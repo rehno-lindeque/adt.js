@@ -1,0 +1,51 @@
+ADT.JS IS PUBLIC DOMAIN SOFTWARE
+--------------------------------
+
+adt.js is open source software released into the public domain using 
+the CC0 dedication. For the formal legal code please read 
+licenses/LEGALCODE-cc0-1.0.
+
+Note that CC0 is approved by the Free Software Foundation and is fully
+compatible with the GPL and other permissive open source software licenses such
+as the MIT license. In countries where a public domain dedication cannot
+be recognized legally, the CC0 dedication provides an extremely permissive
+open source license.
+
+Here's a quick human readable summary of the CC0 dedication from the Creative 
+Commons website, http://creativecommons.org/publicdomain/zero/1.0/
+
+No Copyright:
+
+    The person who associated a work with this deed has dedicated the work to
+    the public domain by waiving all of his or her rights to the work worldwide
+    under copyright law, including all related and neighboring rights, to the
+    extent allowed by law.
+
+    You can copy, modify, distribute and perform the work, even for commercial
+    purposes, all without asking permission.
+
+Other Information:
+
+  * In no way are the patent or trademark rights of any person affected by
+    CC0, nor are the rights that other persons may have in the work or in how
+    the work is used, such as publicity or privacy rights.
+  * Unless expressly stated otherwise, the person who associated a work with
+    this deed makes no warranties about the work, and disclaims liability for
+    all uses of the work, to the fullest extent permitted by applicable law.
+  * When using or citing the work, you should not imply endorsement by the
+    author or the affirmer.
+
+
+MAKING MODIFICATIONS
+--------------------
+
+If you would like to retain copyright on your modifications to adt.js then we
+advise you to please first delete the licenses/LEGALCODE-cc0-1.0 and COPYING
+files in order to avoid any confusion. When distributing your work you should
+also consider modifying the header (from src/header.js) that is added to the
+distribution files. This will let people know that you do not to wish to
+dedicate your own changes to the public domain.
+
+The adt.js team will not accept any pull requests or patches that are not fully
+released into the public domain.
+
