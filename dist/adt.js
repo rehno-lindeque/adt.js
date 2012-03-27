@@ -40,8 +40,19 @@ var adt = (function() {
       } 
       return this;
     },
-    parse: function() {
+    parse: function(str) {
       // TODO
+      /*var 
+        i = 0,
+        j = i;
+      for (; i < str.length + 1; ++i) {
+        if (str[i] === ' ' || i == str.length) {
+          if (str[j] === '(')
+          for (; j < i; ++j)
+            if (tokens[j] === '')
+          ++j;
+        }        
+      }*/
     }
   };
 
