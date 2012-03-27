@@ -3,13 +3,19 @@
  * adt.js is free, public domain software (http://creativecommons.org/publicdomain/zero/1.0/)
  * Originally created by Rehno Lindeque of http://www.mischievousmeerkat.com
  */
-
+var adt = (function() {
+"use strict";
   // Define a local copy of adt
   var 
     adt = function() {
       return adt.fn.init.apply(adt, arguments);
     },
-    makeConstructor = function(identifier) { return function() { [identifier].concat(arguments); }; };
+    makeConstructor = function(identifier) { 
+      return function() { 
+        // TODO: extend the array with a toString function and adt type identifier
+        [identifier].concat(arguments);
+      }; 
+    };
   // ADT constructor/evaluator api
   adt.fn = adt.prototype = {
     init: function() {
