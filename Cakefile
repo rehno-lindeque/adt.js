@@ -4,9 +4,8 @@ path   = require 'path'
 
 libFiles  = [
   # omit src/ and .js to make the below lines a little shorter
-  'closure.header'
+  'core'
   'adt'
-  'closure.footer'
 ]
 
 ###
@@ -74,22 +73,18 @@ wrap = (callback) ->
     #       In order to get something similar to point-free style (http://www.haskell.org/haskellwiki/Pointfree)
     #       we could do something like `(f0.compose f1).compose f2`
     #       or alternatively `(compose (compose f0) f1) f2` or `(f0.compose() f1).compose() f2`
-    
+
     # Maybe (() -> IO) -> () -> IO
-    writeADT = (callback) -> (concatFiles ['src/header.js', "build/#{filenameADT}"]) (writeFile "dist/#{filenameADT}") callback
-    writeMin = (callback) -> (concatFiles ['src/header.js', "build/#{filenameMin}"]) (writeFile "dist/#{filenameMin}") callback
-    writeModuleADT = (callback) -> (concatFiles ['src/header.js', 'src/module.header.js', "build/#{filenameADT}", 'src/module.footer.js']) (writeFile 'dist/adt.module.js') callback
-    writeModuleMin = (callback) -> (concatFiles ['src/header.js', 'src/module.header.js', "build/#{filenameMin}", 'src/module.footer.js']) (writeFile 'dist/adt.module.min.js') callback
+    writeADT = (callback) -> (concatFiles ['src/header.js', "build/#{filenameADT}", 'src/footer.js']) (writeFile "dist/#{filenameADT}") callback
+    writeMin = (callback) -> (concatFiles ['src/header.js', "build/#{filenameMin}", 'src/footer.js']) (writeFile "dist/#{filenameMin}") callback
 
     # Maybe (() -> IO) -> () -> IO
     wrapADT = (callback) -> writeADT (logDone 'adt.js') callback
     wrapMin = (callback) -> writeMin (logDone 'adt.min.js') callback
-    wrapModuleADT = (callback) -> writeModuleADT (logDone 'adt.module.js') callback
-    wrapModuleMin = (callback) -> writeModuleMin (logDone 'adt.module.min.js') callback
-    
+
     # Maybe (() -> IO) -> () -> IO
-    buildADT = (ifExists "build/#{filenameADT}") ((callback) -> wrapADT wrapModuleADT callback)
-    buildMin = (ifExists "build/#{filenameMin}") ((callback) -> wrapMin wrapModuleMin callback)
+    buildADT = (ifExists "build/#{filenameADT}") ((callback) -> wrapADT callback)
+    buildMin = (ifExists "build/#{filenameMin}") ((callback) -> wrapMin callback)
 
     buildADT buildMin callback
 

@@ -4,44 +4,54 @@
  * Originally created by Rehno Lindeque of http://www.mischievousmeerkat.com
  */
 
+var f = (function() { this.... })()
 
-var ADT = new (function() {
+var adt = new (function() {
 "use strict";
 
-var ADT = this != null? this : window;
+var adt = this != null? this : window;
 (function(){
 
-(function() {
+  // Define a local copy of adt
   var 
-    // Eval an ADT in Array representation
-    _evalArrayRep = function() {
-    };
-  ADT.eval = function(adt, f) {
-    // TODO
-  };
-  ADT.parse = function(text) {
-    // TODO
-  };
-  ADT.constructors = function() {
-    var
-      constructorNames = arguments,
-      makeConstructor = function(key) { return function() { [key].concat(arguments); }; },
-      adtConstructors = {},
-      i;
-    // Create ADT constructors
-    for (i = 0; i < constructorNames.length; ++i) {    
-      var name = constructorNames[i];
-      adtConstructors[name] = makeConstructor(name);
+    adt = function() {
+      return adt.fn.init.apply(adt, arguments);
+    },
+    makeConstructor = function(identifier) { return function() { [identifier].concat(arguments); }; };
+  // ADT constructor/evaluator api
+  adt.fn = adt.prototype = {
+    init: function() {
+      // Arguments to this function can be either constructor names (strings or 
+      // arrays of strings, numbers or arrays of numbers) or evaluators (dispatch tables or arrays of dispatch
+      // tables with keys as deconstructors and values as dispatch functions)
+      var i, key;
+      for (i = 0; i < arguments.length; ++i) {
+        var a = arguments[i];
+        if (Array.isArray(a))
+          this.init.apply(this, a);
+        else if (typeof(a) === 'string' || typeof(a) === 'number')
+          this[a] = makeConstructor(a);
+        else if (typeof(a) === 'object')
+          for (key in a)
+            if (typeof(a[key]) === 'function')
+              this[key] = a[key];
+            else
+              continue; // TODO: WARNING: expected function values in dispatch table
+        else
+          continue; // TODO: WARNING: unidentified argument passed to adt
+      } 
+      return this;
+    },
+    parse: function() {
+      // TODO
     }
-    return adtConstructors;
   };
-})();
 
 
 })();
 
 
-return ADT;
+return adt;
 
 })();
 

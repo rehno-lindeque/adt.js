@@ -1,3 +1,3 @@
-var ADT = new (function() {
+var adt = new (function() {
 "use strict";
 

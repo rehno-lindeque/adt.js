@@ -1,3 +1,3 @@
-var ADT = this != null? this : window;
+var adt = this != null? this : window;
 (function(){
 
