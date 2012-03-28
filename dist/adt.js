@@ -93,6 +93,15 @@ var adt = (function() {
     },
   };
 
+  adt.fn.parser = adt({
+    '(': function() { console.log('('); },
+    ')': function() { console.log(')'); },
+    '[': function() { console.log('['); },
+    ',': function() { console.log(','); },
+    ']': function() { console.log(']'); },
+    '_': function() {}
+  });
+
   // Export adt to a CommonJS module if exports is available
   if (typeof(exports) !== "undefined" && exports !== null)
     exports.adt = adt;
