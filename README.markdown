@@ -10,19 +10,18 @@ ADT's in **adt.js** consist of a *constructor* and *evaluators*.
 
 In practice, the library gives you access to the following capabilities
 
-* Pattern matching
-* finite state machine
-* Separate interface and implementation
+* Structured [pattern matching](http://en.wikipedia.org/wiki/Pattern_matching)
+* Evaluators in the form of [state machines](http://en.wikipedia.org/wiki/Finite-state_machine)
+* Separation of interface from (multiple) implementations
 
-For example, adt.js let's you do bunch of cool stuff with expression trees, like
+For example, using adt.js you could do a bunch of cool stuff with expression trees, like
 
-* [Domain Specific Languages](http://en.wikipedia.org/wiki/Domain-specific_language)
-* Compilers by transforming/reducing/expanding expression trees
-* Parsers by finite state machine
+* Defining [Domain Specific Languages](http://en.wikipedia.org/wiki/Domain-specific_language) with multiple implementations
+* Compilers capable of arbitrarily transforming/reducing/expanding expression trees
+* Parsers defined by finite state machines
 
-In OO style lingo this is similar to the following patterns
+In OO style lingo you could view this library as emulating the following design patterns
 
-* Visitor
-* Command
-* Builder
-
+* [Command](http://en.wikipedia.org/wiki/Command_pattern)
+* [Visitor](http://en.wikipedia.org/wiki/Visitor_pattern)
+* [Builder](http://en.wikipedia.org/wiki/Builder_pattern)
