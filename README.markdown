@@ -1,6 +1,12 @@
-# adjt.js
+# adt.js
 
-adt.js is an unusual implementation of [Algebraic Data Types (ADT)](http://en.wikipedia.org/wiki/Algebraic_data_type) in JavaScript.
+**adt.js** is an unusual interpretation of [Algebraic Data Types (ADT)](http://en.wikipedia.org/wiki/Algebraic_data_type) in a dynamic language with 
+JavaScript.
+
+ADT's in **adt.js** consist of a *constructor* and *evaluators*.
+
+* *constructors* are used to build and annotate hierarchical data structures
+* *evaluators* deconstruct the hierarchy using pattern matching
 
 In practice, the library gives you access to the following capabilities
 
