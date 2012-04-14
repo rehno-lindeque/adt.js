@@ -35,14 +35,14 @@ For example, using adt.js you could do a bunch of cool stuff with expression tre
 ```javascript
   transportation = adt('car', 'train', 'plane'),
   travelFare = adt({
-    car: function(miles) { miles * 0.3; },
-    train: function(miles,speed) { miles * 0.1 + 0.2 * speed; },
-    plane: function(miles) { miles * miles * 0.3 + 22.0; }
+    car: function(miles) { return miles * 0.3; },
+    train: function(miles,speed) { return miles * 0.1 + 0.2 * speed; },
+    plane: function(miles) { return miles * miles * 0.3 + 22.0; }
   }),
   travelTime = adt({
-    car: function(miles) { miles / 55.3; },
-    train: function(miles,speed) { 0.5 + miles / 60.0; },
-    plane: function(miles) { (miles < 600? 2.5 : 4.0) + miles / 300.0; }
+    car: function(miles) { return miles / 55.3; },
+    train: function(miles,speed) { return 0.5 + miles / 60.0; },
+    plane: function(miles) { return (miles < 600? 2.5 : 4.0) + miles / 300.0; }
   }),
   tripToGrandma = transportation.train(52, 0.6),
   costOfTripToGrandma = travelFare(tripToGrandma),
