@@ -2,7 +2,7 @@
 
 **adt.js** is an unusual interpretation of [Algebraic Data Types (ADT)](http://en.wikipedia.org/wiki/Algebraic_data_type) repurposed for a dynamic scripting language (JavaScript).
 
-Essentially, **adt.js** lets you eval structured data. Using OO lingo you could view this library as emulating the following design patterns
+Essentially, **adt.js** lets you eval structured data. Using OO lingo you could view this library as emulating the following design patterns...
 
 * [Command](http://en.wikipedia.org/wiki/Command_pattern)
 * [Visitor](http://en.wikipedia.org/wiki/Visitor_pattern)
@@ -51,7 +51,7 @@ For example, using adt.js you could do a bunch of cool stuff with expression tre
 
 ## More information
 
-**What is a data type and how exactly is it algebraic?**
+**What is a data type and how exactly can it be algebraic?**
 
 There is some confusion around the usage of various terms such as *data types*, *type classes*, *algebraic data types (ADT's)*, *abstract data types (also ADT's)*.
 This is all a bit of a tangled mess in my personal opinion and the vocabulary for these terms probably needs an overhaul... but then, what can you do? 
@@ -60,10 +60,10 @@ These terms have already been established and are currently in wide-spread use.
 So! If you were looking for the textbook answer I'll assume that you'd simply go to wikipedia / google.
 What follows here is a common sense practical definition for JavaScript hackers...
 
-        A 'variable' is a symbol that stands in place of some quatity (in our case data)
-        A 'type' or 'data type' annotates a variable with a logical proposition about the quantity that the variable represents (this annotation is added to the variable and thus can only be accessed at compile-time)
-        An 'algebraic data type' (or ADT) annotates the variable's **quantity** with type information (that can only be accessed at run-time by the application)
-          ...additionally algebraic data types works on structured data.
+* A 'variable' is a symbol that stands in place of some quatity (in our case data)
+* A 'type' or 'data type' annotates a variable with a logical proposition about the quantity that the variable represents (this annotation is added to the variable and thus can only be accessed at compile-time)
+* An 'algebraic data type' (or ADT) annotates the variable's **quantity** with type information (that can only be accessed at run-time by the application)
+  ...additionally algebraic data types works on structured data.
 
 In math *algebraic* usually refers to the ability to manipulate and interpret structures instead of working directly with underlying quantities.
 For those of you with an academic slant, this [blog post](http://blog.lab49.com/archives/3011) by Kalani Thielen describes some more meta-algebraic stuff that can be done with ADT's.
