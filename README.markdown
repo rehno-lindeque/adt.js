@@ -103,6 +103,12 @@ See also [language-oriented programming](http://en.wikipedia.org/wiki/Language-o
   TODO
 ```
 
+#### Automatic serialization (can be used as an alternative to JSON)
+
+```javascript
+  TODO
+```
+
 ### Version 2.0
 
 #### Shallow pattern matching
