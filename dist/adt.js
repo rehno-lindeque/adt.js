@@ -114,6 +114,14 @@ var adt = (function() {
       return evaluator;
     };
 
+  adt.constructors = function(obj) {
+    var key, keys = [];
+    if (obj != null)
+      for (key in obj)
+        keys.push(key);
+    return adt.apply(null, keys);
+  };
+
   /*adt.fn.parser = adt({
     '(': function() { console.log('('); },
     ')': function() { console.log(')'); },

@@ -44,3 +44,26 @@ console.log("-- Test 2 --");
   detailedAnswer = serialize(expr) + " = " + String(answer);
   console.log("detailed answer: ", detailedAnswer)
 })();
+
+console.log("-- Test 3 --");
+(function(){
+  mathOps = {
+    plus: function(a,b) { return a + b; },
+    mul: function(a,b) { return a * b; }
+  },
+  mathEval = adt(mathOps),
+  mathCons = adt.constructors(mathOps),
+  // or equivalently: mathCons = adt.constructors(mathEval)
+  expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
+  answer = calc(expr);
+  console.log("answer: ", answer);
+})();
+
+/*
+Test4
+
+  MathCons = adt.constructors(Math),
+  MathEval = adt(Math),
+  formula = MathCons.pow(MathCons.random(), MathCons.cos(0.1)),
+  result = MathEval(formula);
+*/
