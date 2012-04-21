@@ -1,3 +1,4 @@
+console.log("-- Test 1 --");
 (function(){
   var 
     transportation,
@@ -20,9 +21,26 @@
     plane: function(miles) { return (miles < 600? 2.5 : 4.0) + miles / 300.0; }
   });
   tripToGrandma = transportation.train(52, 0.6);
-  console.log("tripToGrandma: ", tripToGrandma);
+  console.log("trip to grandma: ", tripToGrandma);
   costOfTripToGrandma = travelFare(tripToGrandma);
-  console.log("costOfTripToGrandma: ", costOfTripToGrandma);
+  console.log("cost of trip to grandma: ", costOfTripToGrandma);
   timeOfTripToGrandma = travelTime(tripToGrandma);
-  console.log("timeOfTripToGrandma: ", timeOfTripToGrandma);
+  console.log("time of trip to grandma: ", timeOfTripToGrandma);
+})();
+
+console.log("-- Test 2 --");
+(function(){
+  math = adt('plus', 'mul'),
+  calc = adt({
+    plus: function(a,b) { return a + b; },
+    mul: function(a,b) { return a * b; }
+  }),
+  serialize = adt({
+    plus: function(a,b) { return "(" + String(a) + " + " + String(b) + ")"; },
+    mul: function(a,b) { return "(" + String(a) + " * " + String(b) + ")"; }
+  }),
+  expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
+  answer = calc(expr),
+  detailedAnswer = serialize(expr) + " = " + String(answer);
+  console.log("detailed answer: ", detailedAnswer)
 })();
