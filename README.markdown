@@ -100,18 +100,30 @@ See also [language-oriented programming](http://en.wikipedia.org/wiki/Language-o
   },
   mathEval = adt(mathOps),
   mathCons = adt.constructors(mathOps),
-  // or equivalently: mathCons = adt.constructors(mathEval)
-  expr = mathCons.mul(mathCons.plus(5, 9), mathCons.plus(33, mathCons.mul(20, 1))),
+  // or equivalently:
+  // mathCons = adt.constructors(mathEval)
+  expr = mathCons.mul(
+    mathCons.plus(5, 9),
+    mathCons.plus(33, mathCons.mul(20, 1))),
   answer = mathEval(expr);
 ```
 
-#### Extending non-enumerable API's (JavaScript >= 1.8.5)
+#### Wrapping native (non-enumerable) API's (JavaScript >= 1.8.5)
+
+Unfortunately the native `Math` object in JavaScript is not directly enumerable.
+To list its properties you need to make use of the [Object.getOwnPropertyNames](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/getOwnPropertyNames)
+function from the JavaScript 1.8.5 spec.
 
 ```javascript
-  MathCons = adt(Math.getOwnPropertyNames()),
+  MathCons = adt.apply(null, Object.getOwnPropertyNames(Math)),
   formula = MathCons.pow(MathCons.random(), MathCons.cos(0.1)),
   // But how do we eval it?
 ```
+
+As you can see, it is possible to create constructors for the Math object. However,
+creating evaluators is more difficult!
+Fortunately **adt.js** supplies you with the `own` namespace which takes care of
+enumerating an object's `OwnPropertyNames` for you.
 
 ```javascript
   MathCons = adt.own.constructors(Math),
