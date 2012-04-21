@@ -43,7 +43,7 @@ If you're more of a FP person, **adt.js** gives you something similar to...
 * [Enumerator + Iteratee](http://www.haskell.org/haskellwiki/Enumerator_and_iteratee)
 * [Lisp](http://en.wikipedia.org/wiki/Lisp_%28programming_language%29), because well, [you know how it is](http://en.wikipedia.org/wiki/Greenspun%27s_tenth_rule).
 
-## Examples
+## Simple examples
 
 ### Version 1.0 
 
@@ -66,9 +66,8 @@ If you're more of a FP person, **adt.js** gives you something similar to...
   timeOfTripToGrandma = travelTime(tripToGrandma);
 ```
 
-This example takes object oriented style dispatch and turns it inside-out, 
-providing dispatchers based on type names (car, train, plane) instead of method
-names (travelFare, travelTime).
+This example takes the standard object-oriented style dispatch and turns it inside-out!
+Instead of dispatching on a method table (travelFare, travelTime) we dispatch on type names (car, train, plane).
 
 See also the [expression problem](http://en.wikipedia.org/wiki/Expression_problem).
 
@@ -107,6 +106,26 @@ See also [language-oriented programming](http://en.wikipedia.org/wiki/Language-o
     mathCons.plus(33, mathCons.mul(20, 1))),
   answer = mathEval(expr);
 ```
+
+### Version 2.0
+
+#### Shallow pattern matching
+
+```javascript
+  TODO
+```
+
+### Version 3.0
+
+#### Deep pattern matching
+
+```javascript
+  TODO
+```
+
+## Advanced examples
+
+### Version 1.0
 
 #### Wrapping native (non-enumerable) API's (JavaScript >= 1.8.5)
 
@@ -184,22 +203,6 @@ And with prototypes and javascript native constructors...
   formula = api.math.pow(api.expr.plus(5,10), api.expr.mul(10, api.math.cos(-0.3))),
   result = calc(formula);
 
-```
-
-### Version 2.0
-
-#### Shallow pattern matching
-
-```javascript
-  TODO
-```
-
-### Version 3.0
-
-#### Deep pattern matching
-
-```javascript
-  TODO
 ```
 
 ## More information
