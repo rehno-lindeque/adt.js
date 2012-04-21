@@ -91,6 +91,35 @@ See also the [expression problem](http://en.wikipedia.org/wiki/Expression_proble
 
 See also [language-oriented programming](http://en.wikipedia.org/wiki/Language-oriented_programming).
 
+### Automatic constructors
+
+```javascript
+  mathOps = {
+    plus: function(a,b) { return a + b; },
+    mul: function(a,b) { return a * b; }
+  },
+  mathEval = adt(mathOps),
+  mathCons = adt.constructors(mathOps),
+  // or equivalently: mathCons = adt.constructors(mathEval)
+  expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
+  answer = calc(expr);
+```
+
+#### Extending non-enumerable API's (JavaScript >= 1.8.5)
+
+```javascript
+  MathCons = adt(Math.getOwnPropertyNames()),
+  formula = MathCons.pow(MathCons.random(), MathCons.cos(0.1)),
+  // But how do we eval it?
+```
+
+```javascript
+  MathCons = adt.own.constructors(Math),
+  MathEval = adt.own(Math),
+  formula = MathCons.pow(MathCons.random(), MathCons.cos(0.1)),
+  result = MathEval(formula);
+```
+
 #### Combining ADT's
 
 ```javascript
@@ -111,14 +140,7 @@ See also [language-oriented programming](http://en.wikipedia.org/wiki/Language-o
 
 This can be used as an alternative to JSON - a safe, executable kind of JSON
 
-#### Automatic constructors and extending existing api's
-
-```javascript
-  MathCons = adt.constructors(Math),
-  MathEval = adt(Math),
-  formula = MathCons.pow(MathCons.random(), MathCons.cos(0.1)),
-  result = MathEval(formula);
-```
+#### ADT's with object constructors (??)
 
 **TODO... POSSIBLY...**
 
