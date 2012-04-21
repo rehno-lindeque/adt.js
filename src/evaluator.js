@@ -56,10 +56,10 @@
         if (key !== 'eval') {
           if (typeof selfProto[key] === 'function')
             // Custom evaluator
-            evaluator[key] = function(){ return selfProto[key].apply(self, arguments); };
+            evaluator[key] = (function(key){ return function(){ return selfProto[key].apply(self, arguments); }; })(key);
           else 
             // Constant constructor (return the constant value)
-            evaluator[key] = function(){ return selfProto[key]; };
+            evaluator[key] = (function(key){ return function(){ return selfProto[key]; }; })(key);
         }
         // TODO: else
         //   Warning? trying to overide standard functions
