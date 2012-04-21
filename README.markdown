@@ -141,8 +141,9 @@ function from the JavaScript 1.8.5 spec.
 
 As you can see, it is possible to create constructors for the Math object. However,
 creating evaluators is more difficult!
-Fortunately **adt.js** supplies you with the `own` namespace which takes care of
-enumerating an object's `OwnPropertyNames` for you.
+Fortunately **adt.js** supplies you with its `own` api which takes care of
+enumerating an object's enumerable and non-enumerable properties for you by
+leveraging `Object.getOwnPropertyNames`.
 
 ```javascript
   MathCons = adt.own.constructors(Math),
