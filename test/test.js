@@ -30,32 +30,34 @@ console.log("-- Test 1 --");
 
 console.log("-- Test 2 --");
 (function(){
-  math = adt('plus', 'mul'),
-  calc = adt({
-    plus: function(a,b) { return a + b; },
-    mul: function(a,b) { return a * b; }
-  }),
-  serialize = adt({
-    plus: function(a,b) { return "(" + String(a) + " + " + String(b) + ")"; },
-    mul: function(a,b) { return "(" + String(a) + " * " + String(b) + ")"; }
-  }),
-  expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
-  answer = calc(expr),
-  detailedAnswer = serialize(expr) + " = " + String(answer);
+  var
+    math = adt('plus', 'mul'),
+    calc = adt({
+      plus: function(a,b) { return a + b; },
+      mul: function(a,b) { return a * b; }
+    }),
+    serialize = adt({
+      plus: function(a,b) { return "(" + String(a) + " + " + String(b) + ")"; },
+      mul: function(a,b) { return "(" + String(a) + " * " + String(b) + ")"; }
+    }),
+    expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
+    answer = calc(expr),
+    detailedAnswer = serialize(expr) + " = " + String(answer);
   console.log("detailed answer: ", detailedAnswer)
 })();
 
 console.log("-- Test 3 --");
 (function(){
-  mathOps = {
-    plus: function(a,b) { return a + b; },
-    mul: function(a,b) { return a * b; }
-  },
-  mathEval = adt(mathOps),
-  mathCons = adt.constructors(mathOps),
-  // or equivalently: mathCons = adt.constructors(mathEval)
-  expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
-  answer = calc(expr);
+  var
+    mathOps = {
+      plus: function(a,b) { return a + b; },
+      mul: function(a,b) { return a * b; }
+    },
+    mathEval = adt(mathOps),
+    mathCons = adt.constructors(mathOps),
+    // or equivalently: mathCons = adt.constructors(mathEval)
+    expr = mathCons.mul(mathCons.plus(5, 9), mathCons.plus(33, mathCons.mul(20, 1))),
+    answer = mathEval(expr);
   console.log("answer: ", answer);
 })();
 

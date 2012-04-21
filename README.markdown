@@ -101,8 +101,8 @@ See also [language-oriented programming](http://en.wikipedia.org/wiki/Language-o
   mathEval = adt(mathOps),
   mathCons = adt.constructors(mathOps),
   // or equivalently: mathCons = adt.constructors(mathEval)
-  expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
-  answer = calc(expr);
+  expr = mathCons.mul(mathCons.plus(5, 9), mathCons.plus(33, mathCons.mul(20, 1))),
+  answer = mathEval(expr);
 ```
 
 #### Extending non-enumerable API's (JavaScript >= 1.8.5)
