@@ -1,4 +1,4 @@
-console.log("-- Test 1 --");
+console.log("-- Test 1 (multiple implementations) --");
 (function(){
   var 
     transportation,
@@ -28,7 +28,7 @@ console.log("-- Test 1 --");
   console.log("time of trip to grandma: ", timeOfTripToGrandma);
 })();
 
-console.log("-- Test 2 --");
+console.log("-- Test 2 (nested expressions) --");
 (function(){
   var
     math = adt('plus', 'mul'),
@@ -46,7 +46,7 @@ console.log("-- Test 2 --");
   console.log("detailed answer: ", detailedAnswer)
 })();
 
-console.log("-- Test 3 --");
+console.log("-- Test 3 (automatic constructors) --");
 (function(){
   var
     mathOps = {
@@ -61,11 +61,12 @@ console.log("-- Test 3 --");
   console.log("answer: ", answer);
 })();
 
-/*
-Test4
-
-  MathCons = adt.constructors(Math),
-  MathEval = adt(Math),
-  formula = MathCons.pow(MathCons.random(), MathCons.cos(0.1)),
-  result = MathEval(formula);
-*/
+console.log("-- Test 4 (non-enumerable api's) --");
+(function(){
+  var
+    MathCons = adt.own.constructors(Math),
+    MathEval = adt.own(Math),
+    formula = MathCons.pow(MathCons.random(), MathCons.cos(0.1)),
+    result = MathEval(formula);
+  console.log(result);
+})();
