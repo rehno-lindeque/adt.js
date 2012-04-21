@@ -109,9 +109,60 @@ See also [language-oriented programming](http://en.wikipedia.org/wiki/Language-o
   TODO
 ```
 
+This can be used as an alternative to JSON - a safe, executable kind of JSON
+
+#### Automatic constructors and extending existing api's
+
+```javascript
+  MathCons = adt.constructors(Math),
+  MathEval = adt(Math),
+  formula = MathCons.pow(MathCons.random(), MathCons.cos(0.1)),
+  result = MathEval(formula);
+```
+
+**TODO... POSSIBLY...**
+
+And with prototypes and javascript native constructors...
+
+```javascript
+  $Cons = adt.constructors($),
+  $Eval = adt($),
+  $ObjCons = adt.proto.constructors($),
+  $ObjEval = adt.proto($),
+  hideTheElephant = $ObjCons.constructor('#elephant').hide(),
+  showTheElephant = $ObjCons(['constructor', '#elephant'])('show'),
+  result = $ObjEval(hideTheElephant);
+```
+
+#### Combining ADT's without merging them
+
+```javascript
+  // TODO... perhaps something like...
+
+  api = adt({ 
+    math: adt.constructors(Math), 
+    expr: adt('plus','minus','mul','div') 
+  }),
+  calc = adt({ 
+    math: adt(Math), 
+    expr: adt({plus: ..., minus: ..., mul: ..., div: ...})
+  }),
+  formula = api.math.pow(api.expr.plus(5,10), api.expr.mul(10, api.math.cos(-0.3))),
+  result = calc(formula);
+
+```
+
 ### Version 2.0
 
 #### Shallow pattern matching
+
+```javascript
+  TODO
+```
+
+### Version 3.0
+
+#### Deep pattern matching
 
 ```javascript
   TODO
