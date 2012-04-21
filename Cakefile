@@ -7,6 +7,7 @@ libFiles  = [
   'core'
   'evaluator'
   'constructors'
+  'own'
   'parser'
 ]
 

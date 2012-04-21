@@ -1,3 +1,4 @@
+  // Automatically create constructors for any dispatch table
   adt.constructors = function(obj) {
     var key, keys = [];
     if (obj != null)
