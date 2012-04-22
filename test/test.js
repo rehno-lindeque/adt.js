@@ -68,7 +68,7 @@ console.log("-- Test 4 (non-enumerable api's) --");
     MathEval = adt.own(Math),
     formula = MathCons.pow(MathCons.random(), MathCons.cos(0.1)),
     result = MathEval(formula);
-  console.log(result);
+  console.log("result: ", result);
 })();
 
 console.log("-- Test 5 (combining adt's) --");
@@ -87,6 +87,32 @@ console.log("-- Test 5 (combining adt's) --");
     // mathEval = adt(adt.own(Math), { ... }),
     formula = mathCons.pow(mathCons.plus(0.5, 3.9), mathCons.mul(0.1, mathCons.exp(4.3))),
     result = mathEval(formula);
-  console.log(result);
+  console.log("result: ", result);
 })();
 
+console.log("-- Test 6 (serialize) --");
+(function(){
+  // Serialize expression
+  var
+    mathCons = adt('plus', 'mul'),
+    expr = mathCons.mul(mathCons.plus(5.0,22), mathCons.mul(0.1,0.1)),
+    exprSerialized = adt.serialize(expr);
+  console.log("expression: ", expr);
+  console.log("expression serialized: ", exprSerialized);
+})();
+
+console.log("-- Test 7 (deserialize) --");
+(function(){
+  // Deserialize expression
+  var
+    mathEval = adt({
+      plus: function(a,b) { return a + b; },
+      mul: function(a,b) { return a * b; }
+    }),
+    exprSerialized = "(mul (plus 5.0 22) (mul 0.1 0.1))",
+    exprDeserialized = adt.deserialize(exprSerialized),
+    result = mathEval(exprDeserialized),
+    detailedResult = exprString + " = " + String(result);
+  console.log("expression deserialized: ", exprDeserialized);
+  console.log("detailed result: ", detailedResult);
+})();
