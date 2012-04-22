@@ -143,14 +143,26 @@ var adt = (function() {
     return adt.apply(null, Array.prototype.concat.apply([], names));
   };
 
-  /*adt.fn.parser = adt({
-    '(': function() { console.log('('); },
-    ')': function() { console.log(')'); },
-    '[': function() { console.log('['); },
-    ',': function() { console.log(','); },
-    ']': function() { console.log(']'); },
-    '_': function() {}
-  });*/
+  adt.serialize = adt({"_": 
+    function() { 
+      var i, str = arguments.length > 0? String(arguments[0]) : "";
+      for (i = 1; i < arguments.length; ++i)
+        str += ' ' + String(arguments[i]);
+      return arguments.length > 1? "(" + str + ")" : str;
+    }
+  });
+
+  adt.deserialize = function(str){
+    console.log("TODO: deserialize", str);
+    adt({
+      '(': function() { console.log('('); },
+      ')': function() { console.log(')'); },
+      '[': function() { console.log('['); },
+      ',': function() { console.log(','); },
+      ']': function() { console.log(']'); },
+      '_': function() {}
+    });
+  };
 
   // Export adt to a CommonJS module if exports is available
   if (typeof(exports) !== "undefined" && exports !== null)
