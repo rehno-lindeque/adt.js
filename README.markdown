@@ -170,19 +170,38 @@ leveraging `Object.getOwnPropertyNames`.
   result = mathEval(formula);
 ```
 
+#### Automatic serialization (can be used as an alternative to JSON)
+
+Interestingly, if we can easily serialize and deserialize our ADT's we could
+actually use them as an alternative to JSON - a safely executable kind of JSON.
+
+```javascript
+  // Serialize expression
+  mathCons = adt('plus', 'mul'),
+  expr = mathCons.mul(mathCons.plus(5.0,22), mathCons.mul(0.1,0.1)),
+  exprSerialized = adt.serialize(expr);
+  // exprSerialized == "(mul (plus 5.0 22) (mul 0.1 0.1))"
+```
+
+```javascript
+  // Deserialize expression
+  mathEval = adt({
+    plus: function(a,b) { return a + b; },
+    mul: function(a,b) { return a * b; }
+  }),
+  exprSerialized = "(mul (plus 5.0 22) (mul 0.1 0.1))",
+  exprDeserialized = adt.deserialize(exprSerialized),
+  result = mathEval(exprDeserialized),
+  detailedResult = exprString + " = " + String(result);
+```
+
+By the way, can you guess what `serialize` and `deserialize` look like?
+
 #### Stateful visitors
 
 ```javascript
   TODO
 ```
-
-#### Automatic serialization (can be used as an alternative to JSON)
-
-```javascript
-  TODO
-```
-
-This can be used as an alternative to JSON - a safe, executable kind of JSON
 
 #### ADT's with object constructors (??)
 
