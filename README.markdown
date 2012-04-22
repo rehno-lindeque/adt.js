@@ -155,7 +155,19 @@ leveraging `Object.getOwnPropertyNames`.
 #### Combining ADT's
 
 ```javascript
-  TODO
+  mathCons = adt(adt.own.constructors(Math), adt('plus', 'minus', 'mul', 'div')),
+  // or equivalently:
+  // mathCons = adt(adt.own.constructors(Math), 'plus', 'minus', 'mul', 'div'),
+  mathEval = adt(adt.own(Math), adt({
+    plus: function(a,b) { return a + b; },
+    minus: function(a,b) { return a - b; }
+    mul: function(a,b) { return a * b; }
+    div: function(a,b) { return a / b; }
+  })),
+  // or equivalently:
+  // mathEval = adt(adt.own(Math), { ... }),
+  formula = mathCons.pow(mathCons.plus(0.5, 3.9), mathCons.mul(0.1, mathCons.exp(4.3))),
+  result = mathEval(formula);
 ```
 
 #### Stateful visitors
