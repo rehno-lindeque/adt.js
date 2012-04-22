@@ -8,7 +8,7 @@
           init(selfProto, a);
         else if (typeof(a) === 'string' || typeof(a) === 'number')
           selfProto[a] = makeConstructor(a);
-        else if (typeof(a) === 'object')
+        else if (typeof(a) === 'object' || typeof(a) == 'function')
           for (key in a)
             if (typeof(a[key]) === 'function')
               //selfProto[key] = function(){ a[key].apply(self, arguments); };
