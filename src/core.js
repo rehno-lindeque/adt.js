@@ -1,5 +1,5 @@
   // Define a local copy of adt
-  var 
+  var
     init = function(selfProto, args) {
       var i, key;
       for (i = 0; i < args.length; ++i) {
@@ -11,10 +11,9 @@
         else if (typeof(a) === 'object' || typeof(a) == 'function')
           for (key in a)
             if (typeof(a[key]) === 'function')
-              //selfProto[key] = function(){ a[key].apply(self, arguments); };
               selfProto[key] = a[key];
             else
-              continue; // TODO: WARNING: expected function values in dispatch table
+              selfProto[key] = function() { return a[key]; }
         else
           continue; // TODO: WARNING: unidentified argument passed to adt
       }
