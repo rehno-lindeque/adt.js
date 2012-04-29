@@ -106,6 +106,8 @@ See also [language-oriented programming](http://en.wikipedia.org/wiki/Language-o
 
 #### Shallow pattern matching
 
+Patterns are tested in the order of most specific to most general...
+
 ```javascript
   TODO
 ```
