@@ -367,7 +367,10 @@ CC0 is also very [easy to understand](http://creativecommons.org/publicdomain/ze
 
 ## Appendix
 
-### Peano numbers
+### Natural numbers: Church versus Peano
+
+In the example below we go on a [Curry-Howard](http://en.wikipedia.org/wiki/Curry-Howard_correspondence) style exploration
+of the natural numbers, both from a computational point of view (via *church numerals*) and a logical point of view (via *peano numbers*).
 
 ```javascript
   word = adt('zero','one','two','three','four');
@@ -378,7 +381,7 @@ CC0 is also very [easy to understand](http://creativecommons.org/publicdomain/ze
     _: function() { this.succ(this[Number(this._pattern) - 1]()); };
   });
 
-  // Let's pretend that "peano" is the boxed edition of church numerals (via a 'succ' constructor)...
+  // Let's pretend that "peano" is simply the boxed edition of church numerals (via a 'succ' constructor)...
   // (I.e. 'succ' is interpreted as a logical proposition that annotates the value it wraps)
   peanoNat = adt(nat, { succ: adt('succ') });
 
