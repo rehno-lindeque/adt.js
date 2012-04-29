@@ -127,6 +127,95 @@ Using only a few primitive programming constructs ADT's never-the-less give rise
 
 ### Version 1.0
 
+#### Private members and reserved names
+
+When an evaluator is eval'ed the whole set of evaluators is passed in as the `this` parameter (read it as "this DSL implementation").
+
+```javascript
+  // TODO...
+  peano = adt({
+    succ: adt('succ'),
+    zero: 0,
+    one: function() { return this.succ(this.zero()); },
+    two: function() { return this.succ(this.one()); },
+    three: function() { return this.succ(this.two()); },
+    four: function() { return this.succ(this.three()); }
+  });
+```
+
+The following private member names are reserved for use by **adt.js** (your own private members will be replaced).
+
+* `_pattern`: Gives you access
+
+```javascript
+  // Yes, yes... we know - "this succ". Very funny wise guy.
+  thisSucc = function() { this.succ(this[this._pattern]()); };
+  word = adt('zero','one','two','three','four');
+
+  wordToPeano = adt({
+    succ: adt('succ'),
+    zero: 0,
+    _: thisSucc
+  });
+  wordToNumber = adt({
+    succ: function(num) { return num++; },
+    zero: 0,
+    _: thisSucc
+  });
+
+  four = word.four();
+  console.log("The word is '" + adt.serialize(four) + "'");
+  // > "The word is 'four'"
+
+  console.log("The peano number:'" + adt.serialize(four)) + "'");
+  // > "The number is 'four'"
+
+  wordToPeano(word);
+```
+
+For those of you with a computer science bent, see also [Peano axioms](http://en.wikipedia.org/wiki/Peano_axioms) or [Peano numbers](http://www.haskell.org/haskellwiki/Peano_numbers) a.k.a. [Church numerals](http://en.wikipedia.org/wiki/Church_numeral).
+
+
+Here's also a more elegant version of the above:
+
+```javascript
+  word = adt('zero','one','two','three','four');
+
+  // Church style natural numbers
+  nat = adt({
+    0: 0,
+    _: function() { this.succ(this[Number(this._pattern) - 1]()); };
+  });
+
+  // Let's pretend that "peano" is the boxed edition church numerals (via a 'succ' constructor)...
+  peanoNat = adt(nat, { succ: adt('succ') });
+
+  // ...and "number" is a regular unboxed javascript number (via a 'succ' evaluator)
+  numberNat = adt(nat, { succ: function(num) { return num + 1; } });
+
+  // Words 
+  wordNat = adt(nat, {
+    zero: this[0](),
+    one: this[1](),
+    two: this[2](),
+    three: this[3](),
+    four: this[4]()
+  });
+  wordPeanoNat = adt(peanoNat, wordNat);
+  wordNumberNat = adt(numberNat, wordNat);
+
+  // TODO... (to be continued)
+  // ....
+
+  // Church style natural number arithmetic
+  arithNat = adt({
+    '+': function(a,b) { /* todo... */ },
+    '-': function(a,b) { /* todo... */ },
+    '*': function(a,b) { /* todo... */ },
+    'exp': function(a,b) { /* todo... */ }
+  });
+```
+
 #### Wrapping native (non-enumerable) API's (JavaScript >= 1.8.5)
 
 Unfortunately the native `Math` object in JavaScript is not directly enumerable.
