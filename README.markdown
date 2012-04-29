@@ -180,7 +180,7 @@ The following private member names are reserved for use by **adt.js** (your own 
 For those of you with a computer science bent, see also [Peano axioms](http://en.wikipedia.org/wiki/Peano_axioms) or [Peano numbers](http://www.haskell.org/haskellwiki/Peano_numbers) a.k.a. [Church numerals](http://en.wikipedia.org/wiki/Church_numeral).
 
 
-Here's also a more elegant version of the above:
+Here's a more elegant version of the above: **(TODO: perhaps create an appendix for this)**
 
 ```javascript
   word = adt('zero','one','two','three','four');
@@ -191,11 +191,29 @@ Here's also a more elegant version of the above:
     _: function() { this.succ(this[Number(this._pattern) - 1]()); };
   });
 
-  // Let's pretend that "peano" is the boxed edition church numerals (via a 'succ' constructor)...
+  // Let's pretend that "peano" is the boxed edition of church numerals (via a 'succ' constructor)...
+  // (I.e. 'succ' is interpreted as a logical proposition that annotates the value it wraps)
   peanoNat = adt(nat, { succ: adt('succ') });
 
   // ...and "number" is a regular unboxed javascript number (via a 'succ' evaluator)
   numberNat = adt(nat, { succ: function(num) { return num + 1; } });
+
+
+  // SIDE-NOTE:
+  //   To assert the correctness of the proposition (i.e. provide proof-carying code)
+  //   one might consider writing
+  //   succ: function (n) { 
+  //     assert(arguments.length == 1 && (n === 0 || (adt.isBoxed(n) && adt.getKey(n) === 'succ')));
+  //     return adt('succ')(n); 
+  //   }
+  //   Unfortunately this kind of induction is not enforcable in javascript since
+  //   `succ` can be applied outside of `peanoNat` and an expression built using
+  //   `peanoNat` is not read-only.
+  //   For a "fun" time, try to imagine how ecmascript5 `Object.defineProperty` 
+  //   could be used to construct truely enforcable proof-carrying code.
+  //   (Hint: by-reference equality is necessary to guarantee uniqueness of the
+  //   constructor name)
+
 
   // Words 
   wordNat = adt(nat, {
