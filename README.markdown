@@ -369,8 +369,8 @@ CC0 is also very [easy to understand](http://creativecommons.org/publicdomain/ze
 
 ### Natural numbers: Church versus Peano
 
-In the example below we go on a [Curry-Howard](http://en.wikipedia.org/wiki/Curry-Howard_correspondence) style exploration
-of the natural numbers, both from a computational point of view (via *church numerals*) and a logical point of view (via *peano numbers*).
+Now we go on a [Curry-Howard](http://en.wikipedia.org/wiki/Curry-Howard_correspondence) style exploration of the natural numbers. 
+In other words, we're gonna define `nat` using dual computational and logical interprations (as *church numerals* and *peano numbers* respectively).
 
 ```javascript
   word = adt('zero','one','two','three','four');
