@@ -300,14 +300,14 @@ Finite State Machines are useful for constructing simple parsers.
 **Why the weird license?**
 
 Simplicity - that's all.
-When I tell you this code is in the public domain, you know that you're free to do whatever you want with it - for realsies.
+When I tell you this code is in the public domain, you know that you're free to do whatever you want with it - for realsies!
 No need to figure out whether you need to include the license with your code if all you want is to copy a little snippet of code.
-In a library that provide basic language extensions you really don't want to worry about the licensing implications.
+In a library that provides basic language extensions you really don't want to worry about the licensing implications.
 Unlike "no bullshit"-style public domain licenses, you know you're also covered in unusual situations where public domain isn't legally recognized (CC0 falls through to an extremely permissive license in this case).
 CC0 is also very [easy to understand](http://creativecommons.org/publicdomain/zero/1.0/) and even takes the time to briefly inform you of the practical distinctions between copyright and other legal protections.
 
 ## Bragging rights
 
-**adt.js** is pretty small for what it accomplishes. In fact, right now it weighs in at only...
+**adt.js** is pretty small given what it accomplishes. In fact, right now it weighs in at only...
 
 * version 1.0 (unreleased, as of 2012-04-19): *5.2 kb* unminified, *1.6 kb* minified
