@@ -28,7 +28,7 @@ The library is stratified into four major versions each of which trades some add
   * Primitive types behave like constructor names in patterns
 * *Version 4* (Unreleased)
   * Primitive values can be matched inside of their primitive types
-  * Use regular expression in evaluator patterns
+  * Use regular expressions in evaluator patterns
 
 The simplest way to illustrate the utility of **adt.js** is to run through a couple of basic examples, using *only* constructors and evaluators.
 
@@ -145,7 +145,9 @@ When an evaluator is eval'ed the whole set of evaluators is passed in as the `th
 
 The following private member names are reserved for use by **adt.js** (your own private members will be replaced).
 
-* `_pattern`: Gives you access
+* `_pattern`: Gives you access to the pattern that was matched in order to unbox the evaluator's arguments
+* `_key`: Is the same as `_pattern` in version 1 of **adt.js**.
+* **TODO: perhaps `_full_pattern`: `(pattern _key (pattern ... (pattern ...) ...)`** (breadth-first tree of patterns)
 
 ```javascript
   // Yes, yes... we know - "this succ". Very funny wise guy.
@@ -169,6 +171,8 @@ The following private member names are reserved for use by **adt.js** (your own 
 
   console.log("The peano number:'" + adt.serialize(four)) + "'");
   // > "The number is 'four'"
+
+  // TODO: TO BE CONTINUED....
 
   wordToPeano(word);
 ```
