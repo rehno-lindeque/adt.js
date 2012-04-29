@@ -1,72 +1,54 @@
 # adt.js
 
-**adt.js** is an unusual interpretation of [Algebraic Data Types (ADT)](http://en.wikipedia.org/wiki/Algebraic_data_type) repurposed for a dynamic scripting language (JavaScript).
+**adt.js** is an unusual interpretation of [Algebraic Data Types (ADT's)](http://en.wikipedia.org/wiki/Algebraic_data_type) repurposed for a dynamic scripting language (JavaScript).
 
-Essentially, **adt.js** lets you eval structured data. Using OO lingo you could view this library as emulating the following design patterns...
+Essentially, **adt.js** lets you eval structured data which turns out to be very useful for building [embedded domain specific languages (EDSL's)](http://en.wikipedia.org/wiki/Embedded_domain-specific_language#Usage_patterns) in JavaScript.
 
-* [Command](http://en.wikipedia.org/wiki/Command_pattern)
-* [Visitor](http://en.wikipedia.org/wiki/Visitor_pattern) (depth-first only)
-* [Builder](http://en.wikipedia.org/wiki/Builder_pattern)
-* [Template method](http://en.wikipedia.org/wiki/Template_method_pattern) (except [better](http://en.wikipedia.org/wiki/Domain-specific_language))
+In practice this library gives you access to the following programming facilities:
+
+* Structured [pattern matching](http://en.wikipedia.org/wiki/Pattern_matching).
+* Evaluators in the form of [state machines](http://en.wikipedia.org/wiki/Finite-state_machine).
+* Various forms of polymorphism and method dispatch.
 
 ## Usage
 
 ADT's in **adt.js** consist of *constructors* and *evaluators*.
 
-* *constructors* are used to build and annotate hierarchical data structures
-* *evaluators* deconstruct the hierarchy using pattern matching
+* *constructors* are used to build and annotate hierarchical data structures (a.k.a. boxing)
+* *evaluators* deconstruct the hierarchy using pattern matching (a.k.a. unboxing)
 
-In practice, the library gives you access to the following capabilities
-
-* Structured [pattern matching](http://en.wikipedia.org/wiki/Pattern_matching)
-* Evaluators in the form of [state machines](http://en.wikipedia.org/wiki/Finite-state_machine)
-* Separation of interface from (multiple) implementations
-
-For example, using adt.js you could do a bunch of cool stuff with expression trees, like
-
-* Defining [Domain Specific Languages (DSL)](http://en.wikipedia.org/wiki/Domain-specific_language) with multiple implementations
-* Compilers capable of arbitrarily transforming/reducing/expanding expression trees
-* Parsers defined by finite state machines
-
-## What else?
-
-With pattern matching in the mix (in version 2.0 and later) we can talk polymorphism.
-
-* [Multiple dispatch](http://en.wikipedia.org/wiki/Multiple_dispatch)
-* [Function overloading (ad-hoc polymorphism)](http://en.wikipedia.org/wiki/Method_overloading)
-* [Operator overloading](http://en.wikipedia.org/wiki/Operator_overloading)
-
-If you're more of a FP person, **adt.js** gives you something similar to...
-
-* [Algebraic data types](http://www.haskell.org/haskellwiki/Algebraic_data_type) (obviously)
-* [Embedded domain-specific languages](http://en.wikipedia.org/wiki/Domain-specific_language)
-* [Enumerator + Iteratee](http://www.haskell.org/haskellwiki/Enumerator_and_iteratee)
-* [Lisp](http://en.wikipedia.org/wiki/Lisp_%28programming_language%29), because well, [you know how it is](http://en.wikipedia.org/wiki/Greenspun%27s_tenth_rule).
-
-## Simple examples
+The simplest way to illustrate the utility of **adt.js** is to run through a couple of basic examples, using *only* constructors and evaluators.
 
 ### Version 1.0 
 
 #### Providing multiple implementations
 
 ```javascript
+  // Create constructors for these three algebraic data types (car, train and plane)
   transportation = adt('car', 'train', 'plane'),
+
+  // Create a set of evaluators for the adt's to calculate a travel fare by unboxing their arguments
   travelFare = adt({
     car: function(miles) { return miles * 0.3; },
     train: function(miles,speed) { return miles * 0.1 + 0.2 * speed; },
     plane: function(miles) { return miles * miles * 0.3 + 22.0; }
   }),
+
+  // Create an alternative set of evaluators for the adt's to calculate a travel time using the same arguments
   travelTime = adt({
     car: function(miles) { return miles / 55.3; },
     train: function(miles,speed) { return 0.5 + miles / 60.0; },
     plane: function(miles) { return (miles < 600? 2.5 : 4.0) + miles / 300.0; }
   }),
+
+  // Now we can calculate not only the time needed to get to grandma's house but also the cost of the trip.
+  // So, should we take the train?
   tripToGrandma = transportation.train(52, 0.6),
   costOfTripToGrandma = travelFare(tripToGrandma),
   timeOfTripToGrandma = travelTime(tripToGrandma);
 ```
 
-This example takes the standard object-oriented style dispatch and turns it inside-out!
+This example takes the standard object-oriented style of method dispatch and turns it inside-out!
 Instead of dispatching on a method table (travelFare, travelTime) we dispatch on type names (car, train, plane).
 
 See also the [expression problem](http://en.wikipedia.org/wiki/Expression_problem).
@@ -123,7 +105,10 @@ See also [language-oriented programming](http://en.wikipedia.org/wiki/Language-o
   TODO
 ```
 
-## Advanced examples
+## Advanced usage
+
+Using only a few primitive programming constructs ADT's never-the-less give rise to a suprisingly large variety of programming patterns.
+**adt.js** also exposes few more advanced features that happen to fit snugly with JavaScript's dynamic philosophy.
 
 ### Version 1.0
 
