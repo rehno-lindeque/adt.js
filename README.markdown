@@ -199,21 +199,19 @@ Here's a more elegant version of the above: **(TODO: perhaps create an appendix 
   numberNat = adt(nat, { succ: function(num) { return num + 1; } });
 
 
-  // SIDE-NOTE:
-  //   To assert the correctness of the proposition (i.e. provide proof-carying code)
-  //   one might consider writing
-  //   succ: function (n) { 
-  //     assert(arguments.length == 1 && (n === 0 || (adt.isBoxed(n) && adt.getKey(n) === 'succ')));
-  //     return adt('succ')(n); 
-  //   }
-  //   Unfortunately this kind of induction is not enforcable in javascript since
-  //   `succ` can be applied outside of `peanoNat` and an expression built using
-  //   `peanoNat` is not read-only.
-  //   For a "fun" time, try to imagine how ecmascript5 `Object.defineProperty` 
-  //   could be used to construct truely enforcable proof-carrying code.
-  //   (Hint: by-reference equality is necessary to guarantee uniqueness of the
-  //   constructor name)
-
+  /* SIDE-NOTE:
+     To assert the correctness of the proposition (i.e. provide proof-carying code)
+     one might consider writing
+     succ: function (n) { 
+       assert(arguments.length == 1 && (n === 0 || (adt.isBoxed(n) && adt.getKey(n) === 'succ')));
+       return adt('succ')(n); 
+     }
+     Unfortunately this kind of induction is not really enforcable since `succ` can be applied 
+     outside of `peanoNat` and an expression built using `peanoNat` is not read-only.
+     For a "fun" time, try to imagine how ecmascript5 `Object.defineProperty` could be used to
+     construct truely enforcable proof-carrying code.
+     (Hint: by-reference equality is necessary to guarantee uniqueness of the constructor name)
+  */
 
   // Words 
   wordNat = adt(nat, {
