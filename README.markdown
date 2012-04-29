@@ -222,6 +222,12 @@ And with prototypes and javascript native constructors...
 
 ```
 
+#### Building finite state machines (FSM's)
+
+```javascript
+  // TODO
+```
+
 ## More information
 
 **What is a data type and how exactly can it be algebraic?**
@@ -240,6 +246,41 @@ What follows here is a common sense practical definition for JavaScript hackers.
 
 In math *algebraic* usually refers to the ability to manipulate and interpret structures instead of working directly with underlying quantities.
 For those of you with an academic slant, this [blog post](http://blog.lab49.com/archives/3011) by Kalani Thielen describes some more meta-algebraic stuff that can be done with ADT's.
+
+**How can I relate to this library given my object-oriented programming background?**
+
+Using OO lingo you could view this library as an emulation of the following design patterns...
+
+* [Command](http://en.wikipedia.org/wiki/Command_pattern)
+* [Visitor](http://en.wikipedia.org/wiki/Visitor_pattern) (depth-first only)
+* [Builder](http://en.wikipedia.org/wiki/Builder_pattern)
+* [Template method](http://en.wikipedia.org/wiki/Template_method_pattern) (except [better](http://en.wikipedia.org/wiki/Domain-specific_language))
+
+With pattern matching thrown into the mix (in version 2.0 and later), we can also talk polymorphism.
+See if you can apply the following concepts 
+
+* [Multiple dispatch](http://en.wikipedia.org/wiki/Multiple_dispatch)
+* [Function overloading (ad-hoc polymorphism)](http://en.wikipedia.org/wiki/Method_overloading)
+* [Operator overloading](http://en.wikipedia.org/wiki/Operator_overloading)
+
+**Actually... I'm a functional programmer, what do you have for me?**
+
+Besides  [Algebraic data types](http://www.haskell.org/haskellwiki/Algebraic_data_type) you mean? 
+Well, ostensibly **adt.js** brings you a little bit closer to [Lisp](http://en.wikipedia.org/wiki/Lisp_%28programming_language%29) because, after all, [you know how it is](http://en.wikipedia.org/wiki/Greenspun%27s_tenth_rule).
+In combination with [CoffeeScript](http://coffeescript.org/) you can even write [s-expressions](http://en.wikipedia.org/wiki/S-expression).
+
+ADT's built-in serialization is designed to work with [Haskell](http://www.haskell.org/haskellwiki/Haskell)'s default `Read` and `Show` derivations.
+So if you happen to be using Haskell server-side there's no need to even convert to json.
+Additionally, building state machines using a combination of `evalWith` and `adt.fsm` bears some resemblance to the [State monad](http://www.haskell.org/haskellwiki/State_Monad), [Enumerator and Iteratee](http://www.haskell.org/haskellwiki/Enumerator_and_iteratee).
+
+For example, using adt.js you could do a bunch of cool stuff with expression trees, like
+
+**Nice examples, are you using it for anything practical?**
+
+Sure, **adt.js** is being used in both production code as well as in open source projects.
+The most obvious application for ADT's is obviously in the construction of compilers.
+Pattern matching lends itself to transforming/reducing/expanding expression trees.
+Finite State Machines are useful for constructing simple parsers.
 
 **Why the weird license?**
 
