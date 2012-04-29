@@ -178,63 +178,7 @@ The following private member names are reserved for use by **adt.js** (your own 
 ```
 
 For those of you with a computer science bent, see also [Peano axioms](http://en.wikipedia.org/wiki/Peano_axioms) or [Peano numbers](http://www.haskell.org/haskellwiki/Peano_numbers) a.k.a. [Church numerals](http://en.wikipedia.org/wiki/Church_numeral).
-
-
-Here's a more elegant version of the above: **(TODO: perhaps create an appendix for this)**
-
-```javascript
-  word = adt('zero','one','two','three','four');
-
-  // Church style natural numbers
-  nat = adt({
-    0: 0,
-    _: function() { this.succ(this[Number(this._pattern) - 1]()); };
-  });
-
-  // Let's pretend that "peano" is the boxed edition of church numerals (via a 'succ' constructor)...
-  // (I.e. 'succ' is interpreted as a logical proposition that annotates the value it wraps)
-  peanoNat = adt(nat, { succ: adt('succ') });
-
-  // ...and "number" is a regular unboxed javascript number (via a 'succ' evaluator)
-  numberNat = adt(nat, { succ: function(num) { return num + 1; } });
-
-
-  /* SIDE-NOTE:
-     To assert the correctness of the proposition (i.e. provide proof-carying code)
-     one might consider writing
-     succ: function (n) { 
-       assert(arguments.length == 1 && (n === 0 || (adt.isBoxed(n) && adt.getKey(n) === 'succ')));
-       return adt('succ')(n); 
-     }
-     Unfortunately this kind of induction is not really enforcable since `succ` can be applied 
-     outside of `peanoNat` and an expression built using `peanoNat` is not read-only.
-     For a "fun" time, try to imagine how ecmascript5 `Object.defineProperty` could be used to
-     construct truely enforcable proof-carrying code.
-     (Hint: by-reference equality is necessary to guarantee uniqueness of the constructor name)
-  */
-
-  // Words 
-  wordNat = adt(nat, {
-    zero: this[0](),
-    one: this[1](),
-    two: this[2](),
-    three: this[3](),
-    four: this[4]()
-  });
-  wordPeanoNat = adt(peanoNat, wordNat);
-  wordNumberNat = adt(numberNat, wordNat);
-
-  // TODO... (to be continued)
-  // ....
-
-  // Church style natural number arithmetic
-  arithNat = adt({
-    '+': function(a,b) { /* todo... */ },
-    '-': function(a,b) { /* todo... */ },
-    '*': function(a,b) { /* todo... */ },
-    'exp': function(a,b) { /* todo... */ }
-  });
-```
+Find a more complete/elegant implementation of Peano numbers in the appendix.
 
 #### Wrapping native (non-enumerable) API's (JavaScript >= 1.8.5)
 
@@ -420,3 +364,61 @@ CC0 is also very [easy to understand](http://creativecommons.org/publicdomain/ze
 **adt.js** is pretty small given what it accomplishes. In fact, right now it weighs in at only...
 
 * version 1.0 (unreleased, as of 2012-04-19): *5.2 kb* unminified, *1.6 kb* minified
+
+## Appendix
+
+### Peano numbers
+
+```javascript
+  word = adt('zero','one','two','three','four');
+
+  // Church style natural numbers
+  nat = adt({
+    0: 0,
+    _: function() { this.succ(this[Number(this._pattern) - 1]()); };
+  });
+
+  // Let's pretend that "peano" is the boxed edition of church numerals (via a 'succ' constructor)...
+  // (I.e. 'succ' is interpreted as a logical proposition that annotates the value it wraps)
+  peanoNat = adt(nat, { succ: adt('succ') });
+
+  // ...and "number" is a regular unboxed javascript number (via a 'succ' evaluator)
+  numberNat = adt(nat, { succ: function(num) { return num + 1; } });
+
+
+  /* SIDE-NOTE:
+     To assert the correctness of the proposition (i.e. provide proof-carying code)
+     one might consider writing
+     succ: function (n) { 
+       assert(arguments.length == 1 && (n === 0 || (adt.isBoxed(n) && adt.getKey(n) === 'succ')));
+       return adt('succ')(n); 
+     }
+     Unfortunately this kind of induction is not really enforcable since `succ` can be applied 
+     outside of `peanoNat` and an expression built using `peanoNat` is not read-only.
+     For a "fun" time, try to imagine how ecmascript5 `Object.defineProperty` could be used to
+     construct truely enforcable proof-carrying code.
+     (Hint: by-reference equality is necessary to guarantee uniqueness of the constructor name)
+  */
+
+  // Words 
+  wordNat = adt(nat, {
+    zero: this[0](),
+    one: this[1](),
+    two: this[2](),
+    three: this[3](),
+    four: this[4]()
+  });
+  wordPeanoNat = adt(peanoNat, wordNat);
+  wordNumberNat = adt(numberNat, wordNat);
+
+  // TODO... (to be continued)
+  // ....
+
+  // Church style natural number arithmetic
+  arithNat = adt({
+    '+': function(a,b) { /* todo... */ },
+    '-': function(a,b) { /* todo... */ },
+    '*': function(a,b) { /* todo... */ },
+    'exp': function(a,b) { /* todo... */ }
+  });
+```
