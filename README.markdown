@@ -17,6 +17,19 @@ ADT's in **adt.js** consist of *constructors* and *evaluators*.
 * *constructors* are used to build and annotate hierarchical data structures (a.k.a. boxing)
 * *evaluators* deconstruct the hierarchy using pattern matching (a.k.a. unboxing)
 
+The library is stratified into four major versions each of which trades some additional features at the expense of a little bit of internal complexity.
+
+* *Version 1* (Unreleased)
+  * Pattern match on the constructor names only
+* *Version 2* (Unreleased)
+  * Shallow pattern matching (matches nested constructor names and primitive types)
+* *Version 3* (Unreleased)
+  * Deep pattern matching (multiple levels of constructor nesting)
+  * Primitive types behave like constructor names in patterns
+* *Version 4* (Unreleased)
+  * Primitive values can be matched inside of their primitive types
+  * Use regular expression in evaluator patterns
+
 The simplest way to illustrate the utility of **adt.js** is to run through a couple of basic examples, using *only* constructors and evaluators.
 
 ### Version 1.0 
