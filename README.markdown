@@ -369,25 +369,41 @@ CC0 is also very [easy to understand](http://creativecommons.org/publicdomain/ze
 
 ### Natural numbers: Church versus Peano
 
-Now we go on a [Curry-Howard](http://en.wikipedia.org/wiki/Curry-Howard_correspondence) style exploration of the natural numbers. 
+Now we go on a [Curry-Howard](http://en.wikipedia.org/wiki/Curry-Howard_correspondence) style exploration of the natural numbers.
 In other words, we're gonna define `nat` using dual computational and logical interprations (as *church numerals* and *peano numbers* respectively).
+In this case peano numbers are boxed by data types and church numerals are boxed by lambda abstractions.
+The `numNat` implementation is unboxed (or you might say, boxed by the javascript/machine implementation of numbers).
 
 ```javascript
   word = adt('zero','one','two','three','four');
 
-  // Church style natural numbers
+  // Construct natural numbers (either church or peano depending on the implementation of `succ`)
   nat = adt({
     0: 0,
-    _: function() { this.succ(this[Number(this._pattern) - 1]()); };
+    _: function() { this.succ(this[Number(this._pattern) - 1]()); }
   });
+
+  // Natural numbers implemented using church numerals
+  churchNat = adt(nat, {
+    0: function(f) { return function(n) { return n; }; },
+    succ: function(f) { return function(n) { return f(n); }; }
+  });
+
+  console.log("Church numerals: ");
+  console.log("church(0) = ", churchNat[0]());
+  console.log("church(1) = ", churchNat[1]());
+  console.log("church(2) = ", churchNat[2]());
+  console.log("church(5) = ", churchNat[5]());
 
   // Let's pretend that "peano" is simply the boxed edition of church numerals (via a 'succ' constructor)...
   // (I.e. 'succ' is interpreted as a logical proposition that annotates the value it wraps)
   peanoNat = adt(nat, { succ: adt('succ') });
 
-  // ...and "number" is a regular unboxed javascript number (via a 'succ' evaluator)
-  numberNat = adt(nat, { succ: function(num) { return num + 1; } });
-
+  console.log("Peano numbers: ");
+  console.log("peano(0) = ", peanoNat[0]());
+  console.log("peano(1) = ", peanoNat[1]());
+  console.log("peano(2) = ", peanoNat[2]());
+  console.log("peano(5) = ", peanoNat[5]());
 
   /* SIDE-NOTE:
      To assert the correctness of the proposition (i.e. provide proof-carying code)
@@ -403,16 +419,37 @@ In other words, we're gonna define `nat` using dual computational and logical in
      (Hint: by-reference equality is necessary to guarantee uniqueness of the constructor name)
   */
 
+
+  // Convert a nat to a javascript number
+  numberNat = adt(nat, { 
+    succ: function(num) { return num + 1; },
+  });
+
+  console.log("JavaScript numbers: ");
+  console.log("number(0) = ", numberNat[0]());
+  console.log("number(1) = ", numberNat[1]());
+  console.log("number(2) = ", numberNat[2]());
+  console.log("number(5) = ", numberNat[5]());
+
+
+  // Convert a church numeral to a javascript number
+  churchToNumber = function(churchNum) { churchNum(numberNat.succ)(0); };
+
+  // Convert a peano number to a javascript number
+  peanoToNumber = function(peanoNum) { numberNat(peanoNum); };
+
   // Words 
-  wordNat = adt(nat, {
+  wordToNat = adt({
     zero: this[0](),
     one: this[1](),
     two: this[2](),
     three: this[3](),
     four: this[4]()
   });
-  wordPeanoNat = adt(peanoNat, wordNat);
-  wordNumberNat = adt(numberNat, wordNat);
+  // alternatively { zero: 0, one: 1, two: 2, ... };
+
+  wordToPeano = adt(peanoNat, wordNat);
+  wordToNumber = adt(numberNat, wordNat);
 
   // TODO... (to be continued)
   // ....
