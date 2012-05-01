@@ -8,6 +8,7 @@ libFiles  = [
   'evaluator'
   'constructors'
   'own'
+  'deconstruct'
   'serialize'
   'deserialize'
 ]
