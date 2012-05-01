@@ -57,6 +57,7 @@ var adt = (function() {
           // TODO (version 2): perform pattern matching
           // E.g. split the data around whitespace and in order of specific to general...
           var result;
+          self._key = self._pattern = data;
           if (typeof evaluator[data] === 'function')
             result = evaluator[data].apply(self, [].slice.call(arguments, 1));
           else
@@ -91,6 +92,7 @@ var adt = (function() {
           // TODO (version 2): for pattern matching
           //result[0] = key;
           result[0] = data[0];
+          self._key = self._pattern = result[0]; //key
           return evaluator.eval.apply(self, result);
         }
         // If the argument is neither a constructor name, nor a construction (ADTData)
@@ -161,8 +163,8 @@ var adt = (function() {
 
   adt.serialize = adt({"_": 
     function() { 
-      var i, str = arguments.length > 0? String(arguments[0]) : "";
-      for (i = 1; i < arguments.length; ++i)
+      var i, str = this._key;
+      for (i = 0; i < arguments.length; ++i)
         str += ' ' + (typeof arguments[i] == 'string'? '"' + arguments[i] + '"' : String(arguments[i]));
       return arguments.length > 1? "(" + str + ")" : str;
     }
