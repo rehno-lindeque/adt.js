@@ -95,7 +95,7 @@ console.log("-- Test 6 (serialize) --");
   // Serialize expression
   var
     mathCons = adt('plus', 'mul'),
-    expr = mathCons.mul(mathCons.plus(5.0,"22asdf"), mathCons.mul(0.1,0.1)),
+    expr = mathCons.mul(mathCons.plus(5.0,22), mathCons.mul(0.1,0.1)),
     exprSerialized = adt.serialize(expr);
   console.log("expression: ", expr);
   console.log("expression serialized: ", exprSerialized);
@@ -112,7 +112,19 @@ console.log("-- Test 7 (deserialize) --");
     exprSerialized = "(mul (plus 5.0 22) (mul 0.1 0.1))",
     exprDeserialized = adt.deserialize(exprSerialized),
     result = mathEval(exprDeserialized),
-    detailedResult = exprString + " = " + String(result);
+    detailedResult = exprSerialized + " = " + String(result);
   console.log("expression deserialized: ", exprDeserialized);
   console.log("detailed result: ", detailedResult);
+})();
+
+console.log("-- Test 8 (advanced serialize) --");
+(function(){
+  // todo... (include strings and arrays in data)
+  console.log("TODO");
+})();
+
+console.log("-- Test 9 (advanced deserialize) --");
+(function(){
+  // todo... (include strings, characters and arrays in data)
+  console.log("TODO");
 })();
