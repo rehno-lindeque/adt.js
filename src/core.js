@@ -1,19 +1,26 @@
   // Define a local copy of adt
   var
     init = function(selfProto, args) {
-      var i, key;
+      var i, key, strA;
       for (i = 0; i < args.length; ++i) {
         var a = args[i];
         if (Array.isArray(a))
           init(selfProto, a);
-        else if (typeof(a) === 'string' || typeof(a) === 'number')
-          selfProto[a] = makeConstructor(a);
-        else if (typeof(a) === 'object' || typeof(a) == 'function')
+        else if (typeof(a) === 'string' || typeof(a) === 'number') {
+          if (a !== '_' && String(a).charAt(0) === '_')
+            continue; // ignore constructors for private members starting with _
+          else
+            selfProto[a] = makeConstructor(a);
+        }
+        else if (typeof(a) === 'object' || typeof(a) == 'function') {
           for (key in a)
-            if (typeof(a[key]) === 'function')
+            if (key !== '_' && key.charAt(0) === '_')
+              continue; // ignore evaluators for private members starting with _
+            else if (typeof(a[key]) === 'function')
               selfProto[key] = a[key];
             else
-              selfProto[key] = function() { return a[key]; }
+              selfProto[key] = function() { return a[key]; };
+        }
         else
           continue; // TODO: WARNING: unidentified argument passed to adt
       }
