@@ -1,9 +1,16 @@
-  adt.serialize = adt({"_": 
-    function() { 
-      var i, str = this._key;
-      for (i = 0; i < arguments.length; ++i)
-        str += ' ' + (typeof arguments[i] == 'string'? '"' + arguments[i] + '"' : String(arguments[i]));
-      return arguments.length > 1? "(" + str + ")" : str;
-    }
-  });
+  adt.serialize = function(){
+    var 
+    serializeEval = adt('serialized', 
+      {'_': function() { 
+        var i, str = this._key, data;
+        for (i = 0; i < arguments.length; ++i) {
+          data = adt.deconstruct(arguments[i]);
+          str += ' ' + (data.key === 'string'? '"' + data.value + '"' : (data.key === 'serialized'? "(" + data.value + ")" : String(data.value)));
+        }
+        return this.serialized(str); 
+      }}
+    );
+    
+    return String(adt.deconstruct(serializeEval.apply(serializeEval, arguments)).value);
+  };
 

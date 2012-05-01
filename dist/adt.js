@@ -168,14 +168,27 @@ var adt = (function() {
     return adt.apply(null, Array.prototype.concat.apply([], names));
   };
 
-  adt.serialize = adt({"_": 
-    function() { 
-      var i, str = this._key;
-      for (i = 0; i < arguments.length; ++i)
-        str += ' ' + (typeof arguments[i] == 'string'? '"' + arguments[i] + '"' : String(arguments[i]));
-      return arguments.length > 1? "(" + str + ")" : str;
-    }
-  });
+  adt.deconstruct = function(data){
+    return (data && data['_ADTData'] === true? 
+      { key: data[0], value: data.slice(1) } : 
+      { key: typeof data, value: data });
+  };
+
+  adt.serialize = function(){
+    var 
+    serializeEval = adt('serialized', 
+      {'_': function() { 
+        var i, str = this._key, data;
+        for (i = 0; i < arguments.length; ++i) {
+          data = adt.deconstruct(arguments[i]);
+          str += ' ' + (data.key === 'string'? '"' + data.value + '"' : (data.key === 'serialized'? "(" + data.value + ")" : String(data.value)));
+        }
+        return this.serialized(str); 
+      }}
+    );
+    
+    return String(adt.deconstruct(serializeEval.apply(serializeEval, arguments)).value);
+  };
 
   adt.deserialize = function(str){
     console.log("TODO: deserialize", str);
