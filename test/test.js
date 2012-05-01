@@ -95,7 +95,7 @@ console.log("-- Test 6 (serialize) --");
   // Serialize expression
   var
     mathCons = adt('plus', 'mul'),
-    expr = mathCons.mul(mathCons.plus(5.0,22), mathCons.mul(0.1,0.1)),
+    expr = mathCons.mul(mathCons.plus(5.0,"22asdf"), mathCons.mul(0.1,0.1)),
     exprSerialized = adt.serialize(expr);
   console.log("expression: ", expr);
   console.log("expression serialized: ", exprSerialized);

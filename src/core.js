@@ -27,8 +27,10 @@
       return evaluator(selfProto);
     },
     makeConstructor = function(identifier) { 
-      return function() { 
-        // TODO: extend the array with a toString function and adt type identifier
-        return [identifier].concat([].slice.call(arguments, 0));
+      return function() {
+        // (make sure the identifier is a string not a number to call the correct Array constructor)
+        var data = [String(identifier)].concat([].slice.call(arguments, 0));
+        data._ADTData = true;
+        return data;
       }; 
     };
