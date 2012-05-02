@@ -341,8 +341,6 @@ ADT's built-in serialization is designed to work with [Haskell](http://www.haske
 So if you happen to be using Haskell server-side there's no need to even convert to json.
 Additionally, building state machines using a combination of `evalWith` and `adt.fsm` bears some resemblance to the [State monad](http://www.haskell.org/haskellwiki/State_Monad), [Enumerator and Iteratee](http://www.haskell.org/haskellwiki/Enumerator_and_iteratee).
 
-For example, using adt.js you could do a bunch of cool stuff with expression trees, like
-
 **Nice examples, are you using it for anything practical?**
 
 Sure, **adt.js** is being used in both production code as well as in open source projects.
