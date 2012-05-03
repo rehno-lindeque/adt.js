@@ -7,7 +7,6 @@ Essentially, **adt.js** lets you eval structured data which turns out to be very
 In practice this library gives you access to the following programming facilities:
 
 * Structured [pattern matching](http://en.wikipedia.org/wiki/Pattern_matching).
-* Evaluators in the form of [state machines](http://en.wikipedia.org/wiki/Finite-state_machine).
 * Various forms of polymorphism and method dispatch.
 
 ## Usage
@@ -250,12 +249,6 @@ actually use them as an alternative to JSON - a safely executable kind of JSON.
 
 By the way, can you guess what `serialize` and `deserialize` look like?
 
-#### Stateful visitors
-
-```javascript
-  TODO
-```
-
 #### ADT's with object constructors (??)
 
 **TODO... POSSIBLY...**
@@ -288,12 +281,6 @@ And with prototypes and javascript native constructors...
   formula = api.math.pow(api.expr.plus(5,10), api.expr.mul(10, api.math.cos(-0.3))),
   result = calc(formula);
 
-```
-
-#### Building finite state machines (FSM's)
-
-```javascript
-  // TODO
 ```
 
 ## More information
@@ -339,14 +326,12 @@ In combination with [CoffeeScript](http://coffeescript.org/) you can even write 
 
 ADT's built-in serialization is designed to work with [Haskell](http://www.haskell.org/haskellwiki/Haskell)'s default `Read` and `Show` derivations.
 So if you happen to be using Haskell server-side there's no need to even convert to json.
-Additionally, building state machines using a combination of `evalWith` and `adt.fsm` bears some resemblance to the [State monad](http://www.haskell.org/haskellwiki/State_Monad), [Enumerator and Iteratee](http://www.haskell.org/haskellwiki/Enumerator_and_iteratee).
 
 **Nice examples, are you using it for anything practical?**
 
 Sure, **adt.js** is being used in both production code as well as in open source projects.
 The most obvious application for ADT's is obviously in the construction of compilers.
 Pattern matching lends itself to transforming/reducing/expanding expression trees.
-Finite State Machines are useful for constructing simple parsers.
 
 **Why the weird license?**
 
