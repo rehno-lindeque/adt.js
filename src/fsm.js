@@ -1,0 +1,3 @@
+  adt.fsm = function(){
+  };
+

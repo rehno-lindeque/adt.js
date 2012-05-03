@@ -34,6 +34,13 @@ The simplest way to illustrate the utility of **adt.js** is to run through a cou
 
 ### Version 1.0 
 
+```javascript
+//TODO: constructors are simply shortcuts for
+
+adt({ foo: adt.constructor('foo').apply(???, arguments); });
+```
+
+
 #### Providing multiple implementations
 
 ```javascript
@@ -292,7 +299,55 @@ And with prototypes and javascript native constructors...
 
 #### Building finite state machines (FSM's)
 
+The following example limits the type of adt's that can be nested:
+
 ```javascript
+```
+
+Make sure the number of wheels on a vehicle is correct
+
+```javascript
+  // Constructors
+  //vehicle = adt('car', 'bicylce', 'unicycle');
+  // TODO: carParts, bicycleParts, unicycleParts
+
+  //vehicle = adt({
+  //  car: adt.compose('car', adt('wheel', 'windshield', 'seat'))
+
+  // Evaluators
+  countWheels = adt({ wheel: 1, _: 0 });
+  sum = function() { 
+    var i, result = 0;
+    for (i = 0; i < arguments.length; ++i) { result += arguments[i]; }
+    return result; 
+  };
+  checkVehicleWheels =
+    adt({
+      car: adt.compose(
+        function(numWheels) { return numWheels == 4 },
+        sum,
+        countWheels),
+      bicycle: adt.compose(
+        function(numWheels) { return numWheels == 2 },
+        sum,
+        countWheels),
+      unicycle: adt.compose(
+        function(numWheels) { return numWheels == 1 },
+        sum,
+        countWheels)
+    });
+```
+
+```javascript
+  // Note that all modern browsers use a mark-and-sweep garbage collection strategy,
+  // so cycles do not cause memory leaks
+  var start = adt();
+  start.extend({
+    win: adt.next(adt({ win: 1, lose: adt.next(start) }),
+    lose: adt.next(adt({ lose: 0, win: adt.next(start) })
+  });
+  result = start.fold(["win", "lose", "lose", "win", "lose", "win", "win"]);
+  console.log(result);
   // TODO
 ```
 
@@ -417,7 +472,6 @@ The `numNat` implementation is unboxed (or you might say, boxed by the javascrip
      (Hint: by-reference equality is necessary to guarantee uniqueness of the constructor name)
   */
 
-
   // Convert a nat to a javascript number
   numberNat = adt(nat, { 
     succ: function(num) { return num + 1; },
@@ -428,7 +482,6 @@ The `numNat` implementation is unboxed (or you might say, boxed by the javascrip
   console.log("number(1) = ", numberNat[1]());
   console.log("number(2) = ", numberNat[2]());
   console.log("number(5) = ", numberNat[5]());
-
 
   // Convert a church numeral to a javascript number
   churchToNumber = function(churchNum) { churchNum(numberNat.succ)(0); };

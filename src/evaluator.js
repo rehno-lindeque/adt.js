@@ -34,6 +34,11 @@
             result = new Array(data.length),
             key = '',
             i;
+        
+          // state machine path
+          //if (typeof evaluator[data[0]] === 'function' && evaluator[data[0]]._ADT_NEXT === true)
+          
+
           result._ADTData = true;
           for (i = 1; i < data.length; ++i) {
             var subResult = (Array.isArray(data[i]) && data[i]['_ADTData'] === true)? evaluator.eval(data[i]) : data[i];

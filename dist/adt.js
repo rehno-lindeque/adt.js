@@ -191,8 +191,8 @@ var adt = (function() {
   };
 
   adt.deserialize = function(str){
-    console.log("TODO: deserialize", str);
-    adt({
+    var 
+    deserializeEval = adt({
       '(': function() { console.log('('); },
       ')': function() { console.log(')'); },
       '[': function() { console.log('['); },
@@ -200,6 +200,7 @@ var adt = (function() {
       ']': function() { console.log(']'); },
       '_': function() {}
     });
+    return deserializeEval(str);
   };
 
   // Export adt to a CommonJS module if exports is available
