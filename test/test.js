@@ -116,12 +116,12 @@ console.log("-- Test 7 (deserialize) --");
   console.log("detailed result: ", detailedResult);
 })();
 
-console.log("-- Test 8 (advanced serialize: special case primitives (string, array, records)) --");
+console.log("-- Test 8 (advanced serialize: special case primitives (string, array, records, strings with escapes)) --");
 (function(){
   console.log("TODO");
 })();
 
-console.log("-- Test 9 (advanced deserialize: special case primitives (string, array, records)) --");
+console.log("-- Test 9 (advanced deserialize: special case primitives (string, array, records, strings with escapes)) --");
 (function(){
   console.log("TODO");
 })();

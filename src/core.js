@@ -65,12 +65,12 @@
       // Add the last character if it wasn't escaped
       return i === str.length - 1? result + str[str.length - 1] : result;
     },
-    escapeString = function(str) {
+    escapeString = function(str, escapes) {
       var 
         i, 
         result = '',
         replacement,
-        escapes = {
+        escapes = escapes || {
           '\\': '\\\\',
           '\"': '\\\"',
           '\'': '\\\'',

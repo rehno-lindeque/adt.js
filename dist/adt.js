@@ -72,12 +72,12 @@ var adt = (function() {
       // Add the last character if it wasn't escaped
       return i === str.length - 1? result + str[str.length - 1] : result;
     },
-    escapeString = function(str) {
+    escapeString = function(str, escapes) {
       var 
         i, 
         result = '',
         replacement,
-        escapes = {
+        escapes = escapes || {
           '\\': '\\\\',
           '\"': '\\\"',
           '\'': '\\\'',
@@ -220,12 +220,28 @@ var adt = (function() {
 
   adt.serialize = function(){
     var 
-    serializeEval = adt('serialized', 
-      {'_': function() { 
-        var i, str = this._key, data;
+    serializeEval = adt('serialized', {'_': 
+      function() { 
+        var 
+          i, 
+          escapes = {
+            '\\': '\\\\',
+            '\"': '\\\"',
+            '\'': '\\\'',
+            '\t': '\\t',
+            '\r': '\\r',
+            '\n': '\\n',
+            ' ': '\\ '
+          },
+          str = escapeString(this._key, escapes), 
+          data;
         for (i = 0; i < arguments.length; ++i) {
           data = adt.deconstruct(arguments[i]);
-          str += ' ' + (data.key === 'string'? '"' + data.value + '"' : (data.key === 'serialized'? "(" + data.value + ")" : String(data.value)));
+          str += ' ' + (data.key === 'string'? 
+            '"' + escapeString(data.value) + '"' : 
+            (data.key === 'serialized'? 
+              "(" + data.value + ")" :
+              String(data.value)));
         }
         return this.serialized(str); 
       }}
