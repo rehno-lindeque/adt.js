@@ -40,4 +40,48 @@
         data._ADTData = true;
         return data;
       }; 
+    },
+    unescapeString = function(str) {
+      var
+        i,
+        result = '',
+        escapes = {
+          '\\': '\\',
+          '\"': '\"',
+          '\'': '\'',
+          't': '\t',
+          'r': '\r',
+          'n': '\n'
+        };
+      for (i = 0; i < str.length - 1; ++i) {
+        if (str[i] !== '\\')
+          result += str[i];
+        else {
+          replacement = escapes[str[i + 1]]
+          result += (replacement == null? str[i + 1] : replacement);
+          ++i;
+        }          
+      }
+      // Add the last character if it wasn't escaped
+      return i === str.length - 1? result + str[str.length - 1] : result;
+    },
+    escapeString = function(str) {
+      var 
+        i, 
+        result = '',
+        replacement,
+        escapes = {
+          '\\': '\\\\',
+          '\"': '\\\"',
+          '\'': '\\\'',
+          '\t': '\\t',
+          '\r': '\\r',
+          '\n': '\\n'
+        };
+      for (i = 0; i < str.length; ++i) {
+        replacement = escapes[str[i]];
+        result += (replacement == null? str[i] : replacement);
+      }
+      return result;
     };
+
