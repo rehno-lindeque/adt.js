@@ -342,11 +342,9 @@ In a library that provides basic language extensions you really don't want to wo
 Unlike "no bullshit"-style public domain licenses, you know you're also covered in unusual situations where public domain isn't legally recognized (CC0 falls through to an extremely permissive license in this case).
 CC0 is also very [easy to understand](http://creativecommons.org/publicdomain/zero/1.0/) and even takes the time to briefly inform you of the practical distinctions between copyright and other legal protections.
 
-## Bragging rights
+## Size of various distributions
 
-**adt.js** is pretty small given what it accomplishes. In fact, right now it weighs in at only...
-
-* version 1.0 (unreleased, as of 2012-04-19): *5.2 kb* unminified, *1.6 kb* minified
+* version 1.0 (unreleased, as of 2012-05-04): *14.3 kb* unminified, *5.1 kb* minified
 
 ## Appendix
 
