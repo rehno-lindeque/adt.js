@@ -103,7 +103,6 @@ console.log("-- Test 6 (serialize) --");
 
 console.log("-- Test 7 (deserialize) --");
 (function(){
-  // Deserialize expression
   var
     mathEval = adt({
       plus: function(a,b) { return a + b; },
@@ -117,14 +116,41 @@ console.log("-- Test 7 (deserialize) --");
   console.log("detailed result: ", detailedResult);
 })();
 
-console.log("-- Test 8 (advanced serialize) --");
+console.log("-- Test 8 (advanced serialize: special case primitives (string, array, records)) --");
 (function(){
-  // todo... (include strings and arrays in data)
   console.log("TODO");
 })();
 
-console.log("-- Test 9 (advanced deserialize) --");
+console.log("-- Test 9 (advanced deserialize: special case primitives (string, array, records)) --");
 (function(){
-  // todo... (include strings, characters and arrays in data)
   console.log("TODO");
 })();
+
+console.log("-- Test 10 (advanced serialize: constructor keys with escapes) --");
+(function(){
+  escapedCons = adt('cons with spaces', 'cons\'quote', 'cons\"dbl\"quote');
+  a = escapedCons['cons with spaces'](0, escapedCons['cons\'quote'](1, escapedCons['cons\"dbl\"quote'](2)));
+  aSerialized = adt.serialize(a);
+  console.log("cons: ", a);
+  console.log("cons serialized with escapes: ", aSerialized);
+})();
+
+console.log("-- Test 11 (advanced deserialize: constructor keys with escapes) --");
+(function(){
+  var
+    aSerialized = "cons\\ with\\ spaces 0 (cons\\\'quote 1 (cons\\\"dbl\\\"quote 2))";
+  console.log("cons serialized with escapes: ", aSerialized);
+  //console.log("cons with escapes deserialized: ", a);
+  console.log("TODO");
+})();
+
+console.log("-- Test 12 (advanced deserialize: optional outer parentheses) --");
+(function(){
+  console.log("TODO")
+})();
+
+console.log("-- Test 13 (advanced deserialize: direct primitive (number, string, array, record) --");
+(function(){
+  console.log("TODO")
+})();
+
