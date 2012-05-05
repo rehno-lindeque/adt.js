@@ -35,10 +35,7 @@
     },
     makeConstructor = function(identifier) { 
       return function() {
-        // (make sure the identifier is a string not a number to call the correct Array constructor)
-        var data = [String(identifier)].concat([].slice.call(arguments, 0));
-        data._ADTData = true;
-        return data;
+        return adt.construct.apply(null, [identifier].concat([].slice.call(arguments, 0)));
       }; 
     },
     unescapeString = function(str) {
