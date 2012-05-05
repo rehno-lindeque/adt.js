@@ -4,11 +4,50 @@
       var 
         key,
         evaluator = function(){
-          return evaluator.eval.apply(self, arguments);
+          return evaluator.eval.apply(evaluator, arguments);
         },
         self = Object.create(selfProto);
 
-      evaluator.eval = function(data) { 
+      evaluator.recursive = function() {
+        evaluator.eval = evaluator.recurse;
+        return evaluator;
+      };
+
+      evaluator.eval = function(data) {
+        // Determine if the data is a type name (a data type constructor name)
+        if (typeof data === 'string' || typeof data === 'number') {
+          // TODO (version 2): perform pattern matching
+          // E.g. split the data around whitespace and in order of specific to general...
+          var result;
+          self._key = self._pattern = data;
+          if (typeof evaluator[data] === 'function')
+            return evaluator[data].apply(self, [].slice.call(arguments, 1));
+          return evaluator['_'].apply(self, [].slice.call(arguments, 1));
+        }
+        // Determine if the data is a construction (built by a constructor)
+        if (Array.isArray(data) && data['_ADTData'] === true) {
+          // pre-condition: No empty constructions
+          if (data.length < 1)
+            throw "It shouldn't be possible to have empty ADT constructions";
+          /* TODO: (version 2.0): Construct a key for pattern matching
+          var
+            pattern = data[0],
+            i;
+          for (i = 1; i < data.length; ++i) {
+            if (Array.isArray(data[i]) && data[i]['_ADTData'] === true) {
+              key = key.concat(' '.concat(data[i][0]));
+            else
+              key = key.concat(' '.concat(typeof data[i]));
+          }*/
+          self._key = self._pattern = data[0];
+          return evaluator.eval.apply(evaluator, data);
+        }
+        // If the argument is neither a constructor name, nor a construction (ADTData)
+        // then simply return it
+        return data;
+      };
+
+      evaluator.recurse = function(data) {
         // Determine if the data is a type name (a data type constructor name)
         if (typeof data === 'string' || typeof data === 'number') {
           // TODO (version 2): perform pattern matching
@@ -19,38 +58,36 @@
             result = evaluator[data].apply(self, [].slice.call(arguments, 1));
           else
             result = evaluator['_'].apply(self, [].slice.call(arguments, 1));
-          /*
-          if (Array.isArray(result) && result['_ADTData'] === true)
-            return result;
-          result = [result];
-          //result._ADTPrimitive = true;*/
           return result;
         }
         // Determine if the data is a construction (built by a constructor)
         if (Array.isArray(data) && data['_ADTData'] === true) {
-          //assert(data.length > 0, "It shouldn't be possible to have empty ADT constructions");
+          // pre-condition: data.length > 0
+          if (data.length < 1)
+            throw "It shouldn't be possible to have empty ADT constructions";
           // Evaluate sub-trees
           var
             result = new Array(data.length),
-            key = '',
+            pattern = '',
             i;
           result._ADTData = true;
+          pattern = String(data[0]);
           for (i = 1; i < data.length; ++i) {
-            var subResult = (Array.isArray(data[i]) && data[i]['_ADTData'] === true)? evaluator.eval(data[i]) : data[i];
+            var subResult = (Array.isArray(data[i]) && data[i]['_ADTData'] === true)? evaluator.recurse(data[i]) : data[i];
             if (Array.isArray(subResult) && subResult['_ADTData'] === true) {
-              key = key.concat(' '.concat(subResult[0]));
+              pattern = pattern.concat(' '.concat(subResult[0]));
               result[i] = subResult;
             }
             else {
-              key = key.concat(' '.concat(typeof subResult));
+              pattern = pattern.concat(' '.concat(typeof subResult));
               result[i] = subResult;
             }
           }
-          // TODO (version 2): for pattern matching
-          //result[0] = key;
+          /* TODO (version 2): for pattern matching
+          result[0] = pattern;*/
           result[0] = data[0];
           self._key = self._pattern = result[0]; //key
-          return evaluator.eval.apply(self, result);
+          return evaluator.recurse.apply(evaluator, result);
         }
         // If the argument is neither a constructor name, nor a construction (ADTData)
         // then simply return it
@@ -68,16 +105,21 @@
 
       // Add adt constructors / methods to the evaluator
       for (key in selfProto)
-        if (key !== 'eval') {
-          if (typeof selfProto[key] === 'function')
-            // Custom evaluator
-            evaluator[key] = (function(key){ return function(){ return selfProto[key].apply(self, arguments); }; })(key);
-          else 
-            // Constant constructor (return the constant value)
-            evaluator[key] = (function(key){ return function(){ return selfProto[key]; }; })(key);
+        switch(key) {
+          case 'eval':
+          case 'recurse':
+          case 'recursive':
+            continue;  // Warning? trying to overide standard functions
+          default:
+            if (key !== 'eval') {
+              if (typeof selfProto[key] === 'function')
+                // Custom evaluator
+                evaluator[key] = (function(key){ return function(){ return selfProto[key].apply(self, arguments); }; })(key);
+              else 
+                // Constant constructor (return the constant value)
+                evaluator[key] = (function(key){ return function(){ return selfProto[key]; }; })(key);
+            }
         }
-        // TODO: else
-        //   Warning? trying to overide standard functions
 
       /* TODO: Can't work right now because the data isn't available
       // Create an identity constructor for the default constructor if none was supplied

@@ -25,7 +25,7 @@
         }
         return this.serialized(str); 
       }}
-    );
+    ).recursive();
     
     return String(adt.deconstruct(serializeEval.apply(serializeEval, arguments)).value);
   };

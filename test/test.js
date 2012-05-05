@@ -30,20 +30,41 @@ console.log("-- Test 1 (multiple implementations) --");
 
 console.log("-- Test 2 (nested expressions) --");
 (function(){
-  var
-    math = adt('plus', 'mul'),
-    calc = adt({
-      plus: function(a,b) { return a + b; },
-      mul: function(a,b) { return a * b; }
-    }),
-    serialize = adt({
-      plus: function(a,b) { return "(" + String(a) + " + " + String(b) + ")"; },
-      mul: function(a,b) { return "(" + String(a) + " * " + String(b) + ")"; }
-    }),
-    expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
-    answer = calc(expr),
-    detailedAnswer = serialize(expr) + " = " + String(answer);
-  console.log("detailed answer: ", detailedAnswer)
+  console.log("Using recurse()...");
+  (function(){
+    var
+      math = adt('plus', 'mul'),
+      calc = adt({
+        plus: function(a,b) { return a + b; },
+        mul: function(a,b) { return a * b; }
+      }),
+      serialize = adt({
+        plus: function(a,b) { return "(" + String(a) + " + " + String(b) + ")"; },
+        mul: function(a,b) { return "(" + String(a) + " * " + String(b) + ")"; }
+      }),
+      expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
+      answer = calc.recurse(expr),
+      detailedAnswer = serialize.recurse(expr) + " = " + String(answer);
+    console.log("detailed answer: ", detailedAnswer);
+  })();
+  
+  console.log("Using recursive()...");
+  (function(){
+    var
+      math = adt('plus', 'mul'),
+      calc = adt({
+        plus: function(a,b) { return a + b; },
+        mul: function(a,b) { return a * b; }
+      }).recursive(),
+      serialize = adt({
+        plus: function(a,b) { return "(" + String(a) + " + " + String(b) + ")"; },
+        mul: function(a,b) { return "(" + String(a) + " * " + String(b) + ")"; }
+      }).recursive(),
+      expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
+      answer = calc(expr),
+      detailedAnswer = serialize(expr) + " = " + String(answer);
+    console.log("detailed answer: ", detailedAnswer);
+  })();
 })();
 
 console.log("-- Test 3 (automatic constructors) --");
@@ -53,7 +74,7 @@ console.log("-- Test 3 (automatic constructors) --");
       plus: function(a,b) { return a + b; },
       mul: function(a,b) { return a * b; }
     },
-    mathEval = adt(mathOps),
+    mathEval = adt(mathOps).recursive(),
     mathCons = adt.constructors(mathOps),
     // or equivalently: mathCons = adt.constructors(mathEval)
     expr = mathCons.mul(mathCons.plus(5, 9), mathCons.plus(33, mathCons.mul(20, 1))),
@@ -65,7 +86,7 @@ console.log("-- Test 4 (non-enumerable api's) --");
 (function(){
   var
     MathCons = adt.own.constructors(Math),
-    MathEval = adt.own(Math),
+    MathEval = adt.own(Math).recursive(),
     formula = MathCons.pow(MathCons.random(), MathCons.cos(0.1)),
     result = MathEval(formula);
   console.log("result: ", result);
@@ -82,7 +103,7 @@ console.log("-- Test 5 (combining adt's) --");
       minus: function(a,b) { return a - b; },
       mul: function(a,b) { return a * b; },
       div: function(a,b) { return a / b; }
-    })),
+    })).recursive(),
     // or equivalently:
     // mathEval = adt(adt.own(Math), { ... }),
     formula = mathCons.pow(mathCons.plus(0.5, 3.9), mathCons.mul(0.1, mathCons.exp(4.3))),
@@ -107,7 +128,7 @@ console.log("-- Test 7 (deserialize) --");
     mathEval = adt({
       plus: function(a,b) { return a + b; },
       mul: function(a,b) { return a * b; }
-    }),
+    }).recursive(),
     exprSerialized = "(mul (plus 5.0 22) (mul 0.1 0.1))",
     exprDeserialized = adt.deserialize(exprSerialized),
     result = mathEval(exprDeserialized),

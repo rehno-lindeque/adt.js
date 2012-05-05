@@ -67,6 +67,9 @@ See also the [expression problem](http://en.wikipedia.org/wiki/Expression_proble
 
 #### Constructing and evaluating nested expressions
 
+In order to operate on nested expressions it is often useful to make our evaluators *recursive*.
+A set of evaluators can be evaluated in a recursive manner by using the `recurse(...)` member function instead of calling it directly.
+
 ```javascript
   math = adt('plus', 'mul'),
   calc = adt({
@@ -77,6 +80,24 @@ See also the [expression problem](http://en.wikipedia.org/wiki/Expression_proble
     plus: function(a,b) { return "(" + String(a) + " + " + String(b) + ")"; },
     mul: function(a,b) { return "(" + String(a) + " * " + String(b) + ")"; }
   }),
+  expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
+  answer = calc.recurse(expr), // <- Recursively call the calc evaluator
+  detailedAnswer = serialize.recurse(expr) + " = " + String(answer); // <- Recursively call the serialize evaluator
+```
+
+...alternatively it is also possible to make a set of evaluators recursive directly
+calling `recursive()` so that it is not necessary to call `recurse` explicitly.
+
+```javascript
+  math = adt('plus', 'mul'),
+  calc = adt({
+    plus: function(a,b) { return a + b; },
+    mul: function(a,b) { return a * b; }
+  }).recursive(),  // <- Make calc recursive
+  serialize = adt({
+    plus: function(a,b) { return "(" + String(a) + " + " + String(b) + ")"; },
+    mul: function(a,b) { return "(" + String(a) + " * " + String(b) + ")"; }
+  }).recursive(), // <- Make serialize recursive
   expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
   answer = calc(expr),
   detailedAnswer = serialize(expr) + " = " + String(answer);
@@ -91,7 +112,7 @@ See also [language-oriented programming](http://en.wikipedia.org/wiki/Language-o
     plus: function(a,b) { return a + b; },
     mul: function(a,b) { return a * b; }
   },
-  mathEval = adt(mathOps),
+  mathEval = adt(mathOps).recursive(),
   mathCons = adt.constructors(mathOps),
   // or equivalently:
   // mathCons = adt.constructors(mathEval)
@@ -162,7 +183,7 @@ The following private member names are reserved for use by **adt.js** (your own 
     succ: function(num) { return num++; },
     zero: 0,
     _: thisSucc
-  });
+  }).recursive();
 
   four = word.four();
   console.log("The word is '" + adt.serialize(four) + "'");
@@ -199,7 +220,7 @@ leveraging `Object.getOwnPropertyNames`.
 
 ```javascript
   MathCons = adt.own.constructors(Math),
-  MathEval = adt.own(Math),
+  MathEval = adt.own(Math).recursive(),
   formula = MathCons.pow(MathCons.random(), MathCons.cos(0.1)),
   result = MathEval(formula);
 ```
@@ -215,7 +236,7 @@ leveraging `Object.getOwnPropertyNames`.
     minus: function(a,b) { return a - b; }
     mul: function(a,b) { return a * b; }
     div: function(a,b) { return a / b; }
-  })),
+  })).recursive(),
   // or equivalently:
   // mathEval = adt(adt.own(Math), { ... }),
   formula = mathCons.pow(mathCons.plus(0.5, 3.9), mathCons.mul(0.1, mathCons.exp(4.3))),
@@ -240,7 +261,7 @@ actually use them as an alternative to JSON - a safely executable kind of JSON.
   mathEval = adt({
     plus: function(a,b) { return a + b; },
     mul: function(a,b) { return a * b; }
-  }),
+  }).recursive(),
   exprSerialized = "(mul (plus 5.0 22) (mul 0.1 0.1))",
   exprDeserialized = adt.deserialize(exprSerialized),
   result = mathEval(exprDeserialized),
@@ -368,7 +389,7 @@ The `numNat` implementation is unboxed (or you might say, boxed by the javascrip
   churchNat = adt(nat, {
     0: function(f) { return function(n) { return n; }; },
     succ: function(f) { return function(n) { return f(n); }; }
-  });
+  }).recursive();
 
   console.log("Church numerals: ");
   console.log("church(0) = ", churchNat[0]());
@@ -378,7 +399,7 @@ The `numNat` implementation is unboxed (or you might say, boxed by the javascrip
 
   // Let's pretend that "peano" is simply the boxed edition of church numerals (via a 'succ' constructor)...
   // (I.e. 'succ' is interpreted as a logical proposition that annotates the value it wraps)
-  peanoNat = adt(nat, { succ: adt('succ') });
+  peanoNat = adt(nat, { succ: adt('succ') }).recursive();
 
   console.log("Peano numbers: ");
   console.log("peano(0) = ", peanoNat[0]());
@@ -404,7 +425,7 @@ The `numNat` implementation is unboxed (or you might say, boxed by the javascrip
   // Convert a nat to a javascript number
   numberNat = adt(nat, { 
     succ: function(num) { return num + 1; },
-  });
+  }).recursive();
 
   console.log("JavaScript numbers: ");
   console.log("number(0) = ", numberNat[0]());
@@ -441,5 +462,5 @@ The `numNat` implementation is unboxed (or you might say, boxed by the javascrip
     '-': function(a,b) { /* todo... */ },
     '*': function(a,b) { /* todo... */ },
     'exp': function(a,b) { /* todo... */ }
-  });
+  }).recursive();
 ```
