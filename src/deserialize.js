@@ -66,52 +66,63 @@
         }
       }
     },
-    parseADTTail = function(stack, input) {
-      //var 
-      //  head = input[0],
-      //  tail = input.slice(1);
-      // TODO...
-      //return tail;
+    parseADTTail = function(input) {
+      if (input.length < 1)
+        throw "No data given after empty opening parenthesis `(`.";
+      var
+        key = unescapeString(input[0]),
+        tail = input.slice(1),
+        args = [key];
+      if (input.length > 0 && input[0] === '(')
+        throw "Invalid double opening parentheses `((` found."
+      while (tail.length > 0)
+        switch (tail[0]) {
+          case ']':
+          case ',':
+            throw "Invalid character `" + tail[0] + "` found in the data."
+          case ')':
+            return { result: adt.construct.apply(null, args), tail: tail.slice(1) };
+          default:
+            var parseResult = parse(tail);
+            if (parseResult == null)
+              continue;
+            args.push(parseResult.result);
+            tail = parseResult.tail;
+        }
+      throw "Could not find the closing parenthesis for the data `(" + input.slice(0, Math.max(input.length,4)).join(' ') + "...`";
     },
-    parseArrayTail = function(stack, input) {
+    parseArrayTail = function(input) {
       if (input.length < 2)
         throw "No closing bracket found for array [...";
       // TODO...
       //return tail;
+      throw "TODO: Parsing arrays not yet implemented";
     },
-    parseArg = function(stack, input) {
+    parse = function(input) {
       // pre-condition: input.length > 0
       var head = input[0], tail = input.slice(1);
       if (head.length === 0)
-        return tail; // no argument (two whitespace characters next to each other causes this)
+        return; // no argument (two whitespace characters next to each other causes this)
       switch (head) {
         case '(':
-          tail = parseADTTail(stack, tail);
-          // post-condition: tail.length === 0
-          // post-condition: stack.length === 1
-          return tail;
+          return parseADTTail(tail);
         case '[':
-          tail = parseArrayTail(stack, tail);
-
-          return tail;
+          return parseArrayTail(tail);
       }
       switch (head[0]) {
         case '\"':
           //pre-condition: head[head.length - 1] === '\"'
           //pre-condition: head.length > 1
-          stack[stack.length - 1].push(unescapeString(head.slice(1, head.length - 1)));
-          return tail;
+          return { result: unescapeString(head.slice(1, head.length - 1)), tail: tail };
         case '\'':
           //pre-condition: head[head.length - 1] === '\"'
           //pre-condition: head.length > 1
-          stack[stack.length - 1].push(unescapeString(head.slice(1, head.length - 1)));
-          return tail;
+          return { result: unescapeString(head.slice(1, head.length - 1)), tail: tail };
       }
-      throw "Unexpected token `" + head + "` in data";
-    },
-    parse = function(input) {
-      // post-condition: tail.length === 0
-      // post-condition: stack.length === 1
+      var numberCast = Number(head);
+      if (!isNaN(numberCast))
+        return { result: numberCast, tail: tail };
+      throw "Unexpected token `" + head + "` in data.";
     };
   adt.deserialize = function(str){
     var
@@ -129,11 +140,12 @@
     if (lexemes.length == 0)
       return;
     // Allow lisp style constructors with starting and ending parentheses
-    if (lexemes[0] === '(')
+    if (lexemes[0] === '(') {
       if (lexemes[lexemes.length - 1] !== ')') {
         lexemesStr = lexemes.join(' ');
         throw "Optional opening parenthesis used for the data " + lexemesStr.slice(0, Math.min(10, lexemesStr.length)) + "... but could not find the closing parenthesis."
       }
+    }
     else {
       // pre-condition: lexemes[0].length > 0 (because empty lexemes at the beginning were removed)
       switch (lexemes[0][0]) {
@@ -145,7 +157,9 @@
           lexemes = ['('].concat(lexemes).concat([')']);
       }
     }
-    return parse(lexemes);
+    return parse(lexemes).result;
+    // post-condition: parse(lexemes) != null (because all empty lexemes at the beginning were explicitly removed)
+    // post-condition: parse(lexemes).tail.length === 0
   };
 //*/
 
