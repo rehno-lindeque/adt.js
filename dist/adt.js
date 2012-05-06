@@ -61,7 +61,7 @@ var adt = (function() {
         if (str[i] !== '\\')
           result += str[i];
         else {
-          replacement = escapes[str[i + 1]]
+          var replacement = escapes[str[i + 1]];
           result += (replacement == null? str[i + 1] : replacement);
           ++i;
         }          
@@ -319,8 +319,6 @@ var adt = (function() {
       }
       return '';
     },
-
-    // TODO: id's will be escaped...
 
     lexString = function(str) {
       var i, searchIndex = 1;

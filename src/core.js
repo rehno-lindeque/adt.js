@@ -54,7 +54,7 @@
         if (str[i] !== '\\')
           result += str[i];
         else {
-          replacement = escapes[str[i + 1]]
+          var replacement = escapes[str[i + 1]];
           result += (replacement == null? str[i + 1] : replacement);
           ++i;
         }          

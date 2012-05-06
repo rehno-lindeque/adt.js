@@ -13,8 +13,6 @@
       return '';
     },
 
-    // TODO: id's will be escaped...
-
     lexString = function(str) {
       var i, searchIndex = 1;
       // pre-condition: str.length > 1
