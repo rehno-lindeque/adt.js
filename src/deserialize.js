@@ -34,7 +34,8 @@
     },
     lex = function(str) {
       var 
-        nextWhiteSpace;
+        nextWhiteSpace, 
+        skip = 1;
       str = eatWhiteSpace(str);
       if (str.length === 0)
         return ['','']; // empty string
@@ -45,8 +46,10 @@
         case ']':
         case ',': 
           return { head: str[0], tail: str.slice(1) };
+        case '\\':
+          skip = 2;
       }
-      for (var i = 0; i < str.length; ++i) {
+      for (var i = skip; i < str.length; ++i) {
         switch (str[i]) {
           case '(':
           case ')':
@@ -61,8 +64,13 @@
           case '"': 
           case '\'':
             return lexString(str);
+          case '\\':
+            if (i === str.length - 1)
+              throw "Escape character `\\` found at the end of the input string, followed by nothing."
+            ++i; // skip the next character
         }
       }
+      return { head: str, tail: "" };
     },
     parseADTTail = function(input) {
       if (input.length < 1)
