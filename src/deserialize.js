@@ -32,7 +32,7 @@
     },
     lex = function(str) {
       var 
-        nextWhiteSpace, 
+        nextWhiteSpace,
         skip = 1;
       str = eatWhiteSpace(str);
       if (str.length === 0)
@@ -72,7 +72,7 @@
     },
     parseADTTail = function(input) {
       if (input.length < 1)
-        throw "No data given after empty opening parenthesis `(`.";
+        throw "No data supplied after opening parenthesis `(`.";
       var
         key = unescapeString(input[0]),
         tail = input.slice(1),
@@ -97,10 +97,36 @@
     },
     parseArrayTail = function(input) {
       if (input.length < 2)
-        throw "No closing bracket found for array [...";
+        throw "No data supplied after array opening bracket `[`.";
+      var 
+        tail = input, 
+        commaCount = 0,
+        array = [];
+      while (tail.length > 0)
+        switch (tail[0]) {
+          case ')':
+            throw "Invalid character `" + tail[0] + "` found in the data."
+          case ',':
+            ++commaCount;
+            if (commaCount < array.length)
+              array.push(undefined);
+            // post-condition: array.length === commaCount
+            tail = tail.slice(1);
+            continue;
+          case ']':
+            return { result: array, tail: tail.slice(1) };
+          default:
+            if (commaCount < array.length)
+              throw "Expected `,` separator between array elements."
+            var parseResult = parse(tail);
+            if (parseResult == null)
+              continue;
+            array.push(parseResult.result);
+            tail = parseResult.tail;
+        }
+      throw "Could not find the closing bracket for the array `[" + input.slice(0, Math.max(input.length,4)).join('') + "...`";
       // TODO...
       //return tail;
-      throw "TODO: Parsing arrays not yet implemented";
     },
     parse = function(input) {
       // pre-condition: input.length > 0
