@@ -161,8 +161,9 @@ console.log("-- Test 11 (advanced deserialize: constructor keys with escapes) --
   var
     aSerialized = "cons\\ with\\ spaces 0 (cons\\\'quote 1 (cons\\\"dbl\\\"quote 2))";
   console.log("cons serialized with escapes: ", aSerialized);
-  //console.log("cons with escapes deserialized: ", a);
-  console.log("TODO");
+  a = adt.deserialize(aSerialized);
+  console.log("cons with escapes deserialized: ", a);
+  console.log("cons serialized again: ", adt.serialize(a));
 })();
 
 console.log("-- Test 12 (advanced deserialize: optional outer parentheses) --");
