@@ -19,7 +19,7 @@
       var i, searchIndex = 1;
       // pre-condition: str.length > 1
       while (true) {
-        searchIndex = string.indexOf(str[0], searchIndex);
+        searchIndex = str.indexOf(str[0], searchIndex);
         if (searchIndex === -1)
           throw "No closing quotation mark was found for the string starting with " + str.slice(0, Math.min(5, str.length)) + "...";
         // Check if there's an odd number of escape characters before the quotation mark character
@@ -41,8 +41,6 @@
       switch (str[0]) {
         case '(':
         case ')':
-        case '"': 
-        case '\'':
         case '[':
         case ']':
         case ',': 
