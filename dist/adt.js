@@ -351,6 +351,9 @@ var adt = (function() {
         case ']':
         case ',': 
           return { head: str[0], tail: str.slice(1) };
+        case '\"': 
+        case '\'':
+          return lexString(str);
         case '\\':
           skip = 2;
       }
@@ -366,9 +369,9 @@ var adt = (function() {
           case '\r':
           case '\t':
             return { head: str.slice(0, i), tail: str.slice(i) };
-          case '"': 
+          case '\"': 
           case '\'':
-            return lexString(str);
+            throw "Illegal quote character `" + str[i] + "` found in lexeme. Quotes should be escaped using `\\" + str[i] + "`."
           case '\\':
             if (i === str.length - 1)
               throw "Escape character `\\` found at the end of the input string, followed by nothing."
