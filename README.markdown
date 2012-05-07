@@ -16,22 +16,35 @@ ADT's in **adt.js** consist of *constructors* and *evaluators*.
 * *constructors* are used to build and annotate hierarchical data structures (a.k.a. boxing)
 * *evaluators* deconstruct the hierarchy using pattern matching (a.k.a. unboxing)
 
-The library is stratified into four major versions each of which trades some additional features at the expense of a little bit of internal complexity.
+The library is stratified into several major versions each of which trades some additional features at the expense of a little bit of internal complexity.
+
+**Released:**
+
+None yet!
+
+**Work in progress:**
 
 * *Version 1* (Unreleased)
   * Pattern match on the constructor names only
 * *Version 2* (Unreleased)
+  * Recursive evaluators
+
+**Planned:**
+
+* *Version 3*
   * Shallow pattern matching (matches nested constructor names and primitive types)
-* *Version 3* (Unreleased)
+* *Version 4*
   * Deep pattern matching (multiple levels of constructor nesting)
   * Primitive types behave like constructor names in patterns
-* *Version 4* (Unreleased)
+* *Version 5*
+  * Higher order `fold` function for constructing finite state machines
+* *Version 6*
   * Primitive values can be matched inside of their primitive types
   * Use regular expressions in evaluator patterns
 
 The simplest way to illustrate the utility of **adt.js** is to run through a couple of basic examples, using *only* constructors and evaluators.
 
-### Version 1.0 
+### Version 1.0
 
 #### Providing multiple implementations
 
@@ -64,6 +77,8 @@ This example takes the standard object-oriented style of method dispatch and tur
 Instead of dispatching on a method table (travelFare, travelTime) we dispatch on type names (car, train, plane).
 
 See also the [expression problem](http://en.wikipedia.org/wiki/Expression_problem).
+
+### Version 2.0
 
 #### Constructing and evaluating nested expressions
 
@@ -122,7 +137,7 @@ See also [language-oriented programming](http://en.wikipedia.org/wiki/Language-o
   answer = mathEval(expr);
 ```
 
-### Version 2.0
+### Version 3.0
 
 #### Shallow pattern matching
 
@@ -132,9 +147,19 @@ Patterns are tested in the order of most specific to most general...
   TODO
 ```
 
-### Version 3.0
+### Version 4.0
 
 #### Deep pattern matching
+
+```javascript
+  TODO
+```
+
+### Version 5.0
+
+#### Folding arrays into tree structures using Finite State Machines
+
+adt.js provides a `[fold](http://en.wikipedia.org/wiki/Fold_(higher-order_function))` method for evaluators that can be used to write [fsm](http://en.wikipedia.org/wiki/Finite-state_machine)'s... (TODO)
 
 ```javascript
   TODO
@@ -145,7 +170,7 @@ Patterns are tested in the order of most specific to most general...
 Using only a few primitive programming constructs ADT's never-the-less give rise to a suprisingly large variety of programming patterns.
 **adt.js** also exposes few more advanced features that happen to fit snugly with JavaScript's dynamic philosophy.
 
-### Version 1.0
+### Version 2.0
 
 #### Private members and reserved names
 
