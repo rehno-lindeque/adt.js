@@ -172,6 +172,7 @@ You can find additional utilities for manipulating and building ADT's in the [ad
 * TODO: Move `adt.compose()` here... + example
 * TODO: Move `adt.constructors()` here + example
 * TODO: Move `adt.own` here + example
+* TODO: Perhaps move `adt.fold` here? + example (finite state machine)
 
 In addition to this generic funcionality, there are also some existing ADT definitions in other submodules for you to use.
 
@@ -181,6 +182,14 @@ In addition to this generic funcionality, there are also some existing ADT defin
 
 Using only a few primitive programming constructs ADT's never-the-less give rise to a suprisingly large variety of programming patterns.
 **adt.js** also exposes few more advanced features that happen to fit snugly with JavaScript's dynamic philosophy.
+
+### Version 1.0
+
+#### Shortening code
+
+* TODO: example of using the `with` keyword with **adt.js** and warning about deprecation in ECMAScript 5.0 Strict.
+* TODO: a safer alternative method using the `(function(_){ _.cons(...); })(api);` style syntax
+* TODO: another alternative in CoffeeScript, passing in the api as `this` where the `@` character can be used `@cons(...)`...
 
 ### Version 2.0
 
