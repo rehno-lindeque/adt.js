@@ -165,6 +165,18 @@ adt.js provides a `[fold](http://en.wikipedia.org/wiki/Fold_(higher-order_functi
   TODO
 ```
 
+## ADT extras
+
+You can find additional utilities for manipulating and building ADT's in the [adt-util.js](https://github.com/rehno-lindeque/adt-util.js)submodule.
+
+* TODO: Move `adt.compose()` here... + example
+* TODO: Move `adt.constructors()` here + example
+* TODO: Move `adt.own` here + example
+
+In addition to this generic funcionality, there are also some existing ADT definitions in other submodules for you to use.
+
+* [adt-html.js](https://github.com/rehno-lindeque/adt-html.js) - A library for constructing, traversing and transforming HTML structures and their attributes.
+
 ## Advanced usage
 
 Using only a few primitive programming constructs ADT's never-the-less give rise to a suprisingly large variety of programming patterns.
