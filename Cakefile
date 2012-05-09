@@ -72,7 +72,7 @@ minify = (callback) -> ->
 
 # Maybe (() -> IO) -> () -> IO
 wrap = (callback) ->
-    filenameADT = 'adt.js'
+    filename = 'adt.js'
     filenameMin = 'adt.min.js'
 
     # TODO: Unfortunately it is not so easy to wrap `(callback) -> f0 f1 f2 callback` in JavaScript
@@ -81,18 +81,18 @@ wrap = (callback) ->
     #       or alternatively `(compose (compose f0) f1) f2` or `(f0.compose() f1).compose() f2`
 
     # Maybe (() -> IO) -> () -> IO
-    writeADT = (callback) -> (concatFiles ['src/header.js', "build/#{filenameADT}", 'src/footer.js']) (writeFile "dist/#{filenameADT}") callback
+    write = (callback) -> (concatFiles ['src/header.js', "build/#{filename}", 'src/footer.js']) (writeFile "dist/#{filename}") callback
     writeMin = (callback) -> (concatFiles ['src/header.js', "build/#{filenameMin}", 'src/footer.js']) (writeFile "dist/#{filenameMin}") callback
 
     # Maybe (() -> IO) -> () -> IO
-    wrapADT = (callback) -> writeADT (logDone 'adt.js') callback
+    wrap = (callback) -> write (logDone 'adt.js') callback
     wrapMin = (callback) -> writeMin (logDone 'adt.min.js') callback
 
     # Maybe (() -> IO) -> () -> IO
-    buildADT = (ifExists "build/#{filenameADT}") ((callback) -> wrapADT callback)
+    build = (ifExists "build/#{filename}") ((callback) -> wrap callback)
     buildMin = (ifExists "build/#{filenameMin}") ((callback) -> wrapMin callback)
 
-    buildADT buildMin callback
+    build buildMin callback
 
 ###
 Tasks
