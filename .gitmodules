@@ -1,0 +1,6 @@
+[submodule "extra/adt-util.js"]
+	path = extra/adt-util.js
+	url = git@github.com:rehno-lindeque/adt-util.js.git
+[submodule "extra/adt-html.js"]
+	path = extra/adt-html.js
+	url = git@github.com:rehno-lindeque/adt-html.js.git
