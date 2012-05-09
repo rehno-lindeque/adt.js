@@ -191,6 +191,10 @@ Using only a few primitive programming constructs ADT's never-the-less give rise
 * TODO: a safer alternative method using the `(function(_){ _.cons(...); })(api);` style syntax
 * TODO: another alternative in CoffeeScript, passing in the api as `this` where the `@` character can be used `@cons(...)`...
 
+##### Evaluators with state
+
+* TODO: Example of `evalWith`
+
 ### Version 2.0
 
 #### Private members and reserved names
