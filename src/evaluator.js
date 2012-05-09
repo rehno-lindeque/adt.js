@@ -13,17 +13,19 @@
         return evaluator;
       };
 
-      evaluator.eval = function(data) {
+      var evalPrimitiveType = function(data) {
+        // TODO (version 2): perform pattern matching
+        // E.g. split the data around whitespace and in order of specific to general...
+        self._key = self._pattern = data;
+        if (typeof evaluator[data] === 'function')
+          return evaluator[data].apply(self, [].slice.call(arguments, 1));
+        return evaluator['_'].apply(self, [].slice.call(arguments, 1));
+      };
+
+      evaluator.eval = evaluator._eval = function(data) {
         // Determine if the data is a type name (a data type constructor name)
-        if (typeof data === 'string' || typeof data === 'number') {
-          // TODO (version 2): perform pattern matching
-          // E.g. split the data around whitespace and in order of specific to general...
-          var result;
-          self._key = self._pattern = data;
-          if (typeof evaluator[data] === 'function')
-            return evaluator[data].apply(self, [].slice.call(arguments, 1));
-          return evaluator['_'].apply(self, [].slice.call(arguments, 1));
-        }
+        if (typeof data === 'string' || typeof data === 'number')
+          return evalPrimitiveType.apply(this, arguments);
         // Determine if the data is a construction (built by a constructor)
         if (Array.isArray(data) && data['_ADTData'] === true) {
           // pre-condition: No empty constructions
@@ -49,20 +51,11 @@
 
       evaluator.recurse = function(data) {
         // Determine if the data is a type name (a data type constructor name)
-        if (typeof data === 'string' || typeof data === 'number') {
-          // TODO (version 2): perform pattern matching
-          // E.g. split the data around whitespace and in order of specific to general...
-          var result;
-          self._key = self._pattern = data;
-          if (typeof evaluator[data] === 'function')
-            result = evaluator[data].apply(self, [].slice.call(arguments, 1));
-          else
-            result = evaluator['_'].apply(self, [].slice.call(arguments, 1));
-          return result;
-        }
+        if (typeof data === 'string' || typeof data === 'number')
+          return evalPrimitiveType.apply(this, arguments);
         // Determine if the data is a construction (built by a constructor)
         if (Array.isArray(data) && data['_ADTData'] === true) {
-          // pre-condition: data.length > 0
+          // pre-condition: empty construction (built by a constructor)
           if (data.length < 1)
             throw "It shouldn't be possible to have empty ADT constructions";
           // Evaluate sub-trees

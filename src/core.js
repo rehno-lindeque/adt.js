@@ -6,13 +6,13 @@
         var a = args[i];
         if (Array.isArray(a))
           init(selfProto, a);
-        else if (typeof(a) === 'string' || typeof(a) === 'number') {
+        else if (typeof a === 'string' || typeof a === 'number') {
           if (a !== '_' && String(a).charAt(0) === '_')
             continue; // ignore constructors for private members starting with _
           else
             selfProto[a] = makeConstructor(a);
         }
-        else if (typeof(a) === 'object' || typeof(a) == 'function') {
+        else if (typeof a === 'object' || typeof a === 'function') {
           for (key in a)
             if (key !== '_' && key.charAt(0) === '_')
               continue; // ignore evaluators for private members starting with _
