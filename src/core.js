@@ -1,5 +1,9 @@
   // Define a local copy of adt
   var
+    isADTData = function(data) {
+      return Array.isArray(data) && data['_ADTData'] === true;
+    },
+    // TODO: isADTInterface
     init = function(selfProto, args) {
       var i, key, strA;
       for (i = 0; i < args.length; ++i) {

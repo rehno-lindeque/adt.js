@@ -27,7 +27,7 @@
         if (typeof data === 'string' || typeof data === 'number')
           return evalPrimitiveType.apply(this, arguments);
         // Determine if the data is a construction (built by a constructor)
-        if (Array.isArray(data) && data['_ADTData'] === true) {
+        if (isADTData(data)) {
           // pre-condition: No empty constructions
           if (data.length < 1)
             throw "It shouldn't be possible to have empty ADT constructions";
@@ -36,7 +36,7 @@
             pattern = data[0],
             i;
           for (i = 1; i < data.length; ++i) {
-            if (Array.isArray(data[i]) && data[i]['_ADTData'] === true) {
+            if (isADTData(data[i])) {
               key = key.concat(' '.concat(data[i][0]));
             else
               key = key.concat(' '.concat(typeof data[i]));
@@ -54,7 +54,7 @@
         if (typeof data === 'string' || typeof data === 'number')
           return evalPrimitiveType.apply(this, arguments);
         // Determine if the data is a construction (built by a constructor)
-        if (Array.isArray(data) && data['_ADTData'] === true) {
+        if (isADTData(data)) {
           // pre-condition: empty construction (built by a constructor)
           if (data.length < 1)
             throw "It shouldn't be possible to have empty ADT constructions";
@@ -66,8 +66,8 @@
           result._ADTData = true;
           pattern = String(data[0]);
           for (i = 1; i < data.length; ++i) {
-            var subResult = (Array.isArray(data[i]) && data[i]['_ADTData'] === true)? evaluator.recurse(data[i]) : data[i];
-            if (Array.isArray(subResult) && subResult['_ADTData'] === true) {
+            var subResult = isADTData(data[i])? evaluator.recurse(data[i]) : data[i];
+            if (isADTData(subResult)) {
               pattern = pattern.concat(' '.concat(subResult[0]));
               result[i] = subResult;
             }
