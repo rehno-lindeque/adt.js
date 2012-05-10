@@ -13,7 +13,7 @@
         return evaluator;
       };
 
-      var evalPrimitiveType = function(data) {
+      var evalDirect = function(data) {
         // TODO (version 2): perform pattern matching
         // E.g. split the data around whitespace and in order of specific to general...
         self._key = self._pattern = data;
@@ -25,7 +25,7 @@
       evaluator.eval = evaluator._eval = function(data) {
         // Determine if the data is a type name (a data type constructor name)
         if (typeof data === 'string' || typeof data === 'number')
-          return evalPrimitiveType.apply(this, arguments);
+          return evalDirect.apply(this, arguments);
         // Determine if the data is a construction (built by a constructor)
         if (isADTData(data)) {
           // pre-condition: No empty constructions
@@ -52,7 +52,7 @@
       evaluator.recurse = function(data) {
         // Determine if the data is a type name (a data type constructor name)
         if (typeof data === 'string' || typeof data === 'number')
-          return evalPrimitiveType.apply(this, arguments);
+          return evalDirect.apply(this, arguments);
         // Determine if the data is a construction (built by a constructor)
         if (isADTData(data)) {
           // pre-condition: empty construction (built by a constructor)
