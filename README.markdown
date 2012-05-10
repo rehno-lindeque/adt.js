@@ -6,15 +6,15 @@ Essentially, **adt.js** lets you eval structured data which turns out to be very
 
 In practice this library gives you access to the following programming facilities:
 
-* Structured [pattern matching](http://en.wikipedia.org/wiki/Pattern_matching).
+* Structural [pattern matching](http://en.wikipedia.org/wiki/Pattern_matching).
 * Various forms of polymorphism and method dispatch.
 
 ## Usage
 
-ADT's in **adt.js** consist of *constructors* and *evaluators*.
+ADT's in **adt.js** are described by interfaces that consist of *constructors* and *evaluators*.
 
-* *constructors* are used to build and annotate hierarchical data structures (a.k.a. boxing)
-* *evaluators* deconstruct the hierarchy using pattern matching (a.k.a. unboxing)
+* *constructors* are used to build and annotate hierarchical data structures (a.k.a. boxing data)
+* *evaluators* deconstruct the hierarchy using pattern matching (a.k.a. unboxing data)
 
 The library is stratified into several major versions each of which trades some additional features at the expense of a little bit of internal complexity.
 
