@@ -365,9 +365,9 @@ These terms have already been established and are currently in wide-spread use.
 So! If you were looking for the textbook answer I'll assume that you'd simply go to wikipedia / google.
 What follows here is a common sense practical definition for JavaScript hackers...
 
-* A 'variable' is a symbol that stands in place of some quatity (in our case data)
-* A 'type' or 'data type' annotates a variable with a logical proposition about the quantity that the variable represents (this annotation is added to the variable and thus can only be accessed at compile-time)
-* An 'algebraic data type' (or ADT) annotates the variable's **quantity** with type information (that can only be accessed at run-time by the application)
+* A 'variable' is a symbol that stands in the place of some quantity (data)
+* A 'type' or - more precisely - 'data type' annotates a variable with a logical proposition about the quantity that the variable denotes (in other words, a type annotates the variable not the value it denotes and therefore should be considered a compile-time concept)
+* An 'algebraic data type' (or ADT) annotates the variable's **quantity** with type information about the data (that can only be accessed at run-time by the application)
   ...additionally algebraic data types works on structured data.
 
 In math *algebraic* usually refers to the ability to manipulate and interpret structures instead of working directly with underlying quantities.
@@ -383,11 +383,12 @@ Using OO lingo you could view this library as an emulation of the following desi
 * [Template method](http://en.wikipedia.org/wiki/Template_method_pattern) (except [better](http://en.wikipedia.org/wiki/Domain-specific_language))
 
 With pattern matching thrown into the mix (in version 2.0 and later), we can also talk polymorphism.
-See if you can apply the following concepts 
+See if you can apply the following concepts:
 
 * [Multiple dispatch](http://en.wikipedia.org/wiki/Multiple_dispatch)
 * [Function overloading (ad-hoc polymorphism)](http://en.wikipedia.org/wiki/Method_overloading)
 * [Operator overloading](http://en.wikipedia.org/wiki/Operator_overloading)
+* [Variant type](http://en.wikipedia.org/wiki/Variant_type)
 
 **Actually... I'm a functional programmer, what do you have for me?**
 
