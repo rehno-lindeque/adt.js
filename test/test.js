@@ -1,4 +1,23 @@
-console.log("-- Test 1 (multiple implementations) --");
+console.log("-- Test 1 (Primitive type dispatch - values) --");
+(function(){
+  // Pretty print various primitive types
+  var
+    literalClass = adt({
+      number: 'numeric',
+      string: 'string',
+      object: 'object'
+    }),
+    value = 2.75,
+    html = "<span class='" + literalClass(value) + "'>" + String(value) + "</span>";
+  console.log(html);
+})();
+
+console.log("-- Test 2 (Primitive type dispatch - functions) --");
+(function(){
+  console.log("TODO");
+})();
+
+console.log("-- Test 3 (multiple implementations) --");
 (function(){
   var 
     transportation,
