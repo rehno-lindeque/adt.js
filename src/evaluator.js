@@ -46,7 +46,7 @@
           return _eval(null, data[0], 'adt', [].slice.call(data,1));
         }
         // Evaluate primitive type
-        return _eval(null, null, typeof data, data);
+        return _eval(null, null, typeof data, [data]);
       };
 
       evaluator.recurse = function(data) {
@@ -75,7 +75,7 @@
           // TODO (version 3.0): Use pattern
           return _eval(null/*pattern*/, data[0], 'adt', result);
         }
-        return _eval(null, null, typeof data, data);
+        return _eval(null, null, typeof data, [data]);
       };
 
       /* TODO (version 2/3)?
