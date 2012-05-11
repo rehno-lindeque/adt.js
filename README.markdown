@@ -47,6 +47,76 @@ The simplest way to illustrate the utility of **adt.js** is to run through a cou
 
 ### Version 1.0
 
+#### Dispatch on built-in object types
+
+The most basic application of **adt.js** is to provide dispatch on data types.
+In this first example we'll construct an interface called `literalClass` consisting of *evaluators* that match JavaScript's built-in data types.
+
+```javascript
+// Pretty print various primitive types
+var
+  literalClass = adt({
+    Number: 'numeric',
+    String: 'text',
+    Array: 'list'
+  }),
+  value = 2.75,
+  html = "<span class='" + literalClass(value) + "'>" + String(value) + "</span>";
+console.log(html);
+```
+
+    Result:
+    <span class='numeric'>2.75</span>
+
+Of course, you may think that this piece of code is entirely trivial...
+
+    Note: What is wrong with the following snippet of code?
+
+    literalClass = { number: 'numeric', string: 'text', object: 'record', array: 'list' }[typeof t];
+
+The next example function
+
+```javascript
+// Pretty print with function dispatch
+var
+  prettyPrintLiteral = adt({
+    Number: function(a) { return "<span class='numeric'>" + String(a) + "</span>" },
+    String: function(a) { return "<span class='text'>" + a + "</span>" },
+    Object: function(a) { return "<span class='record'>" + JSON.stringify(a) + "</span>" },
+    Array: function(a) { 
+      return "<ol>\n" + a.map(function(b){ return "<li>" + this(b) + "</li>\n"; }, this).join('') + "</ol>";
+    }
+  }),
+  html = prettyPrintLiteral(["hello", 2.7, ["a","b"], { foo: "bar" }, 8]);
+```
+
+    Result:
+    <ol>
+    <li><span class='text'>hello</span></li>
+    <li><span class='numeric'>2.7</span></li>
+    <li><ol>
+    <li><span class='text'>a</span></li>
+    <li><span class='text'>b</span></li>
+    </ol></li>
+    <li><span class='record'>{"foo":"bar"}</span></li>
+    <li><span class='numeric'>8</span></li>
+    </ol>
+
+
+#### Dispatch on user-defined classes
+
+The same way that adt.js can dispatch on primitive types such as Number and 
+
+```javascript
+TODO
+```
+
+#### Data type constructors
+
+```javascript
+TODO
+```
+
 #### Providing multiple implementations
 
 ```javascript
