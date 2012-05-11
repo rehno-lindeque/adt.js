@@ -120,8 +120,7 @@ var adt = (function() {
         tag,
         evaluator = function(){
           return evaluator.eval.apply(evaluator, arguments);
-        },
-        self = Object.create(selfProto);
+        };
 
       evaluator.recursive = function() {
         evaluator.eval = evaluator.recurse;
@@ -133,13 +132,13 @@ var adt = (function() {
         // TODO (version 3.0): perform pattern matching
         // E.g. split the data around whitespace and in order of specific to general...
         var result;
-        self._pattern = (pattern != null? pattern : (tag != null? tag : datatype));
-        self._tag = (tag != null? tag : datatype);
-        self._datatype = (datatype != null? datatype : 'adt');
-        var f = evaluator[self._pattern]; 
+        evaluator._pattern = (pattern != null? pattern : (tag != null? tag : datatype));
+        evaluator._tag = (tag != null? tag : datatype);
+        evaluator._datatype = (datatype != null? datatype : 'adt');
+        var f = evaluator[evaluator._pattern]; 
         if (typeof f !== 'function')
           f = evaluator['_'];
-        return f.apply(self, args);
+        return f.apply(evaluator, args);
       };
 
       evaluator.eval = function(data) {
@@ -190,7 +189,7 @@ var adt = (function() {
           // TODO (version 3.0): Use pattern
           return _eval(null/*pattern*/, data[0], 'adt', result);
         }
-        return _eval(null, null, typeof data, [data]);
+        return _eval(null, null, getObjectType(data), [data]);
       };
 
       /* TODO (version 2/3)?
@@ -213,7 +212,7 @@ var adt = (function() {
             if (tag !== 'eval') {
               if (typeof selfProto[tag] === 'function')
                 // Custom evaluator
-                evaluator[tag] = (function(tag){ return function(){ return selfProto[tag].apply(self, arguments); }; })(tag);
+                evaluator[tag] = (function(tag){ return function(){ return selfProto[tag].apply(evaluator, arguments); }; })(tag);
               else 
                 // Constant constructor (return the constant value)
                 evaluator[tag] = (function(tag){ return function(){ return selfProto[tag]; }; })(tag);
@@ -222,7 +221,7 @@ var adt = (function() {
       /* Create an identity constructor for the default constructor if none was supplied
       if (typeof selfProto['_'] === 'undefined') {
         selfProto['_'] = function(data){ return data; };
-        evaluator['_'] = function(){ return selfProto['_'].apply(self, arguments); }
+        evaluator['_'] = function(){ return selfProto['_'].apply(evaluator, arguments); }
       }*/
       
       return evaluator;
