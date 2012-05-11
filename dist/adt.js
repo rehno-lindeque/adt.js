@@ -104,8 +104,8 @@ var adt = (function() {
 
   adt.deconstruct = function(data){
     return (isADTData(data)? 
-      { tag: data[0], value: data.slice(1) } : 
-      { tag: typeof data, value: data });
+      { tag: data[0], args: data.slice(1) } : 
+      { tag: typeof data, args: data });
   };
 
   // ADT evaluator api
@@ -156,7 +156,7 @@ var adt = (function() {
           return _eval(null, data[0], 'adt', [].slice.call(data,1));
         }
         // Evaluate primitive type
-        return _eval(null, null, typeof data, data);
+        return _eval(null, null, typeof data, [data]);
       };
 
       evaluator.recurse = function(data) {
@@ -185,7 +185,7 @@ var adt = (function() {
           // TODO (version 3.0): Use pattern
           return _eval(null/*pattern*/, data[0], 'adt', result);
         }
-        return _eval(null, null, typeof data, data);
+        return _eval(null, null, typeof data, [data]);
       };
 
       /* TODO (version 2/3)?
