@@ -1,20 +1,31 @@
-console.log("-- Test 1 (Primitive type dispatch - values) --");
+console.log("-- Test 1 (Built-in types - dispatch values) --");
 (function(){
   // Pretty print various primitive types
   var
     literalClass = adt({
-      number: 'numeric',
-      string: 'string',
-      object: 'object'
+      Number: 'numeric',
+      String: 'text',
+      Array: 'list'
     }),
     value = 2.75,
     html = "<span class='" + literalClass(value) + "'>" + String(value) + "</span>";
   console.log(html);
 })();
 
-console.log("-- Test 2 (Primitive type dispatch - functions) --");
+console.log("-- Test 2 (Built-in types - dispatch functions) --");
 (function(){
-  console.log("TODO");
+  // Pretty print with function dispatch
+  var
+    prettyPrintLiteral = adt({
+      Number: function(a) { return "<span class='numeric'>" + String(a) + "</span>" },
+      String: function(a) { return "<span class='text'>" + a + "</span>" },
+      Object: function(a) { return "<span class='record'>" + JSON.stringify(a) + "</span>" },
+      Array: function(a) { 
+        return "<ol>\n" + a.map(function(b){ return "<li>" + this(b) + "</li>\n"; }, this).join('') + "</ol>";
+      }
+    }),
+    html = prettyPrintLiteral(["hello", 2.7, ["a","b"], { foo: "bar" }, 8]);
+  console.log(html);
 })();
 
 console.log("-- Test 3 (multiple implementations) --");
@@ -47,7 +58,7 @@ console.log("-- Test 3 (multiple implementations) --");
   console.log("time of trip to grandma: ", timeOfTripToGrandma);
 })();
 
-console.log("-- Test 2 (nested expressions) --");
+console.log("-- Test 4 (nested expressions) --");
 (function(){
   console.log("Using recurse()...");
   (function(){
@@ -86,7 +97,7 @@ console.log("-- Test 2 (nested expressions) --");
   })();
 })();
 
-console.log("-- Test 3 (automatic constructors) --");
+console.log("-- Test 5 (automatic constructors) --");
 (function(){
   var
     mathOps = {
@@ -101,7 +112,7 @@ console.log("-- Test 3 (automatic constructors) --");
   console.log("answer: ", answer);
 })();
 
-console.log("-- Test 4 (non-enumerable api's) --");
+console.log("-- Test 6 (non-enumerable api's) --");
 (function(){
   var
     MathCons = adt.own.constructors(Math),
@@ -111,7 +122,7 @@ console.log("-- Test 4 (non-enumerable api's) --");
   console.log("result: ", result);
 })();
 
-console.log("-- Test 5 (combining adt's) --");
+console.log("-- Test 7 (combining adt's) --");
 (function(){
   var
     mathCons = adt(adt.own.constructors(Math), adt('plus', 'minus', 'mul', 'div')),
@@ -130,7 +141,7 @@ console.log("-- Test 5 (combining adt's) --");
   console.log("result: ", result);
 })();
 
-console.log("-- Test 6 (serialize) --");
+console.log("-- Test 8 (serialize) --");
 (function(){
   // Serialize expression
   var
@@ -141,7 +152,7 @@ console.log("-- Test 6 (serialize) --");
   console.log("expression serialized: ", exprSerialized);
 })();
 
-console.log("-- Test 7 (deserialize) --");
+console.log("-- Test 9 (deserialize) --");
 (function(){
   var
     mathEval = adt({
@@ -156,17 +167,17 @@ console.log("-- Test 7 (deserialize) --");
   console.log("detailed result: ", detailedResult);
 })();
 
-console.log("-- Test 8 (advanced serialize: special case primitives (string, array, records, strings with escapes)) --");
+console.log("-- Test 10 (advanced serialize: special case primitives (string, array, records, strings with escapes)) --");
 (function(){
   console.log("TODO");
 })();
 
-console.log("-- Test 9 (advanced deserialize: special case primitives (string, array, records, strings with escapes)) --");
+console.log("-- Test 11 (advanced deserialize: special case primitives (string, array, records, strings with escapes)) --");
 (function(){
   console.log("TODO");
 })();
 
-console.log("-- Test 10 (advanced serialize: constructor keys with escapes) --");
+console.log("-- Test 12 (advanced serialize: constructor keys with escapes) --");
 (function(){
   escapedCons = adt('cons with spaces', 'cons\'quote', 'cons\"dbl\"quote');
   a = escapedCons['cons with spaces'](0, escapedCons['cons\'quote'](1, escapedCons['cons\"dbl\"quote'](2)));
@@ -175,7 +186,7 @@ console.log("-- Test 10 (advanced serialize: constructor keys with escapes) --")
   console.log("cons serialized with escapes: ", aSerialized);
 })();
 
-console.log("-- Test 11 (advanced deserialize: constructor keys with escapes) --");
+console.log("-- Test 13 (advanced deserialize: constructor keys with escapes) --");
 (function(){
   var
     aSerialized = "cons\\ with\\ spaces 0 (cons\\\'quote 1 (cons\\\"dbl\\\"quote 2))";
@@ -185,12 +196,12 @@ console.log("-- Test 11 (advanced deserialize: constructor keys with escapes) --
   console.log("cons serialized again: ", adt.serialize(a));
 })();
 
-console.log("-- Test 12 (advanced deserialize: optional outer parentheses) --");
+console.log("-- Test 14 (advanced deserialize: optional outer parentheses) --");
 (function(){
   console.log("TODO")
 })();
 
-console.log("-- Test 13 (advanced deserialize: direct primitive (number, string, array, record) --");
+console.log("-- Test 15 (advanced deserialize: direct primitive (number, string, array, record) --");
 (function(){
   console.log("TODO")
 })();
