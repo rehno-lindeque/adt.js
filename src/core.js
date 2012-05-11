@@ -23,7 +23,7 @@
             else if (typeof(a[key]) === 'function')
               selfProto[key] = a[key];
             else
-              selfProto[key] = function() { return a[key]; };
+              selfProto[key] = (function(val){ return function() { return val; }; })(a[key]);
         }
         else
           continue; // TODO: WARNING: unidentified argument passed to adt
