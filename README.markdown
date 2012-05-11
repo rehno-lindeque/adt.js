@@ -1,20 +1,21 @@
 # adt.js
 
-**adt.js** is an unusual interpretation of [Algebraic Data Types (ADT's)](http://en.wikipedia.org/wiki/Algebraic_data_type) repurposed for a dynamic scripting language (JavaScript).
-
-Essentially, **adt.js** lets you eval structured data which turns out to be very useful for building [embedded domain specific languages (EDSL's)](http://en.wikipedia.org/wiki/Embedded_domain-specific_language#Usage_patterns) in JavaScript.
+**adt.js** is a language extension for JavaScript - in library form!
+It embodies an unusual interpretation of [Algebraic Data Types (ADT's)](http://en.wikipedia.org/wiki/Algebraic_data_type) repurposed for a dynamic scripting language (JavaScript).
 
 In practice this library gives you access to the following programming facilities:
 
 * Structural [pattern matching](http://en.wikipedia.org/wiki/Pattern_matching).
-* Various forms of polymorphism and method dispatch.
+* Various forms of [polymorphism](http://en.wikipedia.org/wiki/Polymorphism_(computer_science)) and [dynamic dispatch](http://en.wikipedia.org/wiki/Dynamic_dispatch).
+
+Essentially, **adt.js** lets you eval structured data which turns out to be very useful for building [embedded domain specific languages (EDSL's)](http://en.wikipedia.org/wiki/Embedded_domain-specific_language#Usage_patterns) in JavaScript.
 
 ## Usage
 
 ADT's in **adt.js** are described by interfaces that consist of *constructors* and *evaluators*.
 
 * *constructors* are used to build and annotate hierarchical data structures (a.k.a. boxing data)
-* *evaluators* deconstruct the hierarchy using pattern matching (a.k.a. unboxing data)
+* *evaluators* deconstruct data structures using pattern matching (a.k.a. unboxing data)
 
 The library is stratified into several major versions each of which trades some additional features at the expense of a little bit of internal complexity.
 
@@ -159,7 +160,7 @@ Patterns are tested in the order of most specific to most general...
 
 #### Folding arrays into tree structures using Finite State Machines
 
-adt.js provides a `[fold](http://en.wikipedia.org/wiki/Fold_(higher-order_function))` method for evaluators that can be used to write [fsm](http://en.wikipedia.org/wiki/Finite-state_machine)'s... (TODO)
+adt.js provides a [fold](http://en.wikipedia.org/wiki/Fold_(higher-order_function)) method for evaluators that can be used to write [fsm](http://en.wikipedia.org/wiki/Finite-state_machine)'s... (TODO)
 
 ```javascript
   TODO
@@ -216,8 +217,9 @@ When an evaluator is eval'ed the whole set of evaluators is passed in as the `th
 The following private member names are reserved for use by **adt.js** (your own private members will be replaced).
 
 * `_pattern`: Gives you access to the pattern that was matched in order to unbox the evaluator's arguments
-* `_key`: Is the same as `_pattern` in version 1 of **adt.js**.
-* **TODO: perhaps `_full_pattern`: `(pattern _key (pattern ... (pattern ...) ...)`** (breadth-first tree of patterns)
+* `_tag`: Is the same as `_pattern` in version 1 and 2 of **adt.js**.
+* `_datatype`: Is either `typeof arguments[0]` or `'adt'` depending on whether the evaluated argument was a primitive type or an ADT.
+* **TODO: perhaps `_full_pattern`: `(pattern _tag (pattern ... (pattern ...) ...)`** (breadth-first tree of patterns)
 
 ```javascript
   // Yes, yes... we know - "this succ". Very funny wise guy.
@@ -462,7 +464,7 @@ The `numNat` implementation is unboxed (or you might say, boxed by the javascrip
      To assert the correctness of the proposition (i.e. provide proof-carying code)
      one might consider writing
      succ: function (n) { 
-       assert(arguments.length == 1 && (n === 0 || (adt.isBoxed(n) && adt.getKey(n) === 'succ')));
+       assert(arguments.length == 1 && (n === 0 || (adt.isBoxed(n) && adt.getTag(n) === 'succ')));
        return adt('succ')(n); 
      }
      Unfortunately this kind of induction is not really enforcable since `succ` can be applied 
