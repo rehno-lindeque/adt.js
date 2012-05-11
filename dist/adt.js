@@ -7,6 +7,10 @@ var adt = (function() {
 "use strict";
   // Define a local copy of adt
   var
+    isADTData = function(data) {
+      return Array.isArray(data) && data['_ADTData'] === true;
+    },
+    // TODO: isADTInterface
     init = function(selfProto, args) {
       var i, key, strA;
       for (i = 0; i < args.length; ++i) {
@@ -99,16 +103,16 @@ var adt = (function() {
   };
 
   adt.deconstruct = function(data){
-    return (data && data['_ADTData'] === true? 
-      { key: data[0], value: data.slice(1) } : 
-      { key: typeof data, value: data });
+    return (isADTData(data)? 
+      { tag: data[0], value: data.slice(1) } : 
+      { tag: typeof data, value: data });
   };
 
   // ADT evaluator api
   var 
     evaluator = function(selfProto) {
       var 
-        key,
+        tag,
         evaluator = function(){
           return evaluator.eval.apply(evaluator, arguments);
         },
@@ -119,78 +123,69 @@ var adt = (function() {
         return evaluator;
       };
 
-      var evalPrimitiveType = function(data) {
-        // TODO (version 2): perform pattern matching
+      var _eval = function(pattern, tag, datatype, args) {
+        // TODO (version 1.0 & 2.0): The first argument can be removed
+        // TODO (version 3.0): perform pattern matching
         // E.g. split the data around whitespace and in order of specific to general...
-        self._key = self._pattern = data;
-        if (typeof evaluator[data] === 'function')
-          return evaluator[data].apply(self, [].slice.call(arguments, 1));
-        return evaluator['_'].apply(self, [].slice.call(arguments, 1));
+        var result;
+        self._pattern = (pattern != null? pattern : (tag != null? tag : datatype));
+        self._tag = (tag != null? tag : datatype);
+        self._datatype = (datatype != null? datatype : 'adt');
+        var f = evaluator[self._pattern]; 
+        if (typeof f !== 'function')
+          f = evaluator['_'];
+        return f.apply(self, args);
       };
 
-      evaluator.eval = evaluator._eval = function(data) {
-        // Determine if the data is a type name (a data type constructor name)
-        if (typeof data === 'string' || typeof data === 'number')
-          return evalPrimitiveType.apply(this, arguments);
+      evaluator.eval = function(data) {
         // Determine if the data is a construction (built by a constructor)
-        if (Array.isArray(data) && data['_ADTData'] === true) {
+        if (isADTData(data)) {
           // pre-condition: No empty constructions
           if (data.length < 1)
             throw "It shouldn't be possible to have empty ADT constructions";
-          /* TODO: (version 2.0): Construct a key for pattern matching
+          /* TODO: (version 3.0): Construct a pattern for pattern matching
           var
             pattern = data[0],
             i;
           for (i = 1; i < data.length; ++i) {
-            if (Array.isArray(data[i]) && data[i]['_ADTData'] === true) {
-              key = key.concat(' '.concat(data[i][0]));
+            if (isADTData(data[i])) {
+              pattern = pattern.concat(' '.concat(data[i][0]));
             else
-              key = key.concat(' '.concat(typeof data[i]));
+              pattern = pattern.concat(' '.concat(typeof data[i]));
           }*/
-          self._key = self._pattern = data[0];
-          return evaluator.eval.apply(evaluator, data);
+          return _eval(null, data[0], 'adt', [].slice.call(data,1));
         }
-        // If the argument is neither a constructor name, nor a construction (ADTData)
-        // then simply return it
-        return data;
+        // Evaluate primitive type
+        return _eval(null, null, typeof data, data);
       };
 
       evaluator.recurse = function(data) {
-        // Determine if the data is a type name (a data type constructor name)
-        if (typeof data === 'string' || typeof data === 'number')
-          return evalPrimitiveType.apply(this, arguments);
-        // Determine if the data is a construction (built by a constructor)
-        if (Array.isArray(data) && data['_ADTData'] === true) {
+        if (isADTData(data)) {
           // pre-condition: empty construction (built by a constructor)
           if (data.length < 1)
             throw "It shouldn't be possible to have empty ADT constructions";
           // Evaluate sub-trees
           var
-            result = new Array(data.length),
+            result = new Array(data.length - 1),
             pattern = '',
             i;
           result._ADTData = true;
           pattern = String(data[0]);
           for (i = 1; i < data.length; ++i) {
-            var subResult = (Array.isArray(data[i]) && data[i]['_ADTData'] === true)? evaluator.recurse(data[i]) : data[i];
-            if (Array.isArray(subResult) && subResult['_ADTData'] === true) {
+            var subResult = isADTData(data[i])? evaluator.recurse(data[i]) : data[i];
+            if (isADTData(subResult)) {
               pattern = pattern.concat(' '.concat(subResult[0]));
-              result[i] = subResult;
+              result[i - 1] = subResult;
             }
             else {
               pattern = pattern.concat(' '.concat(typeof subResult));
-              result[i] = subResult;
+              result[i - 1] = subResult;
             }
           }
-          /* TODO (version 2): for pattern matching
-          result[0] = pattern;*/
-          result[0] = data[0];
-          self._key = self._pattern = result[0]; //key
-          return evaluator.recurse.apply(evaluator, result);
+          // TODO (version 3.0): Use pattern
+          return _eval(null/*pattern*/, data[0], 'adt', result);
         }
-        // If the argument is neither a constructor name, nor a construction (ADTData)
-        // then simply return it
-        return data;
+        return _eval(null, null, typeof data, data);
       };
 
       /* TODO (version 2/3)?
@@ -203,25 +198,23 @@ var adt = (function() {
       */
 
       // Add adt constructors / methods to the evaluator
-      for (key in selfProto)
-        switch(key) {
+      for (tag in selfProto)
+        switch(tag) {
           case 'eval':
           case 'recurse':
           case 'recursive':
             continue;  // Warning? trying to overide standard functions
           default:
-            if (key !== 'eval') {
-              if (typeof selfProto[key] === 'function')
+            if (tag !== 'eval') {
+              if (typeof selfProto[tag] === 'function')
                 // Custom evaluator
-                evaluator[key] = (function(key){ return function(){ return selfProto[key].apply(self, arguments); }; })(key);
+                evaluator[tag] = (function(tag){ return function(){ return selfProto[tag].apply(self, arguments); }; })(tag);
               else 
                 // Constant constructor (return the constant value)
-                evaluator[key] = (function(key){ return function(){ return selfProto[key]; }; })(key);
+                evaluator[tag] = (function(tag){ return function(){ return selfProto[tag]; }; })(tag);
             }
         }
-
-      /* TODO: Can't work right now because the data isn't available
-      // Create an identity constructor for the default constructor if none was supplied
+      /* Create an identity constructor for the default constructor if none was supplied
       if (typeof selfProto['_'] === 'undefined') {
         selfProto['_'] = function(data){ return data; };
         evaluator['_'] = function(){ return selfProto['_'].apply(self, arguments); }
@@ -281,21 +274,22 @@ var adt = (function() {
             '{': '\\{',
             '}': '\\}'
           },
-          str = escapeString(this._key, escapes), 
+          str = escapeString(this._tag, escapes), 
           data;
         for (i = 0; i < arguments.length; ++i) {
+          // TODO: refactor (is deconstruct still necessary?)
           data = adt.deconstruct(arguments[i]);
-          str += ' ' + (data.key === 'string'? 
-            '"' + escapeString(data.value) + '"' : 
-            (data.key === 'serialized'? 
-              "(" + data.value + ")" :
-              String(data.value)));
+          str += ' ' + (data.tag === 'string'? 
+            '"' + escapeString(data.args) + '"' : 
+            (data.tag === 'serialized'? 
+              "(" + data.args + ")" :
+              String(data.args)));
         }
         return this.serialized(str); 
       }}
-    ).recursive();
+    );
     
-    return String(adt.deconstruct(serializeEval.apply(serializeEval, arguments)).value);
+    return String(adt.deconstruct(serializeEval.recurse.apply(serializeEval, arguments)).args);
   };
 
   var 

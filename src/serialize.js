@@ -20,20 +20,21 @@
             '{': '\\{',
             '}': '\\}'
           },
-          str = escapeString(this._key, escapes), 
+          str = escapeString(this._tag, escapes), 
           data;
         for (i = 0; i < arguments.length; ++i) {
+          // TODO: refactor (is deconstruct still necessary?)
           data = adt.deconstruct(arguments[i]);
-          str += ' ' + (data.key === 'string'? 
-            '"' + escapeString(data.value) + '"' : 
-            (data.key === 'serialized'? 
-              "(" + data.value + ")" :
-              String(data.value)));
+          str += ' ' + (data.tag === 'string'? 
+            '"' + escapeString(data.args) + '"' : 
+            (data.tag === 'serialized'? 
+              "(" + data.args + ")" :
+              String(data.args)));
         }
         return this.serialized(str); 
       }}
-    ).recursive();
+    );
     
-    return String(adt.deconstruct(serializeEval.apply(serializeEval, arguments)).value);
+    return String(adt.deconstruct(serializeEval.recurse.apply(serializeEval, arguments)).args);
   };
 

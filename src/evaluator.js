@@ -13,18 +13,21 @@
         return evaluator;
       };
 
-      var _eval = function(pattern, tag, args) {
+      var _eval = function(pattern, tag, datatype, args) {
+        // TODO (version 1.0 & 2.0): The first argument can be removed
         // TODO (version 3.0): perform pattern matching
         // E.g. split the data around whitespace and in order of specific to general...
-        self._tag = tag;
-        self._pattern = pattern;
-        if (typeof evaluator[pattern] === 'function')
-          return evaluator[pattern].apply(self, args);
-        return evaluator['_'].apply(self, args);
+        var result;
+        self._pattern = (pattern != null? pattern : (tag != null? tag : datatype));
+        self._tag = (tag != null? tag : datatype);
+        self._datatype = (datatype != null? datatype : 'adt');
+        var f = evaluator[self._pattern]; 
+        if (typeof f !== 'function')
+          f = evaluator['_'];
+        return f.apply(self, args);
       };
 
       evaluator.eval = function(data) {
-
         // Determine if the data is a construction (built by a constructor)
         if (isADTData(data)) {
           // pre-condition: No empty constructions
@@ -40,15 +43,10 @@
             else
               pattern = pattern.concat(' '.concat(typeof data[i]));
           }*/
-          return _eval(data[0], data[0], data);
+          return _eval(null, data[0], 'adt', [].slice.call(data,1));
         }
-        // NEW:
-        throw "TODO: evaluate primitive type"
-
-        // OLD:
-        // If the argument is neither a constructor name, nor a construction (ADTData)
-        // then simply return it
-        //return data;
+        // Evaluate primitive type
+        return _eval(null, null, typeof data, data);
       };
 
       evaluator.recurse = function(data) {
@@ -67,22 +65,17 @@
             var subResult = isADTData(data[i])? evaluator.recurse(data[i]) : data[i];
             if (isADTData(subResult)) {
               pattern = pattern.concat(' '.concat(subResult[0]));
-              result[i] = subResult;
+              result[i - 1] = subResult;
             }
             else {
               pattern = pattern.concat(' '.concat(typeof subResult));
-              result[i] = subResult;
+              result[i - 1] = subResult;
             }
           }
-          return _eval(pattern,data[0], result);
+          // TODO (version 3.0): Use pattern
+          return _eval(null/*pattern*/, data[0], 'adt', result);
         }
-        // NEW:
-        throw "TODO: evaluate primitive type"
-        
-        // OLD:
-        // If the argument is neither a constructor name, nor a construction (ADTData)
-        // then simply return it
-        //return data;
+        return _eval(null, null, typeof data, data);
       };
 
       /* TODO (version 2/3)?
