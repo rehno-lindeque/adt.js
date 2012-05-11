@@ -30,7 +30,7 @@ var adt = (function() {
             else if (typeof(a[key]) === 'function')
               selfProto[key] = a[key];
             else
-              selfProto[key] = function() { return a[key]; };
+              selfProto[key] = (function(val){ return function() { return val; }; })(a[key]);
         }
         else
           continue; // TODO: WARNING: unidentified argument passed to adt
@@ -48,6 +48,11 @@ var adt = (function() {
       return function() {
         return adt.construct.apply(null, [identifier].concat([].slice.call(arguments, 0)));
       }; 
+    },
+    getObjectType = function(data) {
+      var 
+        str = Object.prototype.toString.call(data);
+      return str.slice(str.indexOf(' ') + 1, str.length - 1);
     },
     unescapeString = function(str) {
       var
@@ -156,7 +161,7 @@ var adt = (function() {
           return _eval(null, data[0], 'adt', [].slice.call(data,1));
         }
         // Evaluate primitive type
-        return _eval(null, null, typeof data, [data]);
+        return _eval(null, null, getObjectType(data), [data]);
       };
 
       evaluator.recurse = function(data) {

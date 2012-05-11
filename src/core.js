@@ -42,6 +42,11 @@
         return adt.construct.apply(null, [identifier].concat([].slice.call(arguments, 0)));
       }; 
     },
+    getObjectType = function(data) {
+      var 
+        str = Object.prototype.toString.call(data);
+      return str.slice(str.indexOf(' ') + 1, str.length - 1);
+    },
     unescapeString = function(str) {
       var
         i,
