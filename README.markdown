@@ -71,23 +71,26 @@ console.log(html);
 Of course, you may think that this piece of code is entirely trivial...
 
     Note: What is wrong with the following snippet of code?
-
     literalClass = { number: 'numeric', string: 'text', object: 'record', array: 'list' }[typeof t];
 
-The next example function
+Most of the time you'll want your evaluators to do something more than simply returning a constant value.
+The next example dispatches to functions in order to perform more complex evaluations.
+The object itself is passed into the matching evaluator as an argument.
+Notice in the code below that an argument of type `Array` is destructured by invoking the evaluators recursively using `this(...)`.
 
 ```javascript
 // Pretty print with function dispatch
 var
   prettyPrintLiteral = adt({
-    Number: function(a) { return "<span class='numeric'>" + String(a) + "</span>" },
-    String: function(a) { return "<span class='text'>" + a + "</span>" },
-    Object: function(a) { return "<span class='record'>" + JSON.stringify(a) + "</span>" },
-    Array: function(a) { 
-      return "<ol>\n" + a.map(function(b){ return "<li>" + this(b) + "</li>\n"; }, this).join('') + "</ol>";
+    Number: function(val) { return "<span class='numeric'>" + String(val) + "</span>" },
+    String: function(val) { return "<span class='text'>" + val + "</span>" },
+    Object: function(val) { return "<span class='record'>" + JSON.stringify(val) + "</span>" },
+    Array: function(val) { 
+      return "<ol>\n" + val.map(function(a){ return "<li>" + this(a) + "</li>\n"; }, this).join('') + "</ol>";
     }
   }),
   html = prettyPrintLiteral(["hello", 2.7, ["a","b"], { foo: "bar" }, 8]);
+console.log(html);
 ```
 
     Result:
@@ -103,13 +106,24 @@ var
     </ol>
 
 
-#### Dispatch on user-defined classes
+#### Dispatch on user-defined object (proto-)types
 
-The same way that adt.js can dispatch on primitive types such as Number and 
+The same way that adt.js can dispatch on primitive types such as `Number` and `Array` any user defined class is, in fact, matched the same way.
 
 ```javascript
-TODO
+var
+  Error = function(msg) { this.date = Date.now(); this.msg = msg; },
+  Warning = function(msg) { this.date = Date.now(); this.msg = msg; },
+  printLog(adt({
+    Error: function(errorObj) { console.error("ERROR (" + errorObject.date + "): " + errorObj.msg); },
+    Warning: function(warnObj) { console.warn("WARNING (" + warnObject.date + "): " + warnObj.msg); }
+  }));
+printLog(new Error("I'm just kidding - there's no error..."));
+printLog(new Warning("Actually, you left the stove on!"));
 ```
+
+Take care to note that **adt.js** will only match the top most prototype (or *"class"*) from which the object is derived.
+For example `adt({ object: function() {...} })()` will fail to match the ..... object.
 
 #### Data type constructors
 
