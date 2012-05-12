@@ -17,15 +17,61 @@ console.log("-- Test 2 (Built-in types - dispatch functions) --");
   // Pretty print with function dispatch
   var
     prettyPrintLiteral = adt({
-      Number: function(a) { return "<span class='numeric'>" + String(a) + "</span>" },
-      String: function(a) { return "<span class='text'>" + a + "</span>" },
-      Object: function(a) { return "<span class='record'>" + JSON.stringify(a) + "</span>" },
-      Array: function(a) { 
-        return "<ol>\n" + a.map(function(b){ return "<li>" + this(b) + "</li>\n"; }, this).join('') + "</ol>";
+      Number: function(val) { return "<span class='numeric'>" + String(val) + "</span>" },
+      String: function(val) { return "<span class='text'>" + val + "</span>" },
+      Object: function(val) { return "<span class='record'>" + JSON.stringify(val) + "</span>" },
+      Array: function(val) { 
+        return "<ol>\n" + val.map(function(a){ return "<li>" + this(a) + "</li>\n"; }, this).join('') + "</ol>";
       }
     }),
     html = prettyPrintLiteral(["hello", 2.7, ["a","b"], { foo: "bar" }, 8]);
   console.log(html);
+})();
+
+console.log("-- Test 3 (Custom constructors) --");
+(function(){
+var 
+  D = adt('Word', 'Root', 'Syllable'),
+  supercalifragilisticexpialidocious =
+    D.Word(
+      D.Root(
+        D.Syllable('su'),
+        D.Syllable('per')),
+      D.Root(
+        D.Syllable('cal'),
+        D.Syllable('i')),
+      D.Root(
+        D.Syllable('frag'),
+        D.Syllable('i'),
+        D.Syllable('lis'),
+        D.Syllable('tic')),
+      D.Root(
+        D.Syllable('ex'),
+        D.Syllable('pi'),
+        D.Syllable('al'),
+        D.Syllable('i'),
+        D.Syllable('do'),
+        D.Syllable('cious'))),
+  serializeD = adt({
+    Word: function() {
+      var 
+        children = [],
+        i;
+      for (i = 0; i < arguments.length; ++i)
+        children.push(this(arguments[i]));
+      return children.join(' - ');
+    },
+    Root: function() {
+      var 
+        children = [],
+        i;
+      for (i = 0; i < arguments.length; ++i)
+        children.push(this(arguments[i]));
+      return children.join('.');
+    },
+    Syllable: function(syl) { return syl; }
+  });
+console.log(serializeD(supercalifragilisticexpialidocious));
 })();
 
 console.log("-- Test 3 (multiple implementations) --");
