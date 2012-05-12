@@ -137,7 +137,7 @@ Regrettably, due to a flaw in the language design it is not tractable to impleme
 In fact, in this library constructors are simply evaluators that *box* their arguments rather than *unboxing* them.
 Once again, a set constructors is defined inside an interface.
 When `adt(...)` is called with strings (or even numbers) as arguments the library assumes these as *tags* and automatically generates constructor functions for each one.
-Constructors and evaluator can be declared together in one interface with problem.
+Constructors and evaluators can be declared together in one interface without any problems.
 
 ```javascript
 var 
