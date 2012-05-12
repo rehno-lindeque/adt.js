@@ -47,7 +47,7 @@ The simplest way to illustrate the utility of **adt.js** is to run through a cou
 
 ### Version 1.0
 
-#### Dispatch on built-in object types
+#### Dispatch on built-in object class
 
 The most basic application of **adt.js** is to provide dispatch on data types.
 In this first example we'll construct an interface called `literalClass` consisting of *evaluators* that match JavaScript's built-in data types.
@@ -105,25 +105,31 @@ console.log(html);
     <li><span class='numeric'>8</span></li>
     </ol>
 
+This kind of automatic type matching relies on the internal `[[Class]]` property of JavaScript objects.
+In practice this means it works on the following built-in objects (from the [ECMAScript 5 specification](http://es5.github.com/#x15.2.4.2))...
 
-#### Dispatch on user-defined object (proto-)types
+<table>
+  <thead><tr><th>Primitive data types</th></tr></thead>
+  <tbody>
+    <tr><td>Arguments</td></tr>
+    <tr><td>Array</td></tr>
+    <tr><td>Boolean</td></tr>
+    <tr><td>Date</td></tr>
+    <tr><td>Error</td></tr>
+    <tr><td>Function</td></tr>
+    <tr><td>JSON</td></tr>
+    <tr><td>Math</td></tr>
+    <tr><td>Number</td></tr>
+    <tr><td>Object</td></tr>
+    <tr><td>RegExp</td></tr>
+    <tr><td>String</td></tr>
+    <tr><td>Null</td></tr>
+    <tr><td>Undefined</td></tr>
+  </tbody>
+</table>
 
-The same way that adt.js can dispatch on primitive types such as `Number` and `Array` any user defined class is, in fact, matched the same way.
-
-```javascript
-var
-  Error = function(msg) { this.date = Date.now(); this.msg = msg; },
-  Warning = function(msg) { this.date = Date.now(); this.msg = msg; },
-  printLog(adt({
-    Error: function(errorObj) { console.error("ERROR (" + errorObject.date + "): " + errorObj.msg); },
-    Warning: function(warnObj) { console.warn("WARNING (" + warnObject.date + "): " + warnObj.msg); }
-  }));
-printLog(new Error("I'm just kidding - there's no error..."));
-printLog(new Warning("Actually, you left the stove on!"));
-```
-
-Take care to note that **adt.js** will only match the top most prototype (or *"class"*) from which the object is derived.
-For example `adt({ object: function() {...} })()` will fail to match the ..... object.
+Regrettably, due to a flaw in the language design it is not tractable to implement pattern matching for custom constructors in a reliable manner.
+(This is, unfortunately, only aggravated by the non-standard constructor [name property](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/Name).)
 
 #### Data type constructors
 
