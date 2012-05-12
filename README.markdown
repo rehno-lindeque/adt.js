@@ -128,7 +128,7 @@ In practice this means it works on the following built-in objects (from the [ECM
   </tbody>
 </table>
 
-Regrettably, due to a flaw in the language design it is not tractable to implement pattern matching for custom constructors in a reliable manner.
+Regrettably, due to a flaw in the language design it is not tractable to implement pattern matching for custom object constructors (using `new`) in a reliable manner.
 (This is, unfortunately, only aggravated by the non-standard constructor [name property](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/Name).)
 
 #### Custom constructors
