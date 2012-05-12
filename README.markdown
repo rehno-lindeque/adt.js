@@ -76,7 +76,7 @@ Of course, you may think that this piece of code is entirely trivial...
 Most of the time you'll want your evaluators to do something more than simply returning a constant value.
 The next example dispatches to functions in order to perform more complex evaluations.
 The object itself is passed into the matching evaluator as an argument.
-Notice that to deconstruct the argument of type `Array` evaluators interface is invoked recursively by calling `this()` on each of the elements.
+Notice that to deconstruct the argument of type `Array` evaluators interface is invoked recursively by calling `this(...)` on each of the elements.
 
 ```javascript
 // Pretty print with function dispatch
@@ -131,11 +131,63 @@ In practice this means it works on the following built-in objects (from the [ECM
 Regrettably, due to a flaw in the language design it is not tractable to implement pattern matching for custom constructors in a reliable manner.
 (This is, unfortunately, only aggravated by the non-standard constructor [name property](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/Name).)
 
-#### Data type constructors
+#### Custom constructors
+
+**adt.js** provides a way of creating your own custom data type constructors.
+In fact, in this library constructors are simply evaluators that *box* their arguments rather than *unboxing* them.
+Once again, a set constructors is defined inside an interface.
+When `adt(...)` is called with strings (or even numbers) as arguments the library assumes these as *tags* and automatically generates constructor functions for each one.
+Constructors and evaluator can be declared together in one interface with problem.
 
 ```javascript
-TODO
+var 
+  D = adt('Word', 'Root', 'Syllable'),
+  supercalifragilisticexpialidocious =
+    D.Word(
+      D.Root(
+        D.Syllable('su'),
+        D.Syllable('per')),
+      D.Root(
+        D.Syllable('cal'),
+        D.Syllable('i')),
+      D.Root(
+        D.Syllable('frag'),
+        D.Syllable('i'),
+        D.Syllable('lis'),
+        D.Syllable('tic')),
+      D.Root(
+        D.Syllable('ex'),
+        D.Syllable('pi'),
+        D.Syllable('al'),
+        D.Syllable('i'),
+        D.Syllable('do'),
+        D.Syllable('cious'))),
+  serializeD = adt({
+    Word: function() {
+      var 
+        children = [],
+        i;
+      for (i = 0; i < arguments.length; ++i)
+        children.push(this(arguments[i]));
+      return children.join(' - ');
+    },
+    Root: function() {
+      var 
+        children = [],
+        i;
+      for (i = 0; i < arguments.length; ++i)
+        children.push(this(arguments[i]));
+      return children.join('.');
+    },
+    Syllable: function(syl) { return syl; }
+  });
+console.log(serializeD(supercalifragilisticexpialidocious));
 ```
+
+    Result:
+    su.per - cal.i - frag.i.lis.tic - ex.pi.al.i.do.cious
+
+Unlike primitive data types a custom constructor can box any number of values passed in as arguments - or none at all.
 
 #### Providing multiple implementations
 
@@ -260,7 +312,7 @@ adt.js provides a [fold](http://en.wikipedia.org/wiki/Fold_(higher-order_functio
 
 You can find additional utilities for manipulating and building ADT's in the [adt-util.js](https://github.com/rehno-lindeque/adt-util.js)submodule.
 
-* TODO: Move `adt.compose()` here... + example
+* TODO: Move `adt.compose()` here... + example (pretty print a tree...)
 * TODO: Move `adt.constructors()` here + example
 * TODO: Move `adt.own` here + example
 * TODO: Perhaps move `adt.fold` here? + example (finite state machine)
