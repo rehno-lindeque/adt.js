@@ -74,6 +74,23 @@ var
 console.log(serializeD(supercalifragilisticexpialidocious));
 })();
 
+console.log("-- Test ? (Fall through error) --");
+(function(){
+  var 
+    cons = adt('A','B','C'),
+    eval = adt({
+      A: function() { return "matched A"; },
+      B: function() { return "matched B"; },
+      _: function() { throw "Unknown data type `" + this._pattern + "`"; }
+    });
+  try {
+    console.log(eval(cons.A()));
+    console.log(eval(cons.C()));
+  } catch(error) {
+    console.log(error);
+  }
+})();
+
 console.log("-- Test 4 (multiple implementations) --");
 (function(){
   var 
@@ -128,14 +145,14 @@ console.log("-- Test 5 (nested expressions) --");
   (function(){
     var
       math = adt('plus', 'mul'),
-      calc = adt({
+      calc = adt.recursive(adt({
         plus: function(a,b) { return a + b; },
         mul: function(a,b) { return a * b; }
-      }).recursive(),
-      serialize = adt({
+      })),
+      serialize = adt.recursive(adt({
         plus: function(a,b) { return "(" + String(a) + " + " + String(b) + ")"; },
         mul: function(a,b) { return "(" + String(a) + " * " + String(b) + ")"; }
-      }).recursive(),
+      })),
       expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
       answer = calc(expr),
       detailedAnswer = serialize(expr) + " = " + String(answer);
@@ -150,7 +167,7 @@ console.log("-- Test 6 (automatic constructors) --");
       plus: function(a,b) { return a + b; },
       mul: function(a,b) { return a * b; }
     },
-    mathEval = adt(mathOps).recursive(),
+    mathEval = adt.recursive(adt(mathOps)),
     mathCons = adt.constructors(mathOps),
     // or equivalently: mathCons = adt.constructors(mathEval)
     expr = mathCons.mul(mathCons.plus(5, 9), mathCons.plus(33, mathCons.mul(20, 1))),
@@ -162,7 +179,7 @@ console.log("-- Test 7 (non-enumerable api's) --");
 (function(){
   var
     MathCons = adt.own.constructors(Math),
-    MathEval = adt.own(Math).recursive(),
+    MathEval = adt.recursive(adt.own(Math)),
     formula = MathCons.pow(MathCons.random(), MathCons.cos(0.1)),
     result = MathEval(formula);
   console.log("result: ", result);
@@ -174,12 +191,12 @@ console.log("-- Test 8 (combining adt's) --");
     mathCons = adt(adt.own.constructors(Math), adt('plus', 'minus', 'mul', 'div')),
     // or equivalently:
     // mathCons = adt(adt.own.constructors(Math), 'plus', 'minus', 'mul', 'div'),
-    mathEval = adt(adt.own(Math), adt({
+    mathEval = adt.recursive(adt(adt.own(Math), adt({
       plus: function(a,b) { return a + b; },
       minus: function(a,b) { return a - b; },
       mul: function(a,b) { return a * b; },
       div: function(a,b) { return a / b; }
-    })).recursive(),
+    }))),
     // or equivalently:
     // mathEval = adt(adt.own(Math), { ... }),
     formula = mathCons.pow(mathCons.plus(0.5, 3.9), mathCons.mul(0.1, mathCons.exp(4.3))),
@@ -201,10 +218,10 @@ console.log("-- Test 9 (serialize) --");
 console.log("-- Test 10 (deserialize) --");
 (function(){
   var
-    mathEval = adt({
+    mathEval = adt.recursive(adt({
       plus: function(a,b) { return a + b; },
       mul: function(a,b) { return a * b; }
-    }).recursive(),
+    })),
     exprSerialized = "(mul (plus 5.0 22) (mul 0.1 0.1))",
     exprDeserialized = adt.deserialize(exprSerialized),
     result = mathEval(exprDeserialized),
