@@ -371,6 +371,12 @@ Using only a few primitive programming constructs ADT's never-the-less give rise
 
 ### Version 1.0
 
+#### Accessing ADT arguments directly
+
+```javascript
+TODO a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+```
+
 #### Shortening code
 
 * TODO: example of using the `with` keyword with **adt.js** and warning about deprecation in ECMAScript 5.0 Strict.
