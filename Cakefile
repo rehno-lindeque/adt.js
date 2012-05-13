@@ -7,7 +7,7 @@ libFiles  = [
   'core'
   'construct'
   'deconstruct'
-  'evaluator'
+  'evaluators'
   'constructors'
   'recursive'
   'own'

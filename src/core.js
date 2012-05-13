@@ -35,7 +35,7 @@
       // tables with keys as deconstructors and values as dispatch functions)
       var selfProto = {};
       init(selfProto, arguments);
-      return evaluator(selfProto);
+      return evaluators(selfProto);
     },
     makeConstructor = function(identifier) { 
       return function() {

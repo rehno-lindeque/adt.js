@@ -1,15 +1,15 @@
-  // ADT evaluator api
+  // ADT evaluators api
   var 
-    evaluator = function(selfProto) {
+    evaluators = function(selfProto) {
       var 
         tag,
-        evaluator = function(){
-          return evaluator.eval.apply(evaluator, arguments);
+        evaluators = function(){
+          return evaluators.eval.apply(evaluators, arguments);
         };
 
-      evaluator.recursive = function() {
-        evaluator.eval = evaluator.recurse;
-        return evaluator;
+      evaluators.recursive = function() {
+        evaluators.eval = evaluators.recurse;
+        return evaluators;
       };
 
       var _eval = function(pattern, tag, datatype, args) {
@@ -17,16 +17,16 @@
         // TODO (version 3.0): perform pattern matching
         // E.g. split the data around whitespace and in order of specific to general...
         var result;
-        evaluator._pattern = (pattern != null? pattern : (tag != null? tag : datatype));
-        evaluator._tag = (tag != null? tag : datatype);
-        evaluator._datatype = (datatype != null? datatype : 'ADT');
-        var f = evaluator[evaluator._pattern]; 
+        evaluators._pattern = (pattern != null? pattern : (tag != null? tag : datatype));
+        evaluators._tag = (tag != null? tag : datatype);
+        evaluators._datatype = (datatype != null? datatype : 'ADT');
+        var f = evaluators[evaluators._pattern]; 
         if (typeof f !== 'function')
-          f = evaluator['_'];
-        return f.apply(evaluator, args);
+          f = evaluators['_'];
+        return f.apply(evaluators, args);
       };
 
-      evaluator.eval = function(data) {
+      evaluators.eval = function(data) {
         // Determine if the data is a construction (built by a constructor)
         if (isADTData(data)) {
           // pre-condition: No empty constructions
@@ -48,7 +48,7 @@
         return _eval(null, null, getObjectType(data), [data]);
       };
 
-      evaluator.recurse = function(data) {
+      evaluators.recurse = function(data) {
         if (isADTData(data)) {
           // pre-condition: empty construction (built by a constructor)
           if (data.length < 1)
@@ -61,7 +61,7 @@
           result._ADTData = true;
           pattern = String(data[0]);
           for (i = 1; i < data.length; ++i) {
-            result[i - 1] = evaluator.recurse(data[i]);
+            result[i - 1] = evaluators.recurse(data[i]);
             pattern = pattern.concat(' '.concat(isADTData(result[i - 1])? result[i - 1][0] : typeof result[i - 1]));
           }
           // TODO (version 3.0): Use pattern
@@ -73,13 +73,13 @@
       /* TODO (version 2/3)?
       // Iterate over an array of values (while carrying state, like a finite state machine)
       // Similar to a haskell enumerator + iteratee with "map" as the enumerator and "iteratee" as the iteratee carying state
-      evaluator.mapIteratee = function() { console.log("mapIterate", arguments); return 0; };
+      evaluators.mapIteratee = function() { console.log("mapIterate", arguments); return 0; };
 
       // Similar to a haskell enumerator + iteratee with "fold" as the enumerator and "iteratee" as the iteratee carying state
-      evaluator.foldIteratee = function() { console.log("iterate", arguments); return 0; };
+      evaluators.foldIteratee = function() { console.log("iterate", arguments); return 0; };
       */
 
-      // Add adt constructors / methods to the evaluator
+      // Add adt constructors / methods to the evaluators
       for (tag in selfProto)
         switch(tag) {
           case 'eval':
@@ -89,11 +89,11 @@
           default:
             if (tag !== 'eval') {
               if (typeof selfProto[tag] === 'function')
-                // Custom evaluator
-                evaluator[tag] = (function(tag){ return function(){ return selfProto[tag].apply(evaluator, arguments); }; })(tag);
+                // Custom evaluators
+                evaluators[tag] = (function(tag){ return function(){ return selfProto[tag].apply(evaluators, arguments); }; })(tag);
               else 
                 // Constant constructor (return the constant value)
-                evaluator[tag] = (function(tag){ return function(){ return selfProto[tag]; }; })(tag);
+                evaluators[tag] = (function(tag){ return function(){ return selfProto[tag]; }; })(tag);
             }
         }
       // Create an identity constructor for the fall through pattern if none was supplied
@@ -101,9 +101,9 @@
         selfProto['_'] = function(){
           return this._datatype !== 'ADT'? arguments[0] : adt.construct.apply(null, [this._tag].concat([].slice.call(arguments, 0)));
         },
-        evaluator['_'] = function(){ return selfProto['_'].apply(evaluator, arguments); };
+        evaluators['_'] = function(){ return selfProto['_'].apply(evaluators, arguments); };
       }
       
-      return evaluator;
+      return evaluators;
     };
 
