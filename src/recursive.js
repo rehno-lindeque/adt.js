@@ -1,5 +1,5 @@
   adt.recursive = function(f) {
-    return function recurse (data) {
+    var recurse = function (data) {
         var i, results = [data[0]], subResult;
         if (!isADTData(data))
           return f(data);
@@ -11,4 +11,8 @@
         // TODO: Take into account pattern matching requirements...
         return f(adt.construct.apply(null, results));
     };
+    // Assign all the methods in the interface to the recursive interface too
+    for (var key in f)
+      recurse[key] = f[key];
+    return recurse;
   };
