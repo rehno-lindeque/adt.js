@@ -123,25 +123,6 @@ console.log("-- Test 4 (multiple implementations) --");
 
 console.log("-- Test 5 (nested expressions) --");
 (function(){
-  console.log("Using recurse()...");
-  (function(){
-    var
-      math = adt('plus', 'mul'),
-      calc = adt({
-        plus: function(a,b) { return a + b; },
-        mul: function(a,b) { return a * b; }
-      }),
-      serialize = adt({
-        plus: function(a,b) { return "(" + String(a) + " + " + String(b) + ")"; },
-        mul: function(a,b) { return "(" + String(a) + " * " + String(b) + ")"; }
-      }),
-      expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
-      answer = calc.recurse(expr),
-      detailedAnswer = serialize.recurse(expr) + " = " + String(answer);
-    console.log("detailed answer: ", detailedAnswer);
-  })();
-  
-  console.log("Using recursive()...");
   (function(){
     var
       math = adt('plus', 'mul'),

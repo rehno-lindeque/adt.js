@@ -119,13 +119,8 @@ var adt = (function() {
       var 
         tag,
         evaluators = function(){
-          return evaluators.eval.apply(evaluators, arguments);
+          return evaluators._eval.apply(evaluators, arguments);
         };
-
-      evaluators.recursive = function() {
-        evaluators.eval = evaluators.recurse;
-        return evaluators;
-      };
 
       var _eval = function(pattern, tag, datatype, args) {
         // TODO (version 1.0 & 2.0): The first argument can be removed
@@ -141,7 +136,7 @@ var adt = (function() {
         return f.apply(evaluators, args);
       };
 
-      evaluators.eval = function(data) {
+      evaluators._eval = function(data) {
         // Determine if the data is a construction (built by a constructor)
         if (isADTData(data)) {
           // pre-condition: No empty constructions
@@ -163,29 +158,7 @@ var adt = (function() {
         return _eval(null, null, getObjectType(data), [data]);
       };
 
-      evaluators.recurse = function(data) {
-        if (isADTData(data)) {
-          // pre-condition: empty construction (built by a constructor)
-          if (data.length < 1)
-            throw "It shouldn't be possible to have empty ADT constructions";
-          // Evaluate sub-trees
-          var
-            result = new Array(data.length - 1),
-            pattern = '',
-            i;
-          result._ADTData = true;
-          pattern = String(data[0]);
-          for (i = 1; i < data.length; ++i) {
-            result[i - 1] = evaluators.recurse(data[i]);
-            pattern = pattern.concat(' '.concat(isADTData(result[i - 1])? result[i - 1][0] : typeof result[i - 1]));
-          }
-          // TODO (version 3.0): Use pattern
-          return _eval(null/*pattern*/, data[0], 'adt', result);
-        }
-        return _eval(null, null, getObjectType(data), [data]);
-      };
-
-      /* TODO (version 2/3)?
+      /* TODO (version )?
       // Iterate over an array of values (while carrying state, like a finite state machine)
       // Similar to a haskell enumerator + iteratee with "map" as the enumerator and "iteratee" as the iteratee carying state
       evaluators.mapIteratee = function() { console.log("mapIterate", arguments); return 0; };
@@ -198,8 +171,6 @@ var adt = (function() {
       for (tag in selfProto)
         switch(tag) {
           case 'eval':
-          case 'recurse':
-          case 'recursive':
             continue;  // Warning? trying to overide standard functions
           default:
             if (tag !== 'eval') {
@@ -271,42 +242,41 @@ var adt = (function() {
 
   adt.serialize = function(){
     var 
-    serializeEval = adt('serialized', {'_': 
-      function() { 
-        var 
-          i, 
-          escapes = {
-            '\\': '\\\\',
-            '\"': '\\\"',
-            '\'': '\\\'',
-            '\t': '\\t',
-            '\r': '\\r',
-            '\n': '\\n',
-            ' ': '\\ ',
-            ',': '\\,',
-            '(': '\\(',
-            ')': '\\)',
-            '[': '\\[',
-            ']': '\\]',
-            '{': '\\{',
-            '}': '\\}'
-          },
-          str = escapeString(this._tag, escapes), 
-          data;
-        for (i = 0; i < arguments.length; ++i) {
-          // TODO: refactor (is deconstruct still necessary?)
-          data = adt.deconstruct(arguments[i]);
-          str += ' ' + (data.tag === 'string'? 
-            '"' + escapeString(data.args) + '"' : 
-            (data.tag === 'serialized'? 
-              "(" + data.args + ")" :
-              String(data.args)));
-        }
-        return this.serialized(str); 
-      }}
-    );
-    
-    return String(adt.deconstruct(serializeEval.recurse.apply(serializeEval, arguments)).args);
+      serializeEval = adt.recursive(adt('serialized', {'_':
+        function() { 
+          var 
+            i, 
+            escapes = {
+              '\\': '\\\\',
+              '\"': '\\\"',
+              '\'': '\\\'',
+              '\t': '\\t',
+              '\r': '\\r',
+              '\n': '\\n',
+              ' ': '\\ ',
+              ',': '\\,',
+              '(': '\\(',
+              ')': '\\)',
+              '[': '\\[',
+              ']': '\\]',
+              '{': '\\{',
+              '}': '\\}'
+            },
+            str = escapeString(this._tag, escapes), 
+            data;
+          for (i = 0; i < arguments.length; ++i) {
+            // TODO: refactor (is deconstruct still necessary?)
+            data = adt.deconstruct(arguments[i]);
+            str += ' ' + (data.tag === 'string'? 
+              '"' + escapeString(data.args) + '"' : 
+              (data.tag === 'serialized'? 
+                "(" + data.args + ")" :
+                String(data.args)));
+          }
+          return this.serialized(str); 
+        }}
+      ));
+    return String(adt.deconstruct(serializeEval.apply(serializeEval, arguments)).args);
   };
 
   var 
