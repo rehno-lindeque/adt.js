@@ -61,15 +61,8 @@
           result._ADTData = true;
           pattern = String(data[0]);
           for (i = 1; i < data.length; ++i) {
-            var subResult = isADTData(data[i])? evaluator.recurse(data[i]) : data[i];
-            if (isADTData(subResult)) {
-              pattern = pattern.concat(' '.concat(subResult[0]));
-              result[i - 1] = subResult;
-            }
-            else {
-              pattern = pattern.concat(' '.concat(typeof subResult));
-              result[i - 1] = subResult;
-            }
+            result[i - 1] = isADTData(data[i])? evaluator.recurse(data[i]) : data[i];
+            pattern = pattern.concat(' '.concat(isADTData(subResult)? subResult[0] : typeof subResult));
           }
           // TODO (version 3.0): Use pattern
           return _eval(null/*pattern*/, data[0], 'adt', result);
