@@ -47,7 +47,7 @@ The simplest way to illustrate the utility of **adt.js** is to run through a cou
 
 ### Version 1.0
 
-#### Dispatch on built-in object class
+#### Dispatch on built-in object classes
 
 The most basic application of **adt.js** is to provide dispatch on data types.
 In this first example we'll construct an interface called `literalClass` consisting of *evaluators* that match JavaScript's built-in data types.
@@ -71,7 +71,7 @@ console.log(html);
 Of course, you may think that this piece of code is entirely trivial...
 
     Note: What is wrong with the following snippet of code?
-    literalClass = { number: 'numeric', string: 'text', object: 'record', array: 'list' }[typeof t];
+    literalClass = { object: 'record', array: 'list' }[typeof []];
 
 Most of the time you'll want your evaluators to do something more than simply returning a constant value.
 The next example dispatches to functions in order to perform more complex evaluations.
