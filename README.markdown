@@ -134,10 +134,10 @@ Regrettably, due to a flaw in the language design it is not tractable to impleme
 #### Custom constructors
 
 **adt.js** provides a way of creating your own custom data type constructors.
-In fact, in this library constructors are simply evaluators that *box* their arguments rather than *unboxing* them.
-Once again, a set constructors is defined inside an interface.
-When `adt(...)` is called with strings (or even numbers) as arguments the library assumes these as *tags* and automatically generates constructor functions for each one.
-Constructors and evaluators can be declared together in one interface without any problems.
+In fact: in this library constructors are simply evaluators that *box* their arguments rather than *unboxing* them.
+Once again, a set of constructors is defined inside an *interface*.
+When `adt(...)` is called with strings (or even numbers) as arguments the library assumes these are *tags* and automatically generates constructor functions for each one.
+Constructors and evaluators can be mixed together in a single interface without any problems.
 
 ```javascript
 var 
@@ -193,7 +193,6 @@ Unlike primitive data types a custom constructor can box any number of values pa
 
 To create an evaluator that matches any pattern not handled by the rest of the interface, use the `_` pattern.
 By default, **adt.js** assigns the identity function to `_`. 
-(As you'll see later this is convenient for composing partial interfaces using `adt.compose(...)`.)
 
 If you want to enforce exhaustive pattern matching in your interfaces you will need to implement the error check yourself. 
 To see which pattern was matched **adt.js** assigns `this._pattern` in all evaluators, including `_`.
@@ -221,8 +220,8 @@ try {
 #### The this parameter, private members and reserved members.
 
 As you have already seen, an interface can be invoked recursively using `this(...)`.
-In fact in **adt.js** `this` is the interface being that is being evaluated.
-It allows us to also write things like the following...
+In fact in **adt.js** `this` is exactly the interface that is being evaluated.
+It also allows us to write things like the following...
 
 ```javascript
 TODO
