@@ -9,6 +9,7 @@ libFiles  = [
   'deconstruct'
   'evaluator'
   'constructors'
+  'recursive'
   'own'
   'serialize'
   'deserialize'

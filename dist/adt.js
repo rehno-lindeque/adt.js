@@ -134,7 +134,7 @@ var adt = (function() {
         var result;
         evaluator._pattern = (pattern != null? pattern : (tag != null? tag : datatype));
         evaluator._tag = (tag != null? tag : datatype);
-        evaluator._datatype = (datatype != null? datatype : 'adt');
+        evaluator._datatype = (datatype != null? datatype : 'ADT');
         var f = evaluator[evaluator._pattern]; 
         if (typeof f !== 'function')
           f = evaluator['_'];
@@ -157,7 +157,7 @@ var adt = (function() {
             else
               pattern = pattern.concat(' '.concat(typeof data[i]));
           }*/
-          return _eval(null, data[0], 'adt', [].slice.call(data,1));
+          return _eval(null, data[0], 'ADT', [].slice.call(data,1));
         }
         // Evaluate primitive type
         return _eval(null, null, getObjectType(data), [data]);
@@ -176,15 +176,8 @@ var adt = (function() {
           result._ADTData = true;
           pattern = String(data[0]);
           for (i = 1; i < data.length; ++i) {
-            var subResult = isADTData(data[i])? evaluator.recurse(data[i]) : data[i];
-            if (isADTData(subResult)) {
-              pattern = pattern.concat(' '.concat(subResult[0]));
-              result[i - 1] = subResult;
-            }
-            else {
-              pattern = pattern.concat(' '.concat(typeof subResult));
-              result[i - 1] = subResult;
-            }
+            result[i - 1] = evaluator.recurse(data[i]);
+            pattern = pattern.concat(' '.concat(isADTData(result[i - 1])? result[i - 1][0] : typeof result[i - 1]));
           }
           // TODO (version 3.0): Use pattern
           return _eval(null/*pattern*/, data[0], 'adt', result);
@@ -218,11 +211,13 @@ var adt = (function() {
                 evaluator[tag] = (function(tag){ return function(){ return selfProto[tag]; }; })(tag);
             }
         }
-      /* Create an identity constructor for the default constructor if none was supplied
+      // Create an identity constructor for the fall through pattern if none was supplied
       if (typeof selfProto['_'] === 'undefined') {
-        selfProto['_'] = function(data){ return data; };
-        evaluator['_'] = function(){ return selfProto['_'].apply(evaluator, arguments); }
-      }*/
+        selfProto['_'] = function(){
+          return this._datatype !== 'ADT'? arguments[0] : adt.construct.apply(null, [this._tag].concat([].slice.call(arguments, 0)));
+        },
+        evaluator['_'] = function(){ return selfProto['_'].apply(evaluator, arguments); };
+      }
       
       return evaluator;
     };
@@ -236,6 +231,20 @@ var adt = (function() {
     return adt.apply(null, keys);
   };
 
+  adt.recursive = function(f) {
+    return function recurse (data) {
+        var i, results = [data[0]], subResult;
+        if (!isADTData(data))
+          return f(data);
+        for (i = 1; i < data.length; ++i) {
+          subResult = recurse(data[i]);
+          if (typeof subResult !== 'undefined')
+            results.push(subResult);
+        }
+        // TODO: Take into account pattern matching requirements...
+        return f(adt.construct.apply(null, results));
+    };
+  };
   // Create ADT's from an object's own property names (both enumerable + non-enumerable)
   adt.own = function() {
     var i, j, arg, names, key, dispatchTable = {};
