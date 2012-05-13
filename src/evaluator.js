@@ -19,7 +19,7 @@
         var result;
         evaluator._pattern = (pattern != null? pattern : (tag != null? tag : datatype));
         evaluator._tag = (tag != null? tag : datatype);
-        evaluator._datatype = (datatype != null? datatype : 'adt');
+        evaluator._datatype = (datatype != null? datatype : 'ADT');
         var f = evaluator[evaluator._pattern]; 
         if (typeof f !== 'function')
           f = evaluator['_'];
@@ -42,7 +42,7 @@
             else
               pattern = pattern.concat(' '.concat(typeof data[i]));
           }*/
-          return _eval(null, data[0], 'adt', [].slice.call(data,1));
+          return _eval(null, data[0], 'ADT', [].slice.call(data,1));
         }
         // Evaluate primitive type
         return _eval(null, null, getObjectType(data), [data]);
@@ -96,11 +96,13 @@
                 evaluator[tag] = (function(tag){ return function(){ return selfProto[tag]; }; })(tag);
             }
         }
-      /* Create an identity constructor for the default constructor if none was supplied
+      // Create an identity constructor for the fall through pattern if none was supplied
       if (typeof selfProto['_'] === 'undefined') {
-        selfProto['_'] = function(data){ return data; };
-        evaluator['_'] = function(){ return selfProto['_'].apply(evaluator, arguments); }
-      }*/
+        selfProto['_'] = function(){
+          return this._datatype !== 'ADT'? arguments[0] : adt.construct.apply(null, [this._tag].concat([].slice.call(arguments, 0)));
+        },
+        evaluator['_'] = function(){ return selfProto['_'].apply(evaluator, arguments); };
+      }
       
       return evaluator;
     };
