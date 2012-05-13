@@ -23,7 +23,7 @@
         Boolean: function(a) { return SerializedADT(a? 'True' : 'False'); },
         // TODO: what about nested records, arrays and ADT's?
         Array: function(a) { return SerializedADT('[' + String(a) + ']'); },
-        Arguments: function(a) { return this.Array([].slice.call(a)); },
+        Arguments: function(a) { return this.Array([].slice.call(a, 0)); },
         // TODO: what about adt's nested inside the record...
         Object: function(a) { return SerializedADT('"' + JSON.stringify(a) + '"'); },
         SerializedADT: function(a) { return SerializedADT('(' + a + ')'); },
