@@ -128,7 +128,7 @@ In practice this means it works on the following built-in objects (from the [ECM
   </tbody>
 </table>
 
-Regrettably, due to a flaw in the language design it is not tractable to implement pattern matching for custom object constructors (invoked via `new` or even bypassed via `Object.create`) in a reliable manner.
+Regrettably, due to a flaw in the language design it is not tractable to implement pattern matching for custom object constructors (invoked via `new` or bypassed via `Object.create`) in a reliable manner.
 (This is, unfortunately, only aggravated by the non-standard constructor [name property](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/Name).)
 
 #### Custom constructors
@@ -188,6 +188,50 @@ console.log(serializeD(supercalifragilisticexpialidocious));
     su.per - cal.i - frag.i.lis.tic - ex.pi.al.i.do.cious
 
 Unlike primitive data types a custom constructor can box any number of values passed in as arguments - or none at all.
+
+#### The underscore fall through pattern
+
+To create an evaluator that matches any pattern not handled by the rest of the interface, use the `_` pattern.
+By default, **adt.js** assigns the identity function to `_`. 
+(As you'll see later this is convenient for composing partial interfaces using `adt.compose(...)`.)
+
+If you want to enforce exhaustive pattern matching in your interfaces you will need to implement the error check yourself. 
+To see which pattern was matched **adt.js** assigns `this._pattern` in all evaluators, including `_`.
+
+```javascript
+var 
+  cons = adt('A','B','C'),
+  eval = adt({
+    A: function() { return "matched A"; },
+    B: function() { return "matched B"; },
+    _: function() { throw "Unknown data type `" + this._pattern + "`"; }
+  });
+try {
+  console.log(eval(cons.A());
+  console.log(eval(cons.C());
+} catch(error) {
+  console.log(error);
+}
+```
+
+    Result:
+    matched A test.js:87
+    Unknown data type `C`
+
+#### The this parameter, private members and reserved members.
+
+As you have already seen, an interface can be invoked recursively using `this(...)`.
+In fact in **adt.js** `this` is the interface being that is being evaluated.
+It allows us to also write things like the following...
+
+```javascript
+TODO
+```
+
+Any key in an interface that is prefixed by an underscore is considered to be *private* and will not be included.
+
+Inside an evaluator **adt.js** attaches its own private members to `this`.
+Besides `this._pattern`, **adt.js** also provides.... (TODO)
 
 #### Providing multiple implementations
 
@@ -347,7 +391,7 @@ When an evaluator is eval'ed the whole set of evaluators is passed in as the `th
 ```javascript
   // TODO...
   peano = adt({
-    succ: adt('succ'),
+    succ: adt('succ').succ, // TODO: CAN BE BETTER...
     zero: 0,
     one: function() { return this.succ(this.zero()); },
     two: function() { return this.succ(this.one()); },
@@ -659,3 +703,22 @@ The `numNat` implementation is unboxed (or you might say, boxed by the javascrip
     'exp': function(a,b) { /* todo... */ }
   }).recursive();
 ```
+
+### Rule 110
+
+```javascript
+var
+  rule110 = adt({
+    111: 0,
+    110: 1,
+    101: 1,
+    100: 0,
+    011: 1,
+    010: 1,
+    001: 1,
+    000: 0
+  });
+```
+
+TODO...
+
