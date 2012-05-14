@@ -4,6 +4,8 @@
       var 
         tag,
         evaluators = function(){
+          // TODO: Add a second private method called `_run` which includes composition/recursion etc as applied by external plugins.
+          //       This would hopefully allow people to write generic higher-order functions that work together seamlesly.
           return evaluators._eval.apply(evaluators, arguments);
         };
 
@@ -23,21 +25,18 @@
 
       evaluators._eval = function(data) {
         // Determine if the data is a construction (built by a constructor)
-        if (isADTData(data)) {
-          // pre-condition: No empty constructions
-          if (data.length < 1)
-            throw "It shouldn't be possible to have empty ADT constructions";
+        if (isADT(data)) {
           /* TODO: (version 3.0): Construct a pattern for pattern matching
           var
             pattern = data[0],
             i;
           for (i = 1; i < data.length; ++i) {
-            if (isADTData(data[i])) {
+            if (isADT(data[i])) {
               pattern = pattern.concat(' '.concat(data[i][0]));
             else
               pattern = pattern.concat(' '.concat(typeof data[i]));
           }*/
-          return _eval(null, data[0], 'ADT', [].slice.call(data,1));
+          return _eval(null, data._tag, 'ADT', data);
         }
         // Evaluate primitive type
         return _eval(null, null, getObjectType(data), [data]);

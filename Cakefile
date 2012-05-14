@@ -6,7 +6,6 @@ libFiles  = [
   # omit src/ and .js to make the below lines a little shorter
   'core'
   'construct'
-  'deconstruct'
   'evaluators'
   'constructors'
   'recursive'

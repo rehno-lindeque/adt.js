@@ -1,9 +1,11 @@
   // Define a local copy of adt
   var
-    isADTData = function(data) {
-      return Array.isArray(data) && data['_ADTData'] === true;
+    isADT = function(data) {
+      return Array.isArray(data) && typeof data['_tag'] === 'string';
     },
-    // TODO: isADTInterface
+    isInterface = function(obj) {
+      return typeof obj === 'function' && typeof obj['_eval'] === 'function';
+    },
     init = function(selfProto, args) {
       var i, key, strA;
       for (i = 0; i < args.length; ++i) {
@@ -42,10 +44,29 @@
         return adt.construct.apply(null, [identifier].concat([].slice.call(arguments, 0)));
       }; 
     },
+    // Get the internal [[Class]] property (or `Undefined` or `Null` for `(void 0)` and `null` respectively)
     getObjectType = function(data) {
-      var 
-        str = Object.prototype.toString.call(data);
+      var str = Object.prototype.toString.call(data);
       return str.slice(str.indexOf(' ') + 1, str.length - 1);
+    },
+    escapeString = function(str, escapes) {
+      var 
+        i, 
+        result = '',
+        replacement,
+        escapes = escapes || {
+          '\\': '\\\\',
+          '\"': '\\\"',
+          '\'': '\\\'',
+          '\t': '\\t',
+          '\r': '\\r',
+          '\n': '\\n'
+        };
+      for (i = 0; i < str.length; ++i) {
+        replacement = escapes[str[i]];
+        result += (replacement == null? str[i] : replacement);
+      }
+      return result;
     },
     unescapeString = function(str) {
       var
@@ -70,24 +91,4 @@
       }
       // Add the last character if it wasn't escaped
       return i === str.length - 1? result + str[str.length - 1] : result;
-    },
-    escapeString = function(str, escapes) {
-      var 
-        i, 
-        result = '',
-        replacement,
-        escapes = escapes || {
-          '\\': '\\\\',
-          '\"': '\\\"',
-          '\'': '\\\'',
-          '\t': '\\t',
-          '\r': '\\r',
-          '\n': '\\n'
-        };
-      for (i = 0; i < str.length; ++i) {
-        replacement = escapes[str[i]];
-        result += (replacement == null? str[i] : replacement);
-      }
-      return result;
     };
-

@@ -39,6 +39,6 @@
           return SerializedADT(str);
         }
       });
-    return serializeEval(data);
+    return serializeEval(data)[0];
   };
 

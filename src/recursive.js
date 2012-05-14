@@ -1,7 +1,7 @@
   adt.recursive = function(f) {
     var recurse = function (data) {
         var i, results = [data[0]], subResult;
-        if (!isADTData(data))
+        if (!isADT(data))
           return f(data);
         for (i = 1; i < data.length; ++i) {
           subResult = recurse(data[i]);

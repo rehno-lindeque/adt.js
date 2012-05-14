@@ -18,7 +18,7 @@ console.log("-- Test 2 (Built-in types - dispatch functions) --");
   var
     prettyPrintLiteral = adt({
       Number: function(val) { return "<span class='numeric'>" + String(val) + "</span>" },
-      String: function(val) { return "<span class='text'>" + val + "</span>" },
+      String: function(val) { return "<span class='text'>" + val /*TODO: htmlEncode(val)*/ + "</span>" },
       Object: function(val) { return "<span class='record'>" + JSON.stringify(val) + "</span>" },
       Array: function(val) { 
         return "<ol>\n" + val.map(function(a){ return "<li>" + this(a) + "</li>\n"; }, this).join('') + "</ol>";
