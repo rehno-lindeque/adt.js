@@ -213,12 +213,12 @@ console.log("-- Test 10 (deserialize) --");
 
 console.log("-- Test 11 (advanced serialize: special case primitives (string, array, records, strings with escapes)) --");
 (function(){
-  console.log("TODO");
+  console.warn("TODO");
 })();
 
 console.log("-- Test 12 (advanced deserialize: special case primitives (string, array, records, strings with escapes)) --");
 (function(){
-  console.log("TODO");
+  console.warn("TODO");
 })();
 
 console.log("-- Test 13 (advanced serialize: constructor keys with escapes) --");
@@ -242,10 +242,10 @@ console.log("-- Test 14 (advanced deserialize: constructor keys with escapes) --
 
 console.log("-- Test 15 (advanced deserialize: optional outer parentheses) --");
 (function(){
-  console.log("TODO")
+  console.warn("TODO")
 })();
 
 console.log("-- Test 16 (advanced deserialize: direct primitive (number, string, array, record) --");
 (function(){
-  console.log("TODO")
+  console.warn("TODO")
 })();
