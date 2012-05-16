@@ -77,9 +77,9 @@
       if (input.length < 1)
         throw "No data supplied after opening parenthesis `(`.";
       var
-        key = unescapeString(input[0]),
+        tag = unescapeString(input[0]),
         tail = input.slice(1),
-        args = [key];
+        args = [];
       if (input.length > 0 && input[0] === '(')
         throw "Invalid double opening parentheses `((` found."
       while (tail.length > 0)
@@ -88,7 +88,7 @@
           case ',':
             throw "Invalid character `" + tail[0] + "` found in the data."
           case ')':
-            return { result: adt.construct.apply(null, args), tail: tail.slice(1) };
+            return { result: construct(tag, args), tail: tail.slice(1) };
           default:
             var parseResult = parse(tail);
             if (parseResult == null)

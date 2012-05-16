@@ -1,6 +1,6 @@
   adt.recursive = function(f) {
     var recurse = function (data) {
-        var i, results = [data[0]], subResult;
+        var i, results = [], subResult;
         if (!isADT(data))
           return f(data);
         for (i = 1; i < data.length; ++i) {
@@ -9,9 +9,10 @@
             results.push(subResult);
         }
         // TODO: Take into account pattern matching requirements...
-        return f(adt.construct.apply(null, results));
+        return f(construct(data[0], results));
     };
     // Assign all the methods in the interface to the recursive interface too
+    // TODO: But shouldn't these methods also run recursively?
     for (var key in f)
       recurse[key] = f[key];
     return recurse;

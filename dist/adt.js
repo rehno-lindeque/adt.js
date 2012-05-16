@@ -23,7 +23,7 @@ var adt = (function() {
           if (a !== '_' && String(a).charAt(0) === '_')
             continue; // ignore constructors for private members starting with _
           else
-            selfProto[a] = makeConstructor(a);
+            selfProto[a] = (function(tag) { return function() { return construct(tag, arguments); }; })(a);
         }
         else if (typeof a === 'object' || typeof a === 'function') {
           for (key in a)
@@ -45,11 +45,6 @@ var adt = (function() {
       var selfProto = {};
       init(selfProto, arguments);
       return evaluators(selfProto);
-    },
-    makeConstructor = function(identifier) { 
-      return function() {
-        return adt.construct.apply(null, [identifier].concat([].slice.call(arguments, 0)));
-      }; 
     },
     // Get the internal [[Class]] property (or `Undefined` or `Null` for `(void 0)` and `null` respectively)
     getObjectType = function(data) {
@@ -99,14 +94,18 @@ var adt = (function() {
       // Add the last character if it wasn't escaped
       return i === str.length - 1? result + str[str.length - 1] : result;
     };
-  adt.construct = function(id) {
-    if (arguments.length < 1)
-      throw "Incorrect number of arguments passed to `construct()`."
-    var data = [].slice.call(arguments, 1);
-    // (make sure the identifier is a string not a number to call the correct Array constructor)
-    data._tag = String(id);
+  var construct = function(tag, args) {
+    // Make a shallow copy of args and patch on the tag
+    var data = [].slice.call(args);
+    data._tag = tag;
     return data;
   };
+  /* TODO: Possibly expose it in the future...
+  adt.construct = function(tag) {
+    if (arguments.length < 1)
+      throw "Incorrect number of arguments passed to `construct()`."
+    return construct(tag, [].slice.call(arguments, 1));
+  };*/
 
   // ADT evaluators api
   var 
@@ -219,7 +218,7 @@ var adt = (function() {
   };
   adt.recursive = function(f) {
     var recurse = function (data) {
-        var i, results = [data[0]], subResult;
+        var i, results = [], subResult;
         if (!isADT(data))
           return f(data);
         for (i = 1; i < data.length; ++i) {
@@ -228,9 +227,10 @@ var adt = (function() {
             results.push(subResult);
         }
         // TODO: Take into account pattern matching requirements...
-        return f(adt.construct.apply(null, results));
+        return f(construct(data[0], results));
     };
     // Assign all the methods in the interface to the recursive interface too
+    // TODO: But shouldn't these methods also run recursively?
     for (var key in f)
       recurse[key] = f[key];
     return recurse;
@@ -378,9 +378,9 @@ var adt = (function() {
       if (input.length < 1)
         throw "No data supplied after opening parenthesis `(`.";
       var
-        key = unescapeString(input[0]),
+        tag = unescapeString(input[0]),
         tail = input.slice(1),
-        args = [key];
+        args = [];
       if (input.length > 0 && input[0] === '(')
         throw "Invalid double opening parentheses `((` found."
       while (tail.length > 0)
@@ -389,7 +389,7 @@ var adt = (function() {
           case ',':
             throw "Invalid character `" + tail[0] + "` found in the data."
           case ')':
-            return { result: adt.construct.apply(null, args), tail: tail.slice(1) };
+            return { result: construct(tag, args), tail: tail.slice(1) };
           default:
             var parseResult = parse(tail);
             if (parseResult == null)

@@ -16,7 +16,7 @@
           if (a !== '_' && String(a).charAt(0) === '_')
             continue; // ignore constructors for private members starting with _
           else
-            selfProto[a] = makeConstructor(a);
+            selfProto[a] = (function(tag) { return function() { return construct(tag, arguments); }; })(a);
         }
         else if (typeof a === 'object' || typeof a === 'function') {
           for (key in a)
@@ -38,11 +38,6 @@
       var selfProto = {};
       init(selfProto, arguments);
       return evaluators(selfProto);
-    },
-    makeConstructor = function(identifier) { 
-      return function() {
-        return adt.construct.apply(null, [identifier].concat([].slice.call(arguments, 0)));
-      }; 
     },
     // Get the internal [[Class]] property (or `Undefined` or `Null` for `(void 0)` and `null` respectively)
     getObjectType = function(data) {
