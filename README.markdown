@@ -6,7 +6,7 @@ It embodies an unusual interpretation of [Algebraic Data Types (ADT's)](http://e
 In practice this library gives you access to the following programming facilities:
 
 * Structural [pattern matching](http://en.wikipedia.org/wiki/Pattern_matching).
-* Various forms of [polymorphism](http://en.wikipedia.org/wiki/Polymorphism_(computer_science)) and [dynamic dispatch](http://en.wikipedia.org/wiki/Dynamic_dispatch).
+* Various forms of [polymorphism](http://en.wikipedia.org/wiki/Polymorphism_%28computer_science%29) and [dynamic dispatch](http://en.wikipedia.org/wiki/Dynamic_dispatch).
 
 Essentially, **adt.js** lets you eval structured data which turns out to be very useful for building [embedded domain specific languages (EDSL's)](http://en.wikipedia.org/wiki/Embedded_domain-specific_language#Usage_patterns) in JavaScript.
 
