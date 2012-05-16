@@ -1,4 +1,4 @@
-# This script is helpful for checking 
+# This script is helpful for checking common javascript errors
 
 # x == [] is always false since javascript is comparing references rather than values
 # Use x.length == 0 instead
