@@ -8,6 +8,7 @@ libFiles  = [
   'construct'
   'evaluators'
   'constructors'
+  'compose'
   'recursive'
   'own'
   'serialize'
