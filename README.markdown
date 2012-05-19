@@ -370,11 +370,98 @@ Using only a few primitive programming constructs ADT's never-the-less give rise
 TODO a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
 ```
 
-#### Shortening code
+#### Shortening constructor code
 
-* TODO: example of using the `with` keyword with **adt.js** and warning about deprecation in ECMAScript 5.0 Strict.
-* TODO: a safer alternative method using the `(function(_){ _.cons(...); })(api);` style syntax
-* TODO: another alternative in CoffeeScript, passing in the api as `this` where the `@` character can be used `@cons(...)`...
+With interface that have lengthy names, creating large structures can get somewhat heavy handed! For example...
+
+```javascript
+tree = BinarySearchTree.Node(5,
+  BinarySearchTree.Node(3,
+    BinarySearchTree.Leaf(1),
+    BinarySearchTree.Leaf(4)
+  ),
+  BinarySearchTree.Node(9,
+    BinarySearchTree.Leaf(7),
+  )
+)
+```
+
+Instead we can create an anonymous function and pass in the `BinarySearchTree` interface as `this`. For example:
+
+```javascript
+tree = (function(){
+  return this.Node(5,
+    this.Node(3,
+      this.Leaf(1),
+      this.Leaf(4)
+    ),
+    this.Node(9,
+      this.Leaf(7)
+    )
+  )
+}).call(BinarySearchTree);
+```
+
+This is the convention that many **adt.js** based libraries use and is the recommended form, primarily because it is very efficient in [CoffeeScript](http://coffeescript.org/).
+
+```coffeescript
+tree = (->
+  (@Node 5,
+    (@Node 3,
+      (@Leaf 1),
+      (@Leaf 4)
+    ),
+    (@Node 9,
+      (@Leaf 7)
+    )
+  )
+).call BinarySearchTree
+```
+
+Or even shorter... (however, take care with this syntax - CoffeeScript has many strange corner cases in its parser)
+
+```coffeescript
+tree = (->
+  @Node 5,
+    @Node 3,
+      @Leaf 1
+      @Leaf 4
+    @Node 9,
+      @Leaf 7
+).call BinarySearchTree
+```
+
+An alternative form (which is shorter to write in regular JavaScript but conflicts with the [underscore.js](http://underscorejs.org/) library) is to use the `_` underscore character as follows.
+
+```javascript
+tree = (function(){
+  return _.Node(5,
+    _.Node(3,
+      _.Leaf(1),
+      _.Leaf(4),
+    ),
+    _.Node(9,
+      _.Leaf(7)
+    )
+  )
+})(_);
+```
+
+Finally, it is also possible to use the `with` keyword. However, you should be aware that `with` is deprecated in [ECMAScript 5.0 Strict](https://developer.mozilla.org/en/JavaScript/Strict_mode) is unsupported in CoffeeScript and its use is frowned upon by most JavaScript programmers.
+
+```javascript
+with(BinarySearchTree){
+  tree = Node(5,
+    Node(3,
+      Leaf(1),
+      Leaf(4)
+    ),
+    Node(9,
+      Leaf(7)
+    )
+  );
+}
+```
 
 ##### Evaluators with state
 
@@ -720,3 +807,6 @@ var
 
 TODO...
 
+### Safe multi-target SQL serialization
+
+### Huffman tree
