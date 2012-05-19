@@ -402,7 +402,7 @@ tree = (function(){
 }).call(BinarySearchTree);
 ```
 
-This is the convention that many **adt.js** based libraries use and is the recommended form, primarily because it is very efficient in [CoffeeScript](http://coffeescript.org/).
+This is the convention that many **adt.js** based libraries use and is the recommended form, primarily because it is very efficient in [CoffeeScript](http://coffeescript.org/):
 
 ```coffeescript
 tree = (->
