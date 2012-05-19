@@ -1,6 +1,6 @@
   var construct = function(tag, args) {
     // Make a shallow copy of args and patch on the tag
-    var data = [].slice.call(args);
+    var data = [].slice.call(args, 0);
     data._tag = tag;
     return data;
   };
