@@ -11,11 +11,11 @@
         if (key.length > 0 && key[0] !== '_')
           tags.push(key);
     }
-    // Add all evaluator to the interface
+    // Add all evaluators to the interface
     f._eval = f;
     for (i = 0; i < tags.length; ++i)
       f[tags[i]] = (function(f, tag){ 
-        return function(){ return f(adt.construct.apply(null, [tag].concat([].slice.call(arguments, 0)))); };
+        return function(){ return f(construct.apply(null, [tag].concat(arguments))); };
       })(f, tags[i]);
     return f;
   };
