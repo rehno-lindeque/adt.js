@@ -447,7 +447,7 @@ tree = (function(){
 })(_);
 ```
 
-Finally, it is also possible to use the `with` keyword. However, you should be aware that `with` is deprecated in [ECMAScript 5.0 Strict](https://developer.mozilla.org/en/JavaScript/Strict_mode) is unsupported in CoffeeScript and its use is frowned upon by most JavaScript programmers.
+Finally, it is also possible to use the `with` keyword. However, you should be aware that `with` is deprecated in [ECMAScript 5.0 Strict](https://developer.mozilla.org/en/JavaScript/Strict_mode) and its use is frowned upon by most JavaScript programmers. This is also completely unsuppported in CoffeeScript.
 
 ```javascript
 with(BinarySearchTree){
