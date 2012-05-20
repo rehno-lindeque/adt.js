@@ -7,3 +7,6 @@
 [submodule "extra/adt-typecheck.js"]
 	path = extra/adt-typecheck.js
 	url = git@github.com:rehno-lindeque/adt-typecheck.js.git
+[submodule "extra/supersimple-editor.js"]
+	path = extra/supersimple-editor.js
+	url = git@github.com:rehno-lindeque/supersimple-editor.js.git
