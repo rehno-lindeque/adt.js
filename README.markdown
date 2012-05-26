@@ -33,14 +33,14 @@ None yet!
 **Planned:**
 
 * *Version 3*
-  * Shallow pattern matching (matches nested constructor names and primitive types)
+  * Shallow pattern matching (matches nested constructor names and built-in (primitive) types)
 * *Version 4*
   * Deep pattern matching (multiple levels of constructor nesting)
-  * Primitive types behave like constructor names in patterns
+  * JavaScript built-in (primitive) types behave like constructor names in patterns
 * *Version 5*
   * Higher order `fold` function for constructing finite state machines
 * *Version 6*
-  * Primitive values can be matched inside of their primitive types
+  * Primitive values can be matched inside of their built-in types
   * Use regular expressions in evaluator patterns
 
 The simplest way to illustrate the utility of **adt.js** is to run through a couple of basic examples, using *only* constructors and evaluators.
@@ -109,7 +109,7 @@ This kind of automatic type matching relies on the internal `[[Class]]` property
 In practice this means it works on the following built-in objects (from the [ECMAScript 5 specification](http://es5.github.com/#x15.2.4.2))...
 
 <table>
-  <thead><tr><th>Primitive data types</th></tr></thead>
+  <thead><tr><th>Built-in data types</th></tr></thead>
   <tbody>
     <tr><td>Arguments</td></tr>
     <tr><td>Array</td></tr>
@@ -187,7 +187,7 @@ console.log(serializeD(supercalifragilisticexpialidocious));
     Result:
     su.per - cal.i - frag.i.lis.tic - ex.pi.al.i.do.cious
 
-Unlike primitive data types a custom constructor can box any number of values passed in as arguments - or none at all.
+Unlike the built-in data types a custom constructor can box any number of values passed in as arguments - or none at all.
 
 #### The underscore fall through pattern
 
@@ -489,7 +489,7 @@ The following private member names are reserved for use by **adt.js** (your own 
 
 * `_pattern`: Gives you access to the pattern that was matched in order to unbox the evaluator's arguments
 * `_tag`: Is the same as `_pattern` in version 1 and 2 of **adt.js**.
-* `_datatype`: Is either `typeof arguments[0]` or `'adt'` depending on whether the evaluated argument was a primitive type or an ADT.
+* `_datatype`: Is either `typeof arguments[0]` or `'adt'` depending on whether the evaluated argument was a built-in (primitive) type or an ADT.
 * **TODO: perhaps `_full_pattern`: `(pattern _tag (pattern ... (pattern ...) ...)`** (breadth-first tree of patterns)
 
 ```javascript
