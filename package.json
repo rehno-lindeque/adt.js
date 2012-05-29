@@ -1,0 +1,16 @@
+{
+  "author": "Rehno Lindeque <code@rehno.lindeque.name> (http://rehno.lindeque.name)",
+  "name": "adt.js",
+  "description": "Algebraic data types for JavaScript",
+  "version": "0.0.0",
+  "homepage": "https://github.com/rehno-lindeque/adt.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rehno-lindeque/adt.js.git"
+  },
+  "main": "./dist/adt",
+  "engines": {},
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {}
+}
