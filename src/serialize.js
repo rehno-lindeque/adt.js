@@ -42,7 +42,7 @@
         _: function() {
           if (this._datatype !== 'ADT')
             // Currently unsupported: RegExp, Null, Undefined, Math, JSON, Function, Error, Date
-            throw "Unsupported primitive type `" + this._datatype + "` in `adt.serialize`.";
+            throw "Unsupported JavaScript built-in type `" + this._datatype + "` in `adt.serialize`.";
           return serializeTagStruct(this._tag, arguments);
         }
       });
