@@ -87,3 +87,5 @@
       // Add the last character if it wasn't escaped
       return i === str.length - 1? result + str[str.length - 1] : result;
     };
+  adt.isADT = isADT;
+  adt.isInterface = isInterface;

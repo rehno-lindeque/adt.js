@@ -94,6 +94,8 @@ var adt = (function() {
       // Add the last character if it wasn't escaped
       return i === str.length - 1? result + str[str.length - 1] : result;
     };
+  adt.isADT = isADT;
+  adt.isInterface = isInterface;
   var construct = function(tag, args) {
     // Make a shallow copy of args and patch on the tag
     var data = [].slice.call(args, 0);
