@@ -691,6 +691,12 @@ CC0 is also very [easy to understand](http://creativecommons.org/publicdomain/ze
 
 * version 1.0 (unreleased, as of 2012-05-04): *14.3 kb* unminified, *5.1 kb* minified
 
+## Future work
+
+Some other features being considered:
+
+* Naked interfaces (avoid monkey patching evaluator keys onto interfaces for better performance)
+
 ## Appendix
 
 ### Natural numbers: Church versus Peano
