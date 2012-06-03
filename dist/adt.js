@@ -180,7 +180,7 @@ var adt = (function() {
       // Create an identity constructor for the fall through pattern if none was supplied
       if (typeof selfProto['_'] === 'undefined') {
         selfProto['_'] = function(){
-          return this._datatype !== 'ADT'? arguments[0] : adt.construct.apply(null, [this._tag].concat([].slice.call(arguments, 0)));
+          return this._datatype !== 'ADT'? arguments[0] : construct.apply(null, [this._tag].concat([].slice.call(arguments, 0)));
         },
         evaluators['_'] = function(){ return selfProto['_'].apply(evaluators, arguments); };
       }
