@@ -155,7 +155,8 @@
       var numberCast = Number(head);
       if (!isNaN(numberCast))
         return { result: numberCast, tail: tail };
-      throw "Unexpected token `" + head + "` in data.";
+      // The token is not a primitive type, so it must be an empty constructor tag
+      return { result: construct(unescapeString(head), []), tail: tail };
     };
   adt.deserialize = function(str){
     var
