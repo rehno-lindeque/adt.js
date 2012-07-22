@@ -113,14 +113,12 @@ task 'fetch:npm', "Fetch the npm package manager", ->
     throw err if err
     console.log stdout + stderr
     console.log "...Done"
-    invokeNext()
 
 task 'fetch:uglifyjs', "Fetch the UglifyJS minification tool", ->
   exec "npm install uglify-js", (err, stdout, stderr) ->
     throw err if err
     console.log stdout + stderr
     console.log "...Done"
-    invokeNext()
 
 task 'minify', "Minify the resulting application file after build", ->
   exec "mkdir -p 'build'", (err, stdout, stderr) ->
