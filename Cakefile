@@ -1,5 +1,4 @@
 fs     = require 'fs'
-path   = require 'path'
 {exec} = require 'child_process'
 
 libFiles  = [
@@ -21,7 +20,7 @@ Build helpers (sequenced, composible)
 
 # Filename -> (Maybe (() -> IO) -> () -> IO) -> Maybe (() -> IO) -> () -> IO
 ifExists = (filename) -> (condCallback) -> (callback) -> -> 
-  path.exists filename, (exists) ->
+  fs.exists filename, (exists) ->
     if exists
       (condCallback callback)()
     else
@@ -62,9 +61,9 @@ build = (callback) -> (concatSrcFiles libFiles) (writeFile 'build/adt.js') callb
 
 # Maybe (() -> IO) -> () -> IO
 minify = (callback) -> ->
-  path.exists 'node_modules/.bin/uglifyjs', (exists) ->
+  fs.exists 'node_modules/.bin/uglifyjs', (exists) ->
     tool = if exists then 'node_modules/.bin/uglifyjs' else 'uglifyjs'
-    path.exists 'build/adt.js', (exists) ->
+    fs.exists 'build/adt.js', (exists) ->
       if exists
         exec "#{tool} --no-copyright build/adt.js > build/adt.min.js", (err, stdout, stderr) ->
           throw err if err
