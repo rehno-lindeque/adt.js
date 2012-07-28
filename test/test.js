@@ -196,7 +196,7 @@ console.log("-- Test 9 (serialize) --");
   console.log("expression serialized: ", exprSerialized);
 })();
 
-console.log("-- Test 10 (deserialize) --");
+console.log("-- Test 10.1 (deserialize) --");
 (function(){
   var
     mathEval = adt.recursive(adt({
@@ -209,6 +209,16 @@ console.log("-- Test 10 (deserialize) --");
     detailedResult = exprSerialized + " = " + String(result);
   console.log("expression deserialized: ", exprDeserialized);
   console.log("detailed result: ", detailedResult);
+})();
+
+console.log("-- Test 10.2 (deserialize adt in array) --");
+(function(){
+  var
+    exprSerialized = "[arrayelement 0.1 0.1,anotherelement argumentlessconstructor \"astring\"]",
+    exprDeserialized = adt.deserialize(exprSerialized),
+    exprReserialized = adt.serialize(exprDeserialized);
+  console.log("expression deserialized: ", exprDeserialized);
+  console.log("expression re-serialized: ", exprReserialized);
 })();
 
 console.log("-- Test 11 (advanced serialize: special case primitives (string, array, records, strings with escapes)) --");
