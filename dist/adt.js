@@ -386,36 +386,33 @@ var adt = (function() {
       }
       return { head: str, tail: "" };
     },
-    parseADTTail = function(input) {
-      if (input.length < 1)
-        throw "No data supplied after opening parenthesis `(`.";
+    parseADTTail = function(head, input) {
       var
-        tag = unescapeString(input[0]),
-        tail = input.slice(1),
+        tag = unescapeString(head),
+        tail = input,
         args = [];
-      if (input.length > 0 && input[0] === '(')
-        throw "Invalid double opening parentheses `((` found."
+      
       while (tail.length > 0)
         switch (tail[0]) {
+          // Look ahead for terminating characters
+          case ')':
           case ']':
           case ',':
-            throw "Invalid character `" + tail[0] + "` found in the data."
-          case ')':
-            return { result: construct(tag, args), tail: tail.slice(1) };
+            return { result: construct(tag, args), tail: tail };
           default:
-            var parseResult = parse(tail);
+            var parseResult = parseArgument(tail);
             if (parseResult == null)
               continue;
             args.push(parseResult.result);
             tail = parseResult.tail;
         }
-      throw "Could not find the closing parenthesis for the data `(" + input.slice(0, Math.max(input.length,4)).join(' ') + "...`";
+      return { result: construct(tag, args), tail: tail };
     },
     parseArrayTail = function(input) {
       if (input.length < 2)
         throw "No data supplied after array opening bracket `[`.";
       var 
-        tail = input, 
+        tail = input,
         commaCount = 0,
         array = [];
       while (tail.length > 0)
@@ -444,32 +441,81 @@ var adt = (function() {
       // TODO...
       //return tail;
     },
-    parse = function(input) {
-      // pre-condition: input.length > 0
+    parseParensTail = function(input) {
+      if (input.length < 1)
+        throw "No data after opening parenthesis.";
       var head = input[0], tail = input.slice(1);
       if (head.length === 0)
-        return; // no argument (two whitespace characters next to each other causes this)
+        return parseParensTail(tail); // no argument (two whitespace characters next to each other causes this)
       switch (head) {
         case '(':
-          return parseADTTail(tail);
+          throw "Invalid double opening parentheses `((` found."
+        case ')':
+          throw "No data supplied after opening parenthesis `(`. The unit type, (), is not supported.";
         case '[':
-          return parseArrayTail(tail);
+        case ']':
+        case ',':
+        case '\"':
+        case '\'':
+          // Note that primitives are not allowed inside `(...)`
+          throw "Invalid character `" + head + "` found after opening parenthesis."
+      }
+      // Parse the ADT constructor and arguments
+      var parseResult = parseADTTail(head, tail);
+      if (parseResult.tail.length === 0 || parseResult.tail[0] !== ')')
+        throw "Could not find the closing parenthesis for the data `(" + input.slice(0, Math.max(input.length,4)).join(' ') + "...`";
+      return { result: parseResult.result, tail: parseResult.tail.slice(1) };
+    },
+    parsePrimitive = function(head, input) {
+      switch (head) {
+        case '(':
+          return parseParensTail(input);
+        case '[':
+          return parseArrayTail(input);
       }
       switch (head[0]) {
         case '\"':
           //pre-condition: head[head.length - 1] === '\"'
           //pre-condition: head.length > 1
-          return { result: unescapeString(head.slice(1, head.length - 1)), tail: tail };
+          return { result: unescapeString(head.slice(1, head.length - 1)), tail: input };
         case '\'':
           //pre-condition: head[head.length - 1] === '\"'
           //pre-condition: head.length > 1
-          return { result: unescapeString(head.slice(1, head.length - 1)), tail: tail };
+          return { result: unescapeString(head.slice(1, head.length - 1)), tail: input };
       }
       var numberCast = Number(head);
       if (!isNaN(numberCast))
-        return { result: numberCast, tail: tail };
-      // The token is not a primitive type, so it must be an empty constructor tag
-      return { result: construct(unescapeString(head), []), tail: tail };
+        return { result: numberCast, tail: input };
+      return null;
+    },
+    parseArgument = function(input) {
+      // This is almost identical to parse, except it only allows argumentless ADT constructors
+      if (input.length == 0)
+        return null;
+      // pre-condition: input.length > 0
+      var head = input[0], tail = input.slice(1);
+      if (head.length === 0)
+        return parseArgument(tail); // no argument (two whitespace characters next to each other causes this)
+      // Try to parse a primitive from the stream
+      var parseResult = parsePrimitive(head, tail);
+      if (parseResult != null)
+        return parseResult;
+      // The next token is not a primitive type, so it must be a constructor tag
+      var tag = unescapeString(head);
+      return { result: construct(tag, []), tail: tail };
+    },
+    parse = function(input) {
+      if (input.length == 0)
+        return null;
+      var head = input[0], tail = input.slice(1);
+      if (head.length === 0)
+        return parse(tail); // no argument (two whitespace characters next to each other causes this)
+      // Try to parse a primitive from the stream
+      var parseResult = parsePrimitive(head, tail);
+      if (parseResult != null)
+        return parseResult;
+      // The next token is not a primitive type, so it must be a constructor tag
+      return parseADTTail(head, tail);
     };
   adt.deserialize = function(str){
     var
@@ -487,23 +533,11 @@ var adt = (function() {
     if (lexemes.length == 0)
       return;
     // Allow lisp style constructors with starting and ending parentheses
-    if (lexemes[0] === '(') {
+    if (lexemes[0] === '(')
       if (lexemes[lexemes.length - 1] !== ')') {
         lexemesStr = lexemes.join(' ');
-        throw "Optional opening parenthesis used for the data " + lexemesStr.slice(0, Math.min(10, lexemesStr.length)) + "... but could not find the closing parenthesis."
+        throw "Optional opening parenthesis used for the data " + lexemesStr.slice(0, Math.min(10, lexemesStr.length)) + "... but could not find the closing parenthesis.";
       }
-    }
-    else {
-      // pre-condition: lexemes[0].length > 0 (because empty lexemes at the beginning were removed)
-      switch (lexemes[0][0]) {
-        case '\"':
-        case '\'':
-        case '[':
-          break; // adt is a string or an array
-        default: 
-          lexemes = ['('].concat(lexemes).concat([')']);
-      }
-    }
     return parse(lexemes).result;
     // post-condition: parse(lexemes) != null (because all empty lexemes at the beginning were explicitly removed)
     // post-condition: parse(lexemes).tail.length === 0
