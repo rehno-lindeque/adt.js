@@ -223,7 +223,25 @@ console.log("-- Test 10.2 (deserialize adt in array) --");
 
 console.log("-- Test 11 (advanced serialize: special case primitives (string, array, records, strings with escapes)) --");
 (function(){
-  console.warn("TODO");
+  var
+    outerCons = adt('list', 'record'),
+    innerCons = adt('foo', 'bar'),
+    list = outerCons.list([
+      innerCons.foo(111),
+      innerCons.bar("Bar"),
+      innerCons.foo(innerCons.bar())
+    ]),
+    record = outerCons.record({
+      fooKey: innerCons.foo(111),
+      barKey: innerCons.bar("Bar"),
+      fooBarKey: innerCons.foo(innerCons.bar())
+    }),
+    listSerialized = adt.serialize(list),
+    recordSerialized = adt.serialize(record);
+  console.log("list serialized: ", listSerialized);
+  console.log("record serialized: ", recordSerialized);
+  
+  console.warn("TODO: more....");
 })();
 
 console.log("-- Test 12 (advanced deserialize: special case primitives (string, array, records, strings with escapes)) --");
