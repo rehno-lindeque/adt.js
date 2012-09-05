@@ -28,16 +28,45 @@
           }
           return str;
       },
+      serializeBuiltinEval = adt({
+        Array: function(a) { 
+          var 
+            i,
+            str ='[';
+          for (i = 0;; ++i) {
+            str += serializeEval(a[i]);
+            if (i === a.length - 1)
+              break;
+            str += ',';
+          }
+          str += ']'; 
+          return str;
+        },
+        Object: function(a) {
+          var 
+            i,
+            k = Object.keys(a),
+            str = '{';
+          for (i = 0;; ++i) {
+            str += escapeString(k[i], escapes) + ':' + serializeEval(a[k[i]]);
+            if (i === k.length - 1)
+              break;
+            str += ',';
+          }
+          str += '}';
+          return str;
+        }
+      }),
       // TODO: shorten this by using `compose`?
       serializeEval = adt({
         String: function(a) { return this._datatype === 'ADT'? serializeTagStruct('String', arguments) : '"' + a + '"'; },
         Number: function(a) { return this._datatype === 'ADT'? serializeTagStruct('Number', arguments) : String(a); },
         Boolean: function(a) { return this._datatype === 'ADT'? serializeTagStruct('Boolean', arguments) : (a? 'True' : 'False'); },
         // TODO: what about nested records, arrays and ADT's?
-        Array: function(a) { return this._datatype === 'ADT'? serializeTagStruct('Array', arguments) : '[' + String(a) + ']'; },
+        Array: function(a) { return this._datatype === 'ADT'? serializeTagStruct('Array', arguments) : serializeBuiltinEval(a); },
         Arguments: function(a) { return this._datatype === 'ADT'? serializeTagStruct('Arguments', arguments) : this([].slice.call(a, 0)); },
         // TODO: what about adt's nested inside the record...
-        Object: function(a) { return this._datatype === 'ADT'? serializeTagStruct('Object', arguments) : '"' + JSON.stringify(a) + '"'; },
+        Object: function(a) { return this._datatype === 'ADT'? serializeTagStruct('Object', arguments) : serializeBuiltinEval(a); },
         //SerializedADT: function(a) { return '(' + a + ')'; },
         _: function() {
           if (this._datatype !== 'ADT')
