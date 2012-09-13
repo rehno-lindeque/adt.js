@@ -277,3 +277,22 @@ console.log("-- Test 16 (advanced deserialize: direct primitive (number, string,
 (function(){
   console.warn("TODO")
 })();
+
+console.log("-- Test 17 (advanced deserialize: numeric escapes in strings) --");
+(function(){
+  var
+    decSerialized = "DecimalEscape \"An arrow looks like this: \\8594 (\\\\8594)\"",
+    hexSerialized = "HexadecimalEscape \"An arrow looks like this: \\x2192 (\\\\x2192)\"",
+    octSerialized = "OctalEscape \"An arrow looks like this: \\o20622 (\\\\o20622)\"";
+  console.log("string serialized with numeric decimal escape: ", decSerialized);
+  console.log("string serialized with numeric hexadecimal escape: ", hexSerialized);
+  console.log("string serialized with numeric octal escape: ", octSerialized);
+  var 
+    decDeserialized = adt.deserialize(decSerialized),
+    hexDeserialized = adt.deserialize(hexSerialized),
+    octDeserialized = adt.deserialize(octSerialized);
+  console.log("string with numeric decimal escape deserialized: ", decDeserialized);
+  console.log("string with numeric hexadecimal escape deserialized: ", hexDeserialized);
+  console.log("string with numeric octal escape deserialized: ", octDeserialized);
+})();
+
