@@ -131,9 +131,9 @@ Regrettably, due to a flaw in the language design it is not tractable to impleme
 #### Custom constructors
 
 **adt.js** provides a way of creating your own custom data type constructors.
-In fact: in this library constructors are simply evaluators that *box* their arguments rather than *unboxing* them.
+In fact, in this library constructors are simply evaluators that *box* their arguments rather than *unboxing* them.
 Once again, a set of constructors is defined inside an *interface*.
-When `adt(...)` is called with strings (or even numbers) as arguments the library assumes these are *tags* and automatically generates constructor functions for each one.
+When `adt(...)` is called using strings (or even numbers) as arguments the library assumes that these are *tags* and automatically generates constructor functions for each of them.
 Constructors and evaluators can be mixed together in a single interface without any problems.
 
 ```javascript
@@ -160,6 +160,7 @@ var
         D.Syllable('do'),
         D.Syllable('cious'))),
   serializeD = adt({
+    // Serialize a word containing roots
     Word: function() {
       var 
         children = [],
@@ -168,6 +169,7 @@ var
         children.push(this(arguments[i]));
       return children.join(' - ');
     },
+    // Serialize a root containing syllables
     Root: function() {
       var 
         children = [],
@@ -176,6 +178,7 @@ var
         children.push(this(arguments[i]));
       return children.join('.');
     },
+    // Serialize a single syllable
     Syllable: function(syl) { return syl; }
   });
 console.log(serializeD(supercalifragilisticexpialidocious));
