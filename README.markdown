@@ -304,9 +304,15 @@ var
   expr = math.mul(math.plus(5, 9), math.plus(33, math.mul(20, 1))),
   answer = calc(expr), // <- Recursively call the calc evaluator
   detailedAnswer = serialize(expr) + " = " + String(answer); // <- Recursively call the serialize evaluator
+console.log(detailedAnswer);
 ```
 
-One convenient aspect of `adt.recursive is that it works with regular functions too.
+    Result:
+    ((5 + 9) * (33 + (20 * 1))) = 742
+
+See also [language-oriented programming](http://en.wikipedia.org/wiki/Language-oriented_programming).
+
+One convenient aspect of `adt.recursive` is that it works with regular functions too.
 
 ```javascript
 var 
@@ -323,8 +329,6 @@ console.log(printDepth(r.A(r.B(r.C()))));
     1
     2
     3
-
-See also [language-oriented programming](http://en.wikipedia.org/wiki/Language-oriented_programming).
 
 ### Automatic constructors
 
