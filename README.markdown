@@ -218,7 +218,7 @@ try {
 ```
 
     Result:
-    matched A test.js:87
+    matched A
     Unknown data type `C`
 
 #### The this parameter, private members and reserved members.
@@ -255,7 +255,7 @@ The following members are reserved by the implementation and should not be used.
 #### Providing multiple implementations
 
 This example takes the standard object-oriented style of method dispatch and turns it inside-out!
-Instead of dispatching on a method table (travelFare, travelTime) we dispatch on type names (car, train, plane).
+Instead of dispatching on a method table (`travelFare`, `travelTime`) we dispatch on type names (`car`, `train`, `plane`).
 
 ```javascript
   // Create constructors for these three algebraic data types (car, train and plane)
