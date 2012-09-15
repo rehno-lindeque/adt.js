@@ -74,7 +74,7 @@ Of course, you may think that this piece of code is entirely trivial...
     Note: What is wrong with the following snippet of code?
     literalClass = { object: 'record', array: 'list' }[typeof []];
 
-Most of the time you'll want your evaluators to do something more than simply returning a constant value.
+Most of the time you'll want your evaluators to do something more than simply return a constant value.
 The next example dispatches to functions in order to perform more complex evaluations.
 The object itself is passed into the matching evaluator as an argument.
 Notice that, in order to deconstruct the argument of type `Array`, the interface is invoked recursively by calling `this(...)` on each of the elements.
@@ -258,7 +258,7 @@ This example takes the standard object-oriented style of method dispatch and tur
 Instead of dispatching on a method table (`travelFare`, `travelTime`) we dispatch on type names (`car`, `train`, `plane`).
 
 ```javascript
-  // Create constructors for these three algebraic data types (car, train and plane)
+  // Create constructors for transportation types (car, train and plane)
   transportation = adt('car', 'train', 'plane'),
 
   // Create a set of evaluators for the transportation ADT 
