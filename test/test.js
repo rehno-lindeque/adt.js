@@ -121,8 +121,8 @@ console.log("-- Test 4 (multiple implementations) --");
   console.log("time of trip to grandma: ", timeOfTripToGrandma);
 })();
 
-console.log("-- Test 5 (nested expressions) --");
 (function(){
+  console.log("-- Test 5 (nested expressions) --");
   (function(){
     var
       math = adt('plus', 'mul'),
@@ -139,7 +139,21 @@ console.log("-- Test 5 (nested expressions) --");
       detailedAnswer = serialize(expr) + " = " + String(answer);
     console.log("detailed answer: ", detailedAnswer);
   })();
+
+  console.log("-- Test 5.1 (recurse using a function) --");
+  (function(){
+    var 
+      r = adt("A","B","C"),
+      printDepth = adt.recursive(function(x) { 
+        return arguments.length == 1? Number(x) + 1 : 0;
+      });
+    console.log(printDepth(r.A()));
+    console.log(printDepth(r.A(r.B())));
+    console.log(printDepth(r.A(r.B(r.C()))));
+  })();
 })();
+
+
 
 console.log("-- Test 6 (automatic constructors) --");
 (function(){
