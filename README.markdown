@@ -192,9 +192,9 @@ Unlike the built-in data types a custom constructor can box any number of values
 #### The underscore fall through pattern
 
 To create an evaluator that matches any pattern not handled by the rest of the interface, use the `_` pattern.
-By default, **adt.js** assigns the identity function to `_`. 
+By default **adt.js** assigns the identity function to `_`. 
 
-If you want to enforce exhaustive pattern matching in your interfaces you will need to implement the error check yourself. 
+If you wish to enforce exhaustive pattern matching in your interfaces you will need to implement the error check yourself. 
 To see which pattern was matched **adt.js** assigns `this._pattern` in all evaluators, including `_`.
 
 ```javascript
