@@ -175,7 +175,6 @@ var adt = (function() {
               num += parseInt(numStr[j], radix);
             }
             result += String.fromCharCode(num);
-            console.log(numStr,numStr.length);
             i += numStr.length + (s == 'x' || s == 'o'? 1 : 0);
             continue;
           }
