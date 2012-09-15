@@ -302,12 +302,23 @@ var
   detailedAnswer = serialize(expr) + " = " + String(answer); // <- Recursively call the serialize evaluator
 ```
 
-One convenient aspect of `adt.recursive is that it works with non-evaluator functions too.
+One convenient aspect of `adt.recursive is that it works with regular functions too.
 
 ```javascript
-TODO... 
-adt.recursive(function(a) { return a; });
+var 
+  r = adt("A","B","C"),
+  printDepth = adt.recursive(function(x) { 
+    return arguments.length == 1? Number(x) + 1 : 0;
+  });
+console.log(printDepth(r.A()));
+console.log(printDepth(r.A(r.B())));
+console.log(printDepth(r.A(r.B(r.C()))));
 ```
+
+    Result:
+    1
+    2
+    3
 
 See also [language-oriented programming](http://en.wikipedia.org/wiki/Language-oriented_programming).
 
