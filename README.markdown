@@ -23,23 +23,20 @@ The library is stratified into several major versions each of which trades some 
 
 None yet!
 
-**Work in progress:**
+**Roadmap:**
 
 * *Version 1* (Unreleased)
   * Pattern match on the constructor names only
 * *Version 2* (Unreleased)
   * Recursive evaluators
-
-**Planned:**
-
-* *Version 3*
+* *Version 3* (Unreleased)
   * Shallow pattern matching (matches nested constructor names and built-in (primitive) types)
-* *Version 4*
+* *Version 4* (Unreleased)
   * Deep pattern matching (multiple levels of constructor nesting)
   * JavaScript built-in (primitive) types behave like constructor names in patterns
-* *Version 5*
+* *Version 5* (Unreleased)
   * Higher order `fold` function for constructing finite state machines
-* *Version 6*
+* *Version 6* (Unreleased)
   * Primitive values can be matched inside of their built-in types
   * Use regular expressions in evaluator patterns
 
