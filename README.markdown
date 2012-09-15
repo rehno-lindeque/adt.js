@@ -73,7 +73,7 @@ Of course, you may think that this piece of code is entirely trivial...
 Most of the time you'll want your evaluators to do something more than simply returning a constant value.
 The next example dispatches to functions in order to perform more complex evaluations.
 The object itself is passed into the matching evaluator as an argument.
-Notice that to deconstruct the argument of type `Array` evaluators interface is invoked recursively by calling `this(...)` on each of the elements.
+Notice that, in order to deconstruct the argument of type `Array`, the interface is invoked recursively by calling `this(...)` on each of the elements.
 
 ```javascript
 // Pretty print with function dispatch
