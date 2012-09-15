@@ -221,20 +221,32 @@ try {
 
 As you have already seen, an interface can be invoked recursively using `this(...)`.
 In fact in **adt.js** `this` is exactly the interface that is being evaluated.
-It also allows us to write things like the following...
+For example, besides regular recursion it also allows us to write things like the following...
 
 ```javascript
-TODO
+var 
+  eval = adt({
+    A: function() { return "in A and " + this.B(); },
+    B: function() { return "in B"; }
+  });
+console.log(eval.A());
 ```
+
+    Result:
+    in A and in B
 
 Any key in an interface that is prefixed by an underscore is considered to be *private* and will not be included.
 
 Inside an evaluator **adt.js** attaches its own private members to `this`.
-Besides `this._pattern`, **adt.js** also provides.... (TODO)
+Besides `this._pattern`, **adt.js** also provides...
 
-* `this._eval` - TODO (this is a private member, but still accessible to the outside world - it may be useful at times for extending **adt.js**)
-* `this._tag` - TODO
-* `this._datatype` - TODO
+* `this._tag` - The tag name that was matched
+* `this._pattern` - The full pattern that was matched (for later versions of **adt.js**)
+* `this._datatype` - The built-in data type that was matched (or simply `'ADT'` if argument was a regular (custom) constructor.
+
+The following members are reserved by the implementation and should not be used...
+
+* `this._eval`
 
 #### Providing multiple implementations
 
