@@ -250,6 +250,9 @@ The following members are reserved by the implementation and should not be used.
 
 #### Providing multiple implementations
 
+This example takes the standard object-oriented style of method dispatch and turns it inside-out!
+Instead of dispatching on a method table (travelFare, travelTime) we dispatch on type names (car, train, plane).
+
 ```javascript
   // Create constructors for these three algebraic data types (car, train and plane)
   transportation = adt('car', 'train', 'plane'),
@@ -274,9 +277,6 @@ The following members are reserved by the implementation and should not be used.
   costOfTripToGrandma = travelFare(tripToGrandma),
   timeOfTripToGrandma = travelTime(tripToGrandma);
 ```
-
-This example takes the standard object-oriented style of method dispatch and turns it inside-out!
-Instead of dispatching on a method table (travelFare, travelTime) we dispatch on type names (car, train, plane).
 
 See also the [expression problem](http://en.wikipedia.org/wiki/Expression_problem).
 
