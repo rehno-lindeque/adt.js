@@ -261,21 +261,24 @@ Instead of dispatching on a method table (`travelFare`, `travelTime`) we dispatc
   // Create constructors for these three algebraic data types (car, train and plane)
   transportation = adt('car', 'train', 'plane'),
 
-  // Create a set of evaluators for the adt's to calculate a travel fare by unboxing their arguments
+  // Create a set of evaluators for the transportation ADT 
+  // in order to calculate a travel fare by unboxing their arguments
   travelFare = adt({
     car: function(miles) { return miles * 0.3; },
     train: function(miles,speed) { return miles * 0.1 + 0.2 * speed; },
     plane: function(miles) { return miles * miles * 0.3 + 22.0; }
   }),
 
-  // Create an alternative set of evaluators for the adt's to calculate a travel time using the same arguments
+  // Create an alternative set of evaluators for the transportation ADT
+  // in to calculate a travel time using the same arguments
   travelTime = adt({
     car: function(miles) { return miles / 55.3; },
     train: function(miles,speed) { return 0.5 + miles / 60.0; },
     plane: function(miles) { return (miles < 600? 2.5 : 4.0) + miles / 300.0; }
   }),
 
-  // Now we can calculate not only the time needed to get to grandma's house but also the cost of the trip.
+  // Now we can calculate not only the time needed to get to grandma's house
+  // but also the cost of the trip.
   // So, should we take the train?
   tripToGrandma = transportation.train(52, 0.6),
   costOfTripToGrandma = travelFare(tripToGrandma),
