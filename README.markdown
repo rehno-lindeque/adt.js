@@ -384,7 +384,7 @@ In addition to this generic funcionality, there are also some existing ADT defin
 
 * [adt-html.js](https://github.com/rehno-lindeque/adt-html.js) - A library for constructing, traversing and transforming HTML structures and their attributes.
 
-## Advanced usage
+## Advanced usage (BEWARE, UNDER CONSTRUCTION)
 
 Using only a few primitive programming constructs ADT's never-the-less give rise to a suprisingly large variety of programming patterns.
 **adt.js** also exposes few more advanced features that happen to fit snugly with JavaScript's dynamic philosophy.
