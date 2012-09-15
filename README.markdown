@@ -239,7 +239,7 @@ console.log(eval.A());
     Result:
     in A and in B
 
-Any key in an interface that is prefixed by an underscore is considered to be *private* and will not be included.
+Any key in an interface that is prefixed by an underscore is considered to be *private* and will not be used by **adt.js**.
 
 Inside an evaluator **adt.js** attaches its own private members to `this`.
 Besides `this._pattern`, **adt.js** also provides...
@@ -248,9 +248,9 @@ Besides `this._pattern`, **adt.js** also provides...
 * `this._pattern` - The full pattern that was matched (for later versions of **adt.js**)
 * `this._datatype` - The built-in data type that was matched (or simply `'ADT'` if argument was a regular (custom) constructor.
 
-The following members are reserved by the implementation and should not be used...
+The following key is reserved by the implementation and should never be used...
 
-* `this._eval`
+* `_eval`
 
 #### Providing multiple implementations
 
