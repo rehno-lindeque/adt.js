@@ -320,18 +320,33 @@ One convenient aspect of `adt.recursive` is that it works with regular functions
 ```javascript
 var 
   r = adt("A","B","C"),
-  printDepth = adt.recursive(function(x) { 
-    return arguments.length == 1? Number(x) + 1 : 0;
-  });
-console.log(printDepth(r.A()));
-console.log(printDepth(r.A(r.B())));
-console.log(printDepth(r.A(r.B(r.C()))));
+  printDepth = adt.recursive(function() { 
+    var i, d = 0;
+    for (i = 0; i < arguments.length; ++i)
+      d = Math.max(d, arguments[i]);
+    return d + 1;
+  }),
+  printTrace = adt.recursive(function() { 
+    var i, s = arguments.length > 0? arguments[0] : "";
+    for (i = 1; i < arguments.length; ++i)
+      s += " -> " + arguments[i];
+    return s.length > 0? s + " -> " + this._tag : this._tag;
+  }),
+  A = r.A(),
+  A_B = r.A(r.B()),
+  A_B_C = r.A(r.B(r.C())),
+  A_BC = r.A(r.B(), r.C());
+console.log("depth: " + printDepth(A) + "  trace: " + printTrace(A));
+console.log("depth: " + printDepth(A_B) + "  trace: " + printTrace(A_B));
+console.log("depth: " + printDepth(A_B_C) + "  trace: " + printTrace(A_B_C));
+console.log("depth: " + printDepth(A_BC) + "  trace: " + printTrace(A_BC));
 ```
 
     Result:
-    1
-    2
-    3
+    depth: 1  trace: A
+    depth: 2  trace: B -> A
+    depth: 3  trace: C -> B -> A
+    depth: 2  trace: B -> C -> A
 
 ### Automatic constructors
 
