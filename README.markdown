@@ -10,9 +10,8 @@ In practice this library gives you access to the following programming facilitie
 
 Essentially, **adt.js** lets you eval structured data which turns out to be very useful for building [embedded domain specific languages (EDSL's)](http://en.wikipedia.org/wiki/Embedded_domain-specific_language#Usage_patterns) in JavaScript.
 
-## License
+[![CC0 1.0 Universal (Public Domain)](http://i.creativecommons.org/p/zero/1.0/88x31.png)](http://creativecommons.org/publicdomain/zero/1.0/)
 
-[CC0 1.0 Universal](http://creativecommons.org/publicdomain/zero/1.0/) (Public domain)
 
 ## Usage
 
