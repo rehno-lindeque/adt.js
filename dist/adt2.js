@@ -53,7 +53,7 @@ var adt = (function() {
     };
   adt.isADT = isADT;
   adt.isInterface = isInterface;
-  adt.version = "3.0.0";  var construct = function(tag, args) {
+  adt.version = "2.0.0";  var construct = function(tag, args) {
     // Make a shallow copy of args and patch on the tag
     var data = [].slice.call(args, 0);
     data._tag = tag;
@@ -67,7 +67,7 @@ var adt = (function() {
   };*/
 
   // ADT evaluators common
-  // ADT evaluators API (version 3)
+  // ADT evaluators API (version 1)
   var 
     evaluators = function(selfProto) {
       var 
@@ -95,15 +95,6 @@ var adt = (function() {
       evaluators._eval = function(data) {
         // Determine if the data is a construction (built by a constructor)
         if (isADT(data)) {
-          /*var
-            pattern = data[0],
-            i;
-          for (i = 1; i < data.length; ++i) {
-            if (isADT(data[i])) {
-              pattern = pattern.concat(' '.concat(data[i][0]));
-            else
-              pattern = pattern.concat(' '.concat(typeof data[i]));
-          }*/
           return _eval(null, data._tag, 'ADT', data);
         }
         // Evaluate primitive type

@@ -1,5 +1,31 @@
   adt.serialize = function(data){
     var 
+      escapeString = function(str, escapes) {
+        var 
+          i, 
+          result = '',
+          replacement,
+          escapes = escapes || {
+            // Single-character escape codes (JavaScript -> Haskell)
+            '\0': '\\0',    // null character
+            //'\a': '\\a',  // alert            (n/a in JavaScript)
+            '\b': '\\b',    // backspace
+            '\f': '\\f',    // form feed
+            '\n': '\\n',    // newline (line feed)
+            '\r': '\\r',    // carriage return
+            '\t': '\\t',    // horizontal tab
+            '\v': '\\v',    // vertical tab
+            '\"': '\\\"',   // double quote
+            //'\&': '\\&',  // empty string     (n/a in JavaScript)
+            '\'': '\\\'',   // single quote
+            '\\': '\\\\'    // backslash
+          };
+        for (i = 0; i < str.length; ++i) {
+          replacement = escapes[str[i]];
+          result += (replacement == null? str[i] : replacement);
+        }
+        return result;
+      },
       escapes = {
         '\\': '\\\\',
         '\"': '\\\"',
