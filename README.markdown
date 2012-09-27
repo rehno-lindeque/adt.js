@@ -745,6 +745,29 @@ Some other features being considered:
 
 * Naked interfaces (avoid monkey patching evaluator keys onto interfaces for better performance)
 
+## Related work
+
+* **adt.js** by Sjoerd Visscher (Algebraic Data Types in JavaScript)
+  * http://w3future.com/weblog/stories/2008/06/16/adtinjs.xml
+* **adt.js** by Nathan Faubion (Algebraic data types for Javascript)
+  * https://npmjs.org/package/adt
+  * https://github.com/natefaubion/adt.js
+* **jshaskell** (A library and build tool for porting Haskell to JavaScript, and some actual packages)
+  * http://code.google.com/p/jshaskell/source/browse/trunk/jshaskell/src/Haskell/ADT.js
+* **matches** (Powerful pattern matching for Javascript)
+  * https://npmjs.org/package/matches
+  * https://github.com/natefaubion/matches.js
+* **funcy** (An experiment in adding functional pattern matching to JavaScript)
+  * https://npmjs.org/package/funcy
+  * https://github.com/bramstein/funcy
+* **js-matcher** (A basic pattern matcher for JavaScript Objects)
+  * https://npmjs.org/package/js-matcher
+  * https://github.com/CrypticSwarm/js-matcher
+
+*Note: Unfortunately there are number of libraries calling themselves adt.js right now. 
+By rights the first library to coin the name appears to be the one by Sjoerd Visscher.
+Please feel free to suggest an alternate name for this library if you have one in mind!*
+
 ## Appendix
 
 ### Natural numbers: Church versus Peano
