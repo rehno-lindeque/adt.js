@@ -17,25 +17,26 @@
         evaluators._pattern = (pattern != null? pattern : (tag != null? tag : datatype));
         evaluators._tag = (tag != null? tag : datatype);
         evaluators._datatype = (datatype != null? datatype : 'ADT');
-        var f = evaluators[evaluators._pattern]; 
-        if (typeof f !== 'function')
-          f = evaluators['_'];
+        var f = (pattern? evaluators[pattern] : null)
+          || (tag? evaluators[tag] : null)
+          || evaluators[evaluators._datatype]
+          || evaluators['_'];
         return f.apply(evaluators, args);
       };
 
       evaluators._eval = function(data) {
         // Determine if the data is a construction (built by a constructor)
         if (isADT(data)) {
-          /*var
-            pattern = data[0],
+          var
+            pattern = data._tag,
             i;
-          for (i = 1; i < data.length; ++i) {
-            if (isADT(data[i])) {
-              pattern = pattern.concat(' '.concat(data[i][0]));
+          for (i = 0; i < data.length; ++i) {
+            if (isADT(data[i]))
+              pattern += ' ' + data[i]._tag;
             else
-              pattern = pattern.concat(' '.concat(typeof data[i]));
-          }*/
-          return _eval(null, data._tag, 'ADT', data);
+              pattern += ' ' + getObjectType(data[i]);
+          }
+          return _eval(pattern, data._tag, 'ADT', data);
         }
         // Evaluate primitive type
         return _eval(null, null, getObjectType(data), [data]);
@@ -75,4 +76,3 @@
       
       return evaluators;
     };
-

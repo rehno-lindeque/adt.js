@@ -167,8 +167,6 @@ console.log("-- Test 4 (multiple implementations) --");
   })();
 })();
 
-
-
 console.log("-- Test 6 (automatic constructors) --");
 (function(){
   var
@@ -324,3 +322,16 @@ console.log("-- Test 17 (advanced deserialize: numeric escapes in strings) --");
   console.log("string with numeric octal escape deserialized: ", octDeserialized);
 })();
 
+console.log("-- Test 18 (shallow pattern matching) --");
+(function(){
+  var
+    cons = adt('Cons'),
+    evalCallInfo = adt({
+      "String Number": function(a,b) { return "String: \"" + a + "\" Number: " + String(b); },
+      "Number String": function(a,b) { return " Number: " + String(a) + " String: \"" + b + "\""; },
+      "Cons String Number": function(a,b) { return "Cons (String: \"" + a + "\" Number: " + String(b) + ")"; },
+    });
+  //console.log("The (string,number) evaluated...", evalCallInfo("foo", 88));
+  //console.log("The (number,string) evaluated...", evalCallInfo(55, "bar"));
+  console.log("The Cons(string,number) evaluated...", evalCallInfo(cons.Cons("zed", 11)));
+})();
