@@ -42,8 +42,9 @@ None yet!
   * Custom match functions (guards)
 * *adt.util.js* (Unreleased)
   * Higher order functions etc
-    * `iterate` function evaluates nested evaluators like a finite state machine over its input
-    * `iterfold` function evaluates nested evaluators like a finite state machine while accumulating its results (similar to `fold` a.k.a. JavaScript's `array.reduce`, but given an ADT evaluators interface in the form of a finite state machine. Related to `iteratee` in Haskell.)
+    * `iterSM` function evaluates nested evaluators like a state machine by iterating over its input (similar to a `foreach` loop, but with additional state)
+    * `mapSM` function evaluates nested evaluators like a state machine by mapping over its input (similar to `map`, but with additional state in the )
+    * `foldSM` function evaluates nested evaluators like a state machine while accumulating its results (similar to `fold` a.k.a. JavaScript's `array.reduce`, but with additional state. Related to `iteratee` in Haskell.)
 
 The simplest way to illustrate the utility of **adt.js** is to run through a couple of basic examples, using *only* constructors and evaluators.
 
@@ -749,6 +750,9 @@ CC0 is also very [easy to understand](http://creativecommons.org/publicdomain/ze
 Some other features being considered:
 
 * Naked interfaces (avoid monkey patching evaluator keys onto interfaces for better performance)
+* Two implementations of the pattern matcher is possible, one which optimizes compile speed and one which optimizes dispatch speed.
+  * Perhaps implement an `adt.compile()` function to go from the former to the latter.
+* Add a new private member `this._exactpattern` - The exact pattern that was matched (including wildcards and value unpacking, for later versions of **adt.js**)
 
 ## Related work
 
