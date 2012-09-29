@@ -70,9 +70,11 @@ console.log(html);
     Result:
     <span class='numeric'>2.75</span>
 
-Of course, you may think that this piece of code is entirely trivial... but let's see, what's wrong with the following line of code?
+Of course, you may be tempted to claim that this piece of code is entirely trivial... but let's see, what's wrong with the following line of code?
 
-    literalClass = { object: 'record', array: 'list' }[typeof []]; // Result is 'record' (incorrect!)
+```javascript
+literalClass = { object: 'record', array: 'list' }[typeof []]; // Result is 'record' (incorrect!)
+```
 
 Most of the time you'll want your evaluators to do something more than simply return a constant value.
 The next example dispatches to functions in order to perform more complex evaluations.
@@ -239,7 +241,7 @@ console.log(eval.A());
     Result:
     in A and in B
 
-Any key in an interface that is prefixed by an underscore (appart from wildcard patterns where the `_` is separated from surrounding tokens by whitespace, a comma `,`, or a colon `:`) is considered to be *private* and will not be used by **adt.js**.
+Any key in an interface that is prefixed by an underscore is considered to be *private* and will not be used by **adt.js** (apart from wildcard patterns where the `_` is separated from surrounding tokens by whitespace, a comma `,`, or a colon `:`).
 
 Inside an evaluator **adt.js** attaches its own private members to `this`.
 Besides `this._pattern`, **adt.js** also provides...
