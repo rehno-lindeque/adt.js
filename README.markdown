@@ -28,20 +28,22 @@ None yet!
 
 **Roadmap:**
 
-* *Version 1* (Unreleased)
-  * Pattern match on the constructor names only
-* *Version 2* (Unreleased)
+* *Version 1* (Unreleased/Alpha)
+  * Pattern match on the constructor names only and built-in (primitive) types
+* *Version 2* (Unreleased/Alpha)
   * Recursive evaluators
-* *Version 3* (Unreleased)
-  * Shallow pattern matching (matches nested constructor names and built-in (primitive) types)
-* *Version 4* (Unreleased)
-  * Deep pattern matching (multiple levels of constructor nesting)
-  * JavaScript built-in (primitive) types behave like constructor names in patterns
+* *Version 3* (Unreleased/Alpha)
+  * Shallow pattern matching (matches nested constructor names and tupples)
+* *Version 4* (Unreleased/Design)
+  * Deep pattern matching (multiple levels of constructor nesting and value unpacking)
 * *Version 5* (Unreleased)
-  * Higher order `fold` function for constructing finite state machines
-* *Version 6* (Unreleased)
-  * Primitive values can be matched inside of their built-in types
-  * Use regular expressions in evaluator patterns
+  * Match arrays, records
+  * Match literal values for built-in types
+  * Custom match functions (guards)
+* *adt.util.js* (Unreleased)
+  * Higher order functions etc
+    * `iterate` function evaluates nested evaluators like a finite state machine over its input
+    * `iterfold` function evaluates nested evaluators like a finite state machine while accumulating its results (similar to `fold` a.k.a. JavaScript's `array.reduce`, but given an ADT evaluators interface in the form of a finite state machine. Related to `iteratee` in Haskell.)
 
 The simplest way to illustrate the utility of **adt.js** is to run through a couple of basic examples, using *only* constructors and evaluators.
 
@@ -766,7 +768,7 @@ Some other features being considered:
 
 *Note: Unfortunately there are number of libraries calling themselves adt.js right now. 
 By rights the first library to coin the name appears to be the one by Sjoerd Visscher.
-Please feel free to suggest an alternate name for this library if you have one in mind!*
+Please help by suggesting an alternate name for this library if you have one in mind!*
 
 ## Appendix
 
