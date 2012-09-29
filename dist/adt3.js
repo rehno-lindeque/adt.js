@@ -93,22 +93,54 @@ var adt = (function() {
         return f.apply(evaluators, args);
       };
 
-      evaluators._eval = function(data) {
+      evaluators._eval = function() {
         // Determine if the data is a construction (built by a constructor)
-        if (isADT(data)) {
-          var
-            pattern = data._tag,
-            i;
-          for (i = 0; i < data.length; ++i) {
-            if (isADT(data[i]))
-              pattern += ' ' + data[i]._tag;
-            else
-              pattern += ' ' + getObjectType(data[i]);
+        var i,j, 
+          datum, 
+          pattern = '',
+          tag = '',
+          dataType = '',
+          data = [];
+
+        for (i = 0; i < arguments.length; ++i) {
+          if (i > 0) {
+            pattern += ',';
+            tag += ',';
+            dataType += ',';
           }
-          return _eval(pattern, data._tag, 'ADT', data);
+          datum = arguments[i];
+          if (isADT(datum)) {
+            // Get the pattern for this element
+            var innerPattern = datum._tag;            
+            for (j = 0; j < datum.length; ++j) {
+              data.push(datum[j]);
+              if (isADT(datum[j]))
+                innerPattern += ' ' + datum[j]._tag;
+              else
+                innerPattern += ' ' + getObjectType(datum[j]);
+            }
+            // Concat patterns / tags / data types
+            pattern += innerPattern;
+            tag += datum._tag;
+            dataType += 'ADT';
+          }
+          else {
+            // Add to list arguments
+            data.push(datum);
+            // Concat patterns / tags / data types
+            var dataType = getObjectType(datum);
+            pattern += dataType;
+            tag += dataType;
+            dataType += dataType;
+          }
         }
+        /*if (arguments.length > 1) {
+          pattern = '(' + pattern + ')';
+          tag = '(' + tag + ')';
+          tag = '(' + dataType + ')';
+        }*/
         // Evaluate primitive type
-        return _eval(null, null, getObjectType(data), [data]);
+        return _eval(pattern, tag, dataType, data);
       };
 
       /* TODO (version )?
