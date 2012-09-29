@@ -143,7 +143,7 @@ task 'fetch:npm', "Fetch the npm package manager", ->
     console.log "...Done"
 
 task 'fetch:uglifyjs', "Fetch the UglifyJS minification tool", ->
-  exec "npm install uglify-js", (err, stdout, stderr) ->
+  exec "npm install uglify-js@\">=1.3.3 <2.0\"", (err, stdout, stderr) ->
     throw err if err
     console.log stdout + stderr
     console.log "...Done"
