@@ -322,16 +322,109 @@ console.log("-- Test 17 (advanced deserialize: numeric escapes in strings) --");
   console.log("string with numeric octal escape deserialized: ", octDeserialized);
 })();
 
-console.log("-- Test 18 (shallow pattern matching) --");
+console.log("-- Test 18.1 (shallow pattern matching) --");
 (function(){
   var
     cons = adt('Cons'),
     evalCallInfo = adt({
-      "String Number": function(a,b) { return "String: \"" + a + "\" Number: " + String(b); },
-      "Number String": function(a,b) { return " Number: " + String(a) + " String: \"" + b + "\""; },
-      "Cons String Number": function(a,b) { return "Cons (String: \"" + a + "\" Number: " + String(b) + ")"; },
+      "Cons String Number": function(a,b) { return "Cons " + a + " " + String(b); },
+      "Cons Cons Number": function(a,b) { return "Cons (" + a._tag + " \"" + a[0] + "\" \"" + a[1] + "\") " + String(b); },
+      _: function() { throw "Could not match pattern " + this._pattern; }
     });
-  //console.log("The (string,number) evaluated...", evalCallInfo("foo", 88));
-  //console.log("The (number,string) evaluated...", evalCallInfo(55, "bar"));
-  console.log("The Cons(string,number) evaluated...", evalCallInfo(cons.Cons("zed", 11)));
+  console.log("The `Cons String Number` evaluated:              ", evalCallInfo(cons.Cons("zed", 11)));
+  console.log("The `Cons (Cons String String) Number` evaluated:", evalCallInfo(cons.Cons(cons.Cons("foo", "bar"), 55)));
 })();
+
+console.log("-- Test 18.2 (shallow pattern matching + tupples) --");
+(function(){
+  var
+    cons = adt('Cons'),
+    evalCallInfo = adt({
+      "String,Number": function(a,b) { return "\"" + a + "\"," + String(b); },
+      "Number,String": function(a,b) { return String(a) + ",\"" + b + "\""; },
+      "Cons,Number,Cons Number String": function(a,b,c) {
+        return a._tag + " \"" + a[0] + "\" " + String(a[1]) + ","
+          + String(b) 
+          + "Cons " + String(c[0]) + " \"" + c[1] + "\""; },
+      _: function() { throw "Could not match pattern " + this._pattern; }
+    });
+  console.log("The `String,Number` evaluated:                               ", evalCallInfo("foo", 88));
+  console.log("The `Number,String` evaluated:                               ", evalCallInfo(55, "bar"));
+  console.log("The `Cons String Number,Number,Cons Number String` evaluated:", evalCallInfo(cons.Cons("zed", 11), 101, cons.Cons(22, "foo")));
+})();
+
+console.log("-- Test 19.1 (deep pattern matching) --");
+(function(){
+  var
+    cons = adt('Cons'),
+    evalCallInfo = adt({
+      "Cons (Cons String String) (Cons Number Number)": function(a,b) { return "(Cons (Cons \"" + a[0] + "\" \"" + a[1] + "\") (Cons " + String(b[0]) + " " + String(b[1]) + "))"; },
+      "(Cons Number Number)": function(a) { return "(Cons " + String(a[0]) + " " + String(a[1]) + ")"; },
+      _: function() { throw "Could not match pattern " + this._pattern; }
+    });
+  console.log("The `Cons (Cons String String) (Cons Number Number)` evaluated:", evalCallInfo(cons.Cons(cons.Cons("foo", "bar")), cons.Cons(33, 44)));
+  console.log("The `(Cons Number Number)` evaluated:                          ", evalCallInfo(cons.Cons(88,99)));
+})();
+
+console.log("-- Test 19.2 (deep pattern matching + tupples) --");
+(function(){
+  var
+    cons = adt('Cons'),
+    evalCallInfo = adt({
+      "(String,Number)": function(a,b) { return "(\"" + a[0] + "\"," + String(a[1]) + ")"; },
+      "(Number,String)": function(a) { return "(" + String(a[0]) + ",\"" + a[1] + "\")"; },
+      "(Cons, Cons Number String)": function(a,b) { 
+        return "(Cons \"" + a[0][0] + "\" " + String(a[0][1]) + ","
+          + "(Cons " + String(a[1][0]) + " \"" + a[1][1] + "\")" ; },
+      _: function() { throw "Could not match pattern " + this._pattern; }
+    });
+  console.log("The `(String,Number)` evaluated...     ", evalCallInfo("foo", 88));
+  console.log("The `(Number,String)` evaluated...     ", evalCallInfo(55, "bar"));
+  console.log("The `(Cons String Number, Cons Number String)` evaluated...", evalCallInfo(cons.Cons("zed", 11), cons.Cons(22, "foo")));
+})();
+
+console.log("-- Test 19.3 (deep pattern matching + cons unpacking) --");
+(function(){
+  var
+    cons = adt('Cons'),
+    evalCallInfo = adt({
+      "Cons (Cons :String String) (Cons :Number :Number)": function(a,b) { return "(Cons (Cons \"" + a[0] + "\" \"" + a[1] + "\") (Cons " + String(b[0]) + " " + String(b[1]) + "))"; },
+      "(Cons :Number :Number)": function(a,b) { return "(Cons " + String(a[0]) + " " + String(a[1]) + ")"; },
+      _: function() { throw "Could not match pattern " + this._pattern; }
+    });
+  console.log("The `Cons (Cons String String) (Cons Number Number)` evaluated:", evalCallInfo(cons.Cons(cons.Cons("foo", "bar")), cons.Cons(33, 44)));
+  console.log("The `(Cons Number Number)` evaluated:                          ", evalCallInfo(cons.Cons(88,99)));
+})()
+
+console.log("-- Test 19.4 (deep pattern matching + tupple unpacking) --");
+(function(){
+  var
+    cons = adt('Cons'),
+    evalCallInfo = adt({
+      "(:String,:Number)": function(a,b) { return "(\"" + a + "\":String," + String(b) + ":Number)"; },
+      "(Cons :String :Number)": function(a,b) { return "(Cons \"" + a + "\":String " + String(b) + ":Number)"; },
+      "Cons Number (Cons :Number :String)": function(a,b,c) { 
+        return "Cons " + String(a) + " (Cons " + String(b) + ":Number \"" + c + "\")"; },
+      "(:Cons,Number,(Cons :Number String))": function(a,b,c) { 
+        return "(:Cons \"" + a[0] + "\" " + String(a[1]) + ",Number,(Cons " + String(b) + ":Number String))"; },
+      _: function() { throw "Could not match pattern " + this._pattern; }
+    });
+  console.log("The `(:String,:Number)` evaluated...     ", evalCallInfo("foo", 88));
+  console.log("The `(Cons :String :Number)` evaluated...", evalCallInfo(cons.Cons("zed", 11)));
+  console.log("The `Cons Number (Cons :Number :String)` evaluated...", evalCallInfo(cons.Cons(22,cons.Cons("zed", 11))));
+  console.log("The `(:Cons,Number,Cons :Number String)` evaluated...", evalCallInfo(cons.Cons("zed", 11), 101, cons.Cons(22, "foo")));
+})();
+
+console.log("-- Test 19.5 (deep pattern matching + cons/tupple double unpacking) --");
+(function(){
+  var
+    cons = adt('Cons'),
+    evalCallInfo = adt({
+      ":(Cons :(Cons :String String) :(Cons Number :Number))": function(a,b,c,d,e) { 
+        return "...TODO..."; },
+      "a:(Cons b:(Cons c:String String),Number,d:Number)": function(a,b,c,d) { 
+        return "...TODO..."; },
+      _: function() { throw "Could not match pattern " + this._pattern; }
+    });
+  console.log("TODO...");
+})()
