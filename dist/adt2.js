@@ -50,6 +50,12 @@ var adt = (function() {
     getObjectType = function(data) {
       var str = Object.prototype.toString.call(data);
       return str.slice(str.indexOf(' ') + 1, str.length - 1);
+    },
+    getDataType = function(data) {
+      if (isADT(data)) return 'ADT'; else return getObjectType(data);
+    },
+    getTypeTag = function(data) {
+      if (isADT(data)) return data._tag; else return getObjectType(data);
     };
   adt.isADT = isADT;
   adt.isInterface = isInterface;
@@ -84,6 +90,7 @@ var adt = (function() {
         // E.g. split the data around whitespace and in order of specific to general...
         var result;
         evaluators._pattern = (pattern != null? pattern : (tag != null? tag : datatype));
+        // TODO: When the pattern matched was the wildcard _, the pattern should reflect that
         evaluators._tag = (tag != null? tag : datatype);
         evaluators._datatype = (datatype != null? datatype : 'ADT');
         var f = evaluators[evaluators._pattern]; 

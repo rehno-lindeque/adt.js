@@ -33,7 +33,7 @@ None yet!
 * *Version 2* (Unreleased/Alpha)
   * Recursive evaluators
 * *Version 3* (Unreleased/Alpha)
-  * Shallow pattern matching (matches nested constructor names and tupples)
+  * Shallow pattern matching (matches nested constructor names and tuple)
 * *Version 4* (Unreleased/Design)
   * Deep pattern matching (multiple levels of constructor nesting and value unpacking)
 * *Version 5* (Unreleased)
@@ -707,7 +707,7 @@ Using OO lingo you could view this library as an emulation of the following desi
 * [Builder](http://en.wikipedia.org/wiki/Builder_pattern)
 * [Template method](http://en.wikipedia.org/wiki/Template_method_pattern) (except [better](http://en.wikipedia.org/wiki/Domain-specific_language))
 
-With pattern matching thrown into the mix (in version 2.0 and later), we can also talk polymorphism.
+With pattern matching thrown into the mix (in version 3.0 and later), we can also talk polymorphism.
 See if you can apply the following concepts:
 
 * [Multiple dispatch](http://en.wikipedia.org/wiki/Multiple_dispatch)

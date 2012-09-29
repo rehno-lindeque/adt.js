@@ -15,6 +15,7 @@
         // E.g. split the data around whitespace and in order of specific to general...
         var result;
         evaluators._pattern = (pattern != null? pattern : (tag != null? tag : datatype));
+        // TODO: When the pattern matched was the wildcard _, the pattern should reflect that
         evaluators._tag = (tag != null? tag : datatype);
         evaluators._datatype = (datatype != null? datatype : 'ADT');
         var f = evaluators[evaluators._pattern]; 

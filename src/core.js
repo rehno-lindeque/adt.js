@@ -43,6 +43,12 @@
     getObjectType = function(data) {
       var str = Object.prototype.toString.call(data);
       return str.slice(str.indexOf(' ') + 1, str.length - 1);
+    },
+    getDataType = function(data) {
+      if (isADT(data)) return 'ADT'; else return getObjectType(data);
+    },
+    getTypeTag = function(data) {
+      if (isADT(data)) return data._tag; else return getObjectType(data);
     };
   adt.isADT = isADT;
   adt.isInterface = isInterface;
