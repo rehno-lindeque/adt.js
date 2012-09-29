@@ -239,7 +239,7 @@ console.log(eval.A());
     Result:
     in A and in B
 
-Any key in an interface that is prefixed by an underscore is considered to be *private* and will not be used by **adt.js**.
+Any key in an interface that is prefixed by an underscore (appart from wildcard patterns where the `_` is separated from surrounding tokens by a space ` ` or a comma `,`) is considered to be *private* and will not be used by **adt.js**.
 
 Inside an evaluator **adt.js** attaches its own private members to `this`.
 Besides `this._pattern`, **adt.js** also provides...
