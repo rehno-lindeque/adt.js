@@ -70,10 +70,9 @@ console.log(html);
     Result:
     <span class='numeric'>2.75</span>
 
-Of course, you may think that this piece of code is entirely trivial...
+Of course, you may think that this piece of code is entirely trivial... but let's see, what's wrong with the following line of code?
 
-    Note: What is wrong with the following snippet of code?
-    literalClass = { object: 'record', array: 'list' }[typeof []];
+    literalClass = { object: 'record', array: 'list' }[typeof []]; // Result is 'record' (incorrect!)
 
 Most of the time you'll want your evaluators to do something more than simply return a constant value.
 The next example dispatches to functions in order to perform more complex evaluations.
@@ -739,7 +738,9 @@ CC0 is also very [easy to understand](http://creativecommons.org/publicdomain/ze
 
 ## Size of various distributions
 
-* version 1.0 (unreleased, as of 2012-05-04): *14.3 kb* unminified, *5.1 kb* minified
+* version 1 (unreleased, as of 2012-09-29): *6.1 kb* unminified, *2.1 kb* minified
+* version 2 (unreleased, as of 2012-09-29): *25.4 kb* unminified, *9.1 kb* minified
+* version 3 (unreleased, as of 2012-09-29): *26.7 kb* unminified, *9.3 kb* minified
 
 ## Future work
 
