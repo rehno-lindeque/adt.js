@@ -131,9 +131,19 @@ task 'all', "Build all distribution files", ->
   ((build 2) (logDone 'build-2') (minify 2) (logDone 'minify') (wrap 2)())()
   ((build 3) (logDone 'build-3') (minify 3) (logDone 'minify') (wrap 3) linkDistFiles)()
 
-task 'build-1', "Concatenate source files into a single library file", ->
+task 'build-1', "Concatenate source files into a single library file (version 1)", ->
   exec "mkdir -p 'build'", (err, stdout, stderr) ->
-  ((build 1) (logDone 'build') (wrap 1)())()
+  ((build 1) (logDone 'build-1') (wrap 1)())()
+  console.log "ok...."
+
+task 'build-2', "Concatenate source files into a single library file (version 2)", ->
+  exec "mkdir -p 'build'", (err, stdout, stderr) ->
+  ((build 1) (logDone 'build-2') (wrap 2)())()
+  console.log "ok...."
+
+task 'build-3', "Concatenate source files into a single library file (version 3)", ->
+  exec "mkdir -p 'build'", (err, stdout, stderr) ->
+  ((build 3) (logDone 'build-3') (wrap 3)())()
   console.log "ok...."
 
 task 'fetch:npm', "Fetch the npm package manager", ->
