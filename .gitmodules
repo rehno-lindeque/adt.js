@@ -10,3 +10,6 @@
 [submodule "extra/supersimple-editor.js"]
 	path = extra/supersimple-editor.js
 	url = git@github.com:rehno-lindeque/supersimple-editor.js.git
+[submodule "extra/adt-svg.js"]
+	path = extra/adt-svg.js
+	url = git@github.com:rehno-lindeque/adt-svg.js.git
