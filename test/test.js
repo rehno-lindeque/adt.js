@@ -272,7 +272,12 @@ console.log("-- Test 11 (advanced serialize: special case primitives (string, ar
 
 console.log("-- Test 12 (advanced deserialize: special case primitives (string, array, records, strings with escapes)) --");
 (function(){
-  console.warn("TODO");
+  var
+    exprSerialized = "{ foo=\"bar\", something = 5,array = [Cons 9] , anEmptyRecord ={} }",
+    exprDeserialized = adt.deserialize(exprSerialized),
+    exprReserialized = adt.serialize(exprDeserialized);
+  console.log("expression deserialized: ", exprDeserialized);
+  console.log("expression re-serialized: ", exprReserialized);
 })();
 
 console.log("-- Test 13 (advanced serialize: constructor keys with escapes) --");
