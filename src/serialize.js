@@ -74,7 +74,7 @@
             k = Object.keys(a),
             str = '{';
           for (i = 0;; ++i) {
-            str += escapeString(k[i], escapes) + ':' + serializeEval(a[k[i]]);
+            str += escapeString(k[i], escapes) + ' = ' + serializeEval(a[k[i]]);
             if (i === k.length - 1)
               break;
             str += ',';
