@@ -59,12 +59,13 @@
           var 
             i,
             str ='[';
-          for (i = 0;; ++i) {
-            str += serializeEval(a[i]);
-            if (i === a.length - 1)
-              break;
-            str += ',';
-          }
+          if (a.length > 0)
+            for (i = 0;; ++i) {
+              str += serializeEval(a[i]);
+              if (i === a.length - 1)
+                break;
+              str += ',';
+            }
           str += ']'; 
           return str;
         },
@@ -73,12 +74,13 @@
             i,
             k = Object.keys(a),
             str = '{';
-          for (i = 0;; ++i) {
-            str += escapeString(k[i], escapes) + ' = ' + serializeEval(a[k[i]]);
-            if (i === k.length - 1)
-              break;
-            str += ',';
-          }
+          if (k.length > 0)
+            for (i = 0;; ++i) {
+              str += escapeString(k[i], escapes) + ' = ' + serializeEval(a[k[i]]);
+              if (i === k.length - 1)
+                break;
+              str += ',';
+            }
           str += '}';
           return str;
         }
