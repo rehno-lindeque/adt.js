@@ -410,12 +410,13 @@ var adt = (function() {
           var 
             i,
             str ='[';
-          for (i = 0;; ++i) {
-            str += serializeEval(a[i]);
-            if (i === a.length - 1)
-              break;
-            str += ',';
-          }
+          if (a.length > 0)
+            for (i = 0;; ++i) {
+              str += serializeEval(a[i]);
+              if (i === a.length - 1)
+                break;
+              str += ',';
+            }
           str += ']'; 
           return str;
         },
@@ -424,12 +425,13 @@ var adt = (function() {
             i,
             k = Object.keys(a),
             str = '{';
-          for (i = 0;; ++i) {
-            str += escapeString(k[i], escapes) + ':' + serializeEval(a[k[i]]);
-            if (i === k.length - 1)
-              break;
-            str += ',';
-          }
+          if (k.length > 0)
+            for (i = 0;; ++i) {
+              str += escapeString(k[i], escapes) + ' = ' + serializeEval(a[k[i]]);
+              if (i === k.length - 1)
+                break;
+              str += ',';
+            }
           str += '}';
           return str;
         }
@@ -608,6 +610,9 @@ var adt = (function() {
         case ')':
         case '[':
         case ']':
+        case '{':
+        case '}':
+        case '=':
         case ',': 
           return { head: str[0], tail: str.slice(1) };
         case '\"': 
@@ -622,6 +627,9 @@ var adt = (function() {
           case ')':
           case '[':
           case ']':
+          case '{':
+          case '}':
+          case '=':
           case ',':
           case ' ':
           case '\n':
@@ -650,6 +658,7 @@ var adt = (function() {
           // Look ahead for terminating characters
           case ')':
           case ']':
+          case '}':
           case ',':
             return { result: construct(tag, args), tail: tail };
           default:
@@ -671,6 +680,7 @@ var adt = (function() {
       while (tail.length > 0)
         switch (tail[0]) {
           case ')':
+          case '}':
             throw "Invalid character `" + tail[0] + "` found in the data."
           case ',':
             ++commaCount;
@@ -694,6 +704,49 @@ var adt = (function() {
       // TODO...
       //return tail;
     },
+    parseRecordTail = function(input) {
+      if (input.length < 2)
+        throw "No data supplied after record opening curly bracket `{`.";
+      var 
+        tail = input,
+        commaCount = 0,
+        record = {},
+        lastKey = null;
+      while (tail.length > 0)
+        switch (tail[0]) {
+          case ')':
+          case ']':
+            throw "Invalid character `" + tail[0] + "` found in the data."
+          case ',':
+            ++commaCount;
+            if (commaCount < record.length)
+              record.push(undefined);
+            // post-condition: record.length === commaCount
+            tail = tail.slice(1);
+            continue;
+          case '}':
+            return { result: record, tail: tail.slice(1) };
+          default:
+            if (commaCount < record.length)
+              throw "Expected `,` separator between record elements."
+            var parseResult = parseRecordKeyVal(tail);
+            if (parseResult == null)
+              continue;
+            record[parseResult.result[0]] = parseResult.result[1];
+            tail = parseResult.tail;
+        }
+      throw "Could not find the closing curly bracket for the record `{" + input.slice(0, Math.max(input.length,4)).join('') + "...`";
+    },
+    parseRecordKeyVal = function(input) {
+      if (input.length < 3)
+        throw "Expected \'key = val\' in record syntax."
+      var 
+        key = unescapeString(input[0]);
+      if (input[1] != '=')
+        throw "Expected \'key = val\' in record syntax."
+      var parseResult = parse(input.slice(2));
+      return { result: [key,parseResult.result], tail: parseResult.tail };
+    },
     parseParensTail = function(input) {
       if (input.length < 1)
         throw "No data after opening parenthesis.";
@@ -707,6 +760,8 @@ var adt = (function() {
           throw "No data supplied after opening parenthesis `(`. The unit type, (), is not supported.";
         case '[':
         case ']':
+        case '{':
+        case '}':
         case ',':
         case '\"':
         case '\'':
@@ -725,6 +780,8 @@ var adt = (function() {
           return parseParensTail(input);
         case '[':
           return parseArrayTail(input);
+        case '{':
+          return parseRecordTail(input);
       }
       switch (head[0]) {
         case '\"':
