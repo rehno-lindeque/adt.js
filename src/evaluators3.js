@@ -187,7 +187,7 @@
           evaluators._pattern = '_';
           evaluators._tag = Array.prototype.map.call(arguments, getTypeTag).join(',');
           evaluators._datatype = Array.prototype.map.call(arguments, getDataType).join(',');
-          var data = Array.prototype.reduce.call(arguments, [], function(a,b){ return a.concat(isADT(b)? b : [b]); });
+          var data = Array.prototype.reduce.call(arguments, function(a,b){ return a.concat(isADT(b)? b : [b]); }, []);
           return evaluators._.apply(evaluators, data);
         }
         evaluators._pattern = m.pattern;
