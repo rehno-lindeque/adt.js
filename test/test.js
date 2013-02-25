@@ -182,7 +182,32 @@ console.log("-- Test 6 (automatic constructors) --");
   console.log("answer: ", answer);
 })();
 
-console.log("-- Test 7 (non-enumerable api's) --");
+console.log("-- Test 7 (map) --");
+(function(){
+  var
+    D = adt('Word', 'Root', 'Syllable'),
+    supercalifragilisticexpialidocious = [
+      D.Syllable('su'),
+      D.Syllable('per'),
+      D.Syllable('cal'),
+      D.Syllable('i'),
+      D.Syllable('frag'),
+      D.Syllable('i'),
+      D.Syllable('lis'),
+      D.Syllable('tic'),
+      D.Syllable('ex'),
+      D.Syllable('pi'),
+      D.Syllable('al'),
+      D.Syllable('i'),
+      D.Syllable('do'),
+      D.Syllable('cious')
+    ],
+    printEval = adt({ Syllable: function(s) { return s; } }),
+    result = adt.map(printEval, supercalifragilisticexpialidocious).join(".");
+  console.log("result: ", result);
+})();
+
+console.log("-- Test 8 (non-enumerable api's) --");
 (function(){
   var
     MathCons = adt.own.constructors(Math),
@@ -192,7 +217,7 @@ console.log("-- Test 7 (non-enumerable api's) --");
   console.log("result: ", result);
 })();
 
-console.log("-- Test 8 (combining adt's) --");
+console.log("-- Test 9 (combining adt's) --");
 (function(){
   var
     mathCons = adt(adt.own.constructors(Math), adt('plus', 'minus', 'mul', 'div')),
@@ -211,7 +236,7 @@ console.log("-- Test 8 (combining adt's) --");
   console.log("result: ", result);
 })();
 
-console.log("-- Test 9 (serialize) --");
+console.log("-- Test 10 (serialize) --");
 (function(){
   // Serialize expression
   var
@@ -222,7 +247,7 @@ console.log("-- Test 9 (serialize) --");
   console.log("expression serialized: ", exprSerialized);
 })();
 
-console.log("-- Test 10.1 (deserialize) --");
+console.log("-- Test 11.1 (deserialize) --");
 (function(){
   var
     mathEval = adt.recursive(adt({
@@ -237,7 +262,7 @@ console.log("-- Test 10.1 (deserialize) --");
   console.log("detailed result: ", detailedResult);
 })();
 
-console.log("-- Test 10.2 (deserialize adt in array) --");
+console.log("-- Test 11.2 (deserialize adt in array) --");
 (function(){
   var
     exprSerialized = "[arrayelement 0.1 0.1,anotherelement argumentlessconstructor \"astring\"]",
@@ -247,7 +272,7 @@ console.log("-- Test 10.2 (deserialize adt in array) --");
   console.log("expression re-serialized: ", exprReserialized);
 })();
 
-console.log("-- Test 11 (advanced serialize: special case primitives (string, array, records, strings with escapes)) --");
+console.log("-- Test 12 (advanced serialize: special case primitives (string, array, records, strings with escapes)) --");
 (function(){
   var
     outerCons = adt('list', 'record'),
@@ -270,7 +295,7 @@ console.log("-- Test 11 (advanced serialize: special case primitives (string, ar
   console.warn("TODO: more....");
 })();
 
-console.log("-- Test 12 (advanced deserialize: special case primitives (string, array, records, strings with escapes)) --");
+console.log("-- Test 13 (advanced deserialize: special case primitives (string, array, records, strings with escapes)) --");
 (function(){
   var
     exprSerialized = "{ foo=\"bar\", something = 5,array = [Cons 9] , anEmptyRecord ={} }",
@@ -280,7 +305,7 @@ console.log("-- Test 12 (advanced deserialize: special case primitives (string, 
   console.log("expression re-serialized: ", exprReserialized);
 })();
 
-console.log("-- Test 13 (advanced serialize: constructor keys with escapes) --");
+console.log("-- Test 14 (advanced serialize: constructor keys with escapes) --");
 (function(){
   escapedCons = adt('cons with spaces', 'cons\'quote', 'cons\"dbl\"quote');
   a = escapedCons['cons with spaces'](0, escapedCons['cons\'quote'](1, escapedCons['cons\"dbl\"quote'](2)));
@@ -289,7 +314,7 @@ console.log("-- Test 13 (advanced serialize: constructor keys with escapes) --")
   console.log("cons serialized with escapes: ", aSerialized);
 })();
 
-console.log("-- Test 14 (advanced deserialize: constructor keys with escapes) --");
+console.log("-- Test 15 (advanced deserialize: constructor keys with escapes) --");
 (function(){
   var
     aSerialized = "cons\\ with\\ spaces 0 (cons\\\'quote 1 (cons\\\"dbl\\\"quote 2))";
@@ -299,17 +324,17 @@ console.log("-- Test 14 (advanced deserialize: constructor keys with escapes) --
   console.log("cons serialized again: ", adt.serialize(a));
 })();
 
-console.log("-- Test 15 (advanced deserialize: optional outer parentheses) --");
+console.log("-- Test 16 (advanced deserialize: optional outer parentheses) --");
 (function(){
   console.warn("TODO")
 })();
 
-console.log("-- Test 16 (advanced deserialize: direct primitive (number, string, array, record) --");
+console.log("-- Test 17 (advanced deserialize: direct primitive (number, string, array, record) --");
 (function(){
   console.warn("TODO")
 })();
 
-console.log("-- Test 17 (advanced deserialize: numeric escapes in strings) --");
+console.log("-- Test 18 (advanced deserialize: numeric escapes in strings) --");
 (function(){
   var
     decSerialized = "DecimalEscape \"An arrow looks like this: \\8594 (\\\\8594)\"",
@@ -327,7 +352,7 @@ console.log("-- Test 17 (advanced deserialize: numeric escapes in strings) --");
   console.log("string with numeric octal escape deserialized: ", octDeserialized);
 })();
 
-console.log("-- Test 18.1 (shallow pattern matching) --");
+console.log("-- Test 19.1 (shallow pattern matching) --");
 (function(){
   var
     cons = adt('Cons'),
@@ -340,7 +365,7 @@ console.log("-- Test 18.1 (shallow pattern matching) --");
   console.log("The `Cons (Cons String String) Number` evaluated:", evalCallInfo(cons.Cons(cons.Cons("foo", "bar"), 55)));
 })();
 
-console.log("-- Test 18.2 (shallow pattern matching + tuples) --");
+console.log("-- Test 19.2 (shallow pattern matching + tuples) --");
 (function(){
   var
     cons = adt('Cons'),
@@ -358,7 +383,7 @@ console.log("-- Test 18.2 (shallow pattern matching + tuples) --");
   console.log("The `Cons String Number,Number,Cons Number String` evaluated:", evalCallInfo(cons.Cons("zed", 11), 101, cons.Cons(22, "foo")));
 })();
 
-console.log("-- Test 19.1 (deep pattern matching) --");
+console.log("-- Test 20.1 (deep pattern matching) --");
 (function(){
   var
     cons = adt('Cons'),
@@ -371,7 +396,7 @@ console.log("-- Test 19.1 (deep pattern matching) --");
   console.log("The `(Cons Number Number)` evaluated:                          ", evalCallInfo(cons.Cons(88,99)));
 })();
 
-console.log("-- Test 19.2 (deep pattern matching + tuples) --");
+console.log("-- Test 20.2 (deep pattern matching + tuples) --");
 (function(){
   var
     cons = adt('Cons'),
@@ -388,7 +413,7 @@ console.log("-- Test 19.2 (deep pattern matching + tuples) --");
   console.log("The `(Cons String Number, Cons Number String)` evaluated...", evalCallInfo(cons.Cons("zed", 11), cons.Cons(22, "foo")));
 })();
 
-console.log("-- Test 19.3 (deep pattern matching + cons unpacking) --");
+console.log("-- Test 20.3 (deep pattern matching + cons unpacking) --");
 (function(){
   var
     cons = adt('Cons'),
@@ -401,7 +426,7 @@ console.log("-- Test 19.3 (deep pattern matching + cons unpacking) --");
   console.log("The `(Cons Number Number)` evaluated:                          ", evalCallInfo(cons.Cons(88,99)));
 })()
 
-console.log("-- Test 19.4 (deep pattern matching + tuple unpacking) --");
+console.log("-- Test 20.4 (deep pattern matching + tuple unpacking) --");
 (function(){
   var
     cons = adt('Cons'),
@@ -420,7 +445,7 @@ console.log("-- Test 19.4 (deep pattern matching + tuple unpacking) --");
   console.log("The `(:Cons,Number,Cons :Number String)` evaluated...", evalCallInfo(cons.Cons("zed", 11), 101, cons.Cons(22, "foo")));
 })();
 
-console.log("-- Test 19.5 (deep pattern matching + cons/tuple double unpacking) --");
+console.log("-- Test 20.5 (deep pattern matching + cons/tuple double unpacking) --");
 (function(){
   var
     cons = adt('Cons'),
