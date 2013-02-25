@@ -281,6 +281,8 @@ var adt = (function() {
     return adt.apply(null, keys);
   };
 
+  var applyWith = function(f){ return function(a){ return f(a) }; };
+  adt.map = function(fadt, data){ return data.map(applyWith(fadt)); };
   adt.compose = function() {
     var i, a = arguments, f, fi, key, tags;
     if (a.length === 0)

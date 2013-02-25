@@ -16,6 +16,7 @@ libFiles  = [[
   'evaluators'
   'evaluators1'
   'constructors'
+  'map'
   'compose'
   'recursive'
   'own'
@@ -29,6 +30,7 @@ libFiles  = [[
   'evaluators'
   'evaluators3'
   'constructors'
+  'map'
   'compose'
   'recursive'
   'own'
@@ -166,6 +168,7 @@ task 'clean', "Cleanup all build files and distribution files", ->
   cmd = "rm -rf build"
   for v in [1,2,3]
     (cmd += ";rm dist/adt#{v}.js;rm dist/adt#{v}.min.js;rm dist/adt#{v}.module.js;rm dist/adt#{v}.module.min.js")
+  cmd += ";rm dist/adt.js;rm dist/adt.min.js"
   exec cmd, (err, stdout, stderr) ->
     console.log stdout + stderr
     console.log "...Done (clean)"
