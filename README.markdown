@@ -398,7 +398,7 @@ adt.js provides a [fold](http://en.wikipedia.org/wiki/Fold_(higher-order_functio
 
 ## ADT extras
 
-You can find additional utilities for manipulating and building ADT's in the [adt-util.js](https://github.com/rehno-lindeque/adt-util.js)submodule.
+You can find additional utilities for manipulating and building ADT's in the [adt-util.js](https://github.com/rehno-lindeque/adt-util.js) submodule.
 
 * TODO: Move `adt.compose()` here... + example (pretty print a tree...)
 * TODO: Move `adt.constructors()` here + example
